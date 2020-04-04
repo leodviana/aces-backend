@@ -1,0 +1,208 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{F9B704C1-1CFA-4160-B533-84EE2C222B50}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>GtecIt.Infra.Data</RootNamespace>
+    <AssemblyName>GtecIt.Infra.Data</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Dapper, Version=1.50.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Dapper.1.50.2\lib\net451\Dapper.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="GtecIt.Domain">
+      <HintPath>..\GtecIt.Domain\bin\Debug\GtecIt.Domain.dll</HintPath>
+    </Reference>
+    <Reference Include="MySql.Data, Version=6.9.9.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <HintPath>..\packages\MySql.Data.6.9.9\lib\net45\MySql.Data.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MySql.Data.Entity.EF6, Version=6.9.9.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <HintPath>..\packages\MySql.Data.Entity.6.9.9\lib\net45\MySql.Data.Entity.EF6.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Core\Interfaces\Class1.cs" />
+    <Compile Include="Core\Interfaces\IEntregaRepositorio.cs" />
+    <Compile Include="Core\Interfaces\IHorarioProfessorRepositorio.cs" />
+    <Compile Include="Core\Interfaces\IEventsRepositorio.cs" />
+    <Compile Include="Core\Interfaces\IAulaRepositorio.cs" />
+    <Compile Include="Core\Interfaces\IPlanoRepositorio.cs" />
+    <Compile Include="Core\Interfaces\IBancoRepositorio.cs" />
+    <Compile Include="Core\Interfaces\ICefalometriaItemRepositorio.cs" />
+    <Compile Include="Core\Interfaces\ICefalometriaRepositorio.cs" />
+    <Compile Include="Core\Interfaces\ICentrodecustoRepositorio.cs" />
+    <Compile Include="Core\Interfaces\IClienteRepositorio.cs" />
+    <Compile Include="Core\Interfaces\IConvenioRepositorio.cs" />
+    <Compile Include="Core\Interfaces\IDentistaRepositorio.cs" />
+    <Compile Include="Core\Interfaces\IEmpresaRepositorio.cs" />
+    <Compile Include="Core\Interfaces\IEnderecoRepositorio.cs" />
+    <Compile Include="Core\Interfaces\IEstadoCivilRepositorio.cs" />
+    <Compile Include="Core\Interfaces\IFornecedorRepositorio.cs" />
+    <Compile Include="Core\Interfaces\IGrupoRepositorio.cs" />
+    <Compile Include="Core\Interfaces\INotaEntradaItemRepositorio.cs" />
+    <Compile Include="Core\Interfaces\INotaEntradaRepositorio.cs" />
+    <Compile Include="Core\Interfaces\IOrcamentoItemRepositorio.cs" />
+    <Compile Include="Core\Interfaces\IOrcamentoRepositorio.cs" />
+    <Compile Include="Core\Interfaces\IPedidoItemRepositorio.cs" />
+    <Compile Include="Core\Interfaces\IPedidoRepositorio.cs" />
+    <Compile Include="Core\Interfaces\IPessoaRepositorio.cs" />
+    <Compile Include="Core\Interfaces\IPrecoPlanoRepositorio.cs" />
+    <Compile Include="Core\Interfaces\IPrecoRepositorio.cs" />
+    <Compile Include="Core\Interfaces\IProdutoRepositorio.cs" />
+    <Compile Include="Core\Interfaces\IProfissaoRepositorio.cs" />
+    <Compile Include="Core\Interfaces\IRelatorioRepositorio.cs" />
+    <Compile Include="Core\Interfaces\ISexoRepositorio.cs" />
+    <Compile Include="Core\Interfaces\ISubGrupoRepositorio.cs" />
+    <Compile Include="Core\Interfaces\ITipoNotaRepositorio.cs" />
+    <Compile Include="Core\Interfaces\ITipoEntradaRepositorio.cs" />
+    <Compile Include="Core\Interfaces\ITipoAtendimentoRepositorio.cs" />
+    <Compile Include="Core\Interfaces\ITipoPagamentoRepositorio.cs" />
+    <Compile Include="Core\Interfaces\ITipoTelefoneRepositorio.cs" />
+    <Compile Include="Core\Interfaces\ITipoTituloRepositorio.cs" />
+    <Compile Include="Core\Interfaces\ITituloapagarRepositorio.cs" />
+    <Compile Include="Core\Interfaces\ITituloRepositorio.cs" />
+    <Compile Include="Core\Interfaces\IUsuarioRepositorio.cs" />
+    <Compile Include="Core\IRepositorio.cs" />
+    <Compile Include="Core\IUnitOfWork.cs" />
+    <Compile Include="Persistencia\GtecContext.cs" />
+    <Compile Include="Persistencia\Mapeamento\EntregaConfiguration.cs" />
+    <Compile Include="Persistencia\Mapeamento\HorarioProfessorConfiguration.cs" />
+    <Compile Include="Persistencia\Mapeamento\EventsConfiguration.cs" />
+    <Compile Include="Persistencia\Mapeamento\AulaConfiguration.cs" />
+    <Compile Include="Persistencia\Mapeamento\PlanoConfiguration.cs" />
+    <Compile Include="Persistencia\Mapeamento\CentrodecustoConfiguration.cs" />
+    <Compile Include="Persistencia\Mapeamento\BancoConfiguration.cs" />
+    <Compile Include="Persistencia\Mapeamento\CefalometriaConfiguration.cs" />
+    <Compile Include="Persistencia\Mapeamento\CefalometriaItemConfiguration.cs" />
+    <Compile Include="Persistencia\Mapeamento\Class1.cs" />
+    <Compile Include="Persistencia\Mapeamento\ClienteConfiguration.cs" />
+    <Compile Include="Persistencia\Mapeamento\ConvenioConfiguration.cs" />
+    <Compile Include="Persistencia\Mapeamento\DentistaConfiguration.cs" />
+    <Compile Include="Persistencia\Mapeamento\EmpresaConfiguration.cs" />
+    <Compile Include="Persistencia\Mapeamento\EnderecoConfiguration.cs" />
+    <Compile Include="Persistencia\Mapeamento\EstadoCivilConfiguration.cs" />
+    <Compile Include="Persistencia\Mapeamento\FornecedorConfiguration.cs" />
+    <Compile Include="Persistencia\Mapeamento\GrupoConfiguration.cs" />
+    <Compile Include="Persistencia\Mapeamento\NotaEntradaConfiguration.cs" />
+    <Compile Include="Persistencia\Mapeamento\NotaEntradaItemConfiguration.cs" />
+    <Compile Include="Persistencia\Mapeamento\OrcamentoConfiguration.cs" />
+    <Compile Include="Persistencia\Mapeamento\OrcamentoItemConfiguration.cs" />
+    <Compile Include="Persistencia\Mapeamento\PedidoConfiguration.cs" />
+    <Compile Include="Persistencia\Mapeamento\PedidoItemConfiguration.cs" />
+    <Compile Include="Persistencia\Mapeamento\PessoaConfiguration.cs" />
+    <Compile Include="Persistencia\Mapeamento\PrecoPlanoConfiguration.cs" />
+    <Compile Include="Persistencia\Mapeamento\PrecoConfiguration.cs" />
+    <Compile Include="Persistencia\Mapeamento\ProdutoConfiguration.cs" />
+    <Compile Include="Persistencia\Mapeamento\ProfissaoConfiguration.cs" />
+    <Compile Include="Persistencia\Mapeamento\RelatorioConfiguration.cs" />
+    <Compile Include="Persistencia\Mapeamento\SexoConfiguration.cs" />
+    <Compile Include="Persistencia\Mapeamento\SubGrupoConfiguration.cs" />
+    <Compile Include="Persistencia\Mapeamento\TipoNotaConfiguration.cs" />
+    <Compile Include="Persistencia\Mapeamento\TipoAtendimentoConfiguration.cs" />
+    <Compile Include="Persistencia\Mapeamento\TipoPagamentoConfiguration.cs" />
+    <Compile Include="Persistencia\Mapeamento\TipoTelefoneConfiguration.cs" />
+    <Compile Include="Persistencia\Mapeamento\TipoEntradaConfiguration.cs" />
+    <Compile Include="Persistencia\Mapeamento\TipoTituloConfiguration.cs" />
+    <Compile Include="Persistencia\Mapeamento\TituloapagarConfiguration.cs" />
+    <Compile Include="Persistencia\Mapeamento\TituloConfiguration.cs" />
+    <Compile Include="Persistencia\Mapeamento\UsuarioConfiguration.cs" />
+    <Compile Include="Persistencia\Repositorio.cs" />
+    <Compile Include="Persistencia\Repositorios\EntregaRepositorio.cs" />
+    <Compile Include="Persistencia\Repositorios\HorarioProfessorRepositorio.cs" />
+    <Compile Include="Persistencia\Repositorios\EventsRepositorio.cs" />
+    <Compile Include="Persistencia\Repositorios\AulaRepositorio.cs" />
+    <Compile Include="Persistencia\Repositorios\PlanoRepositorio.cs" />
+    <Compile Include="Persistencia\Repositorios\CentrodecustoRepositorio.cs" />
+    <Compile Include="Persistencia\Repositorios\BancoRepositorio.cs" />
+    <Compile Include="Persistencia\Repositorios\CefalometriaItemRepositorio.cs" />
+    <Compile Include="Persistencia\Repositorios\CefalometriaRepositorio .cs" />
+    <Compile Include="Persistencia\Repositorios\ClienteRepositorio.cs" />
+    <Compile Include="Persistencia\Repositorios\ConvenioRepositorio.cs" />
+    <Compile Include="Persistencia\Repositorios\DentistaRepositorio.cs" />
+    <Compile Include="Persistencia\Repositorios\EmpresaRepositorio.cs" />
+    <Compile Include="Persistencia\Repositorios\EnderecoRepositorio.cs" />
+    <Compile Include="Persistencia\Repositorios\EstadoCivilRepositorio.cs" />
+    <Compile Include="Persistencia\Repositorios\FornecedorRepositorio.cs" />
+    <Compile Include="Persistencia\Repositorios\GrupoRepositorio.cs" />
+    <Compile Include="Persistencia\Repositorios\NotaEntradaItemRepositorio.cs" />
+    <Compile Include="Persistencia\Repositorios\NotaEntradaRepositorio.cs" />
+    <Compile Include="Persistencia\Repositorios\OrcamentoItemRepositorio.cs" />
+    <Compile Include="Persistencia\Repositorios\OrcamentoRepositorio.cs" />
+    <Compile Include="Persistencia\Repositorios\PedidoItemRepositorio.cs" />
+    <Compile Include="Persistencia\Repositorios\PedidoRepositorio.cs" />
+    <Compile Include="Persistencia\Repositorios\PessoaRepositorio.cs" />
+    <Compile Include="Persistencia\Repositorios\PrecoPlanoRepositorio.cs" />
+    <Compile Include="Persistencia\Repositorios\PrecoRepositorio.cs" />
+    <Compile Include="Persistencia\Repositorios\ProdutoRepositorio.cs" />
+    <Compile Include="Persistencia\Repositorios\ProfissaoRepositorio.cs" />
+    <Compile Include="Persistencia\Repositorios\RelatorioRepositorio.cs" />
+    <Compile Include="Persistencia\Repositorios\SexoRepositorio.cs" />
+    <Compile Include="Persistencia\Repositorios\SubGrupoRepositorio.cs" />
+    <Compile Include="Persistencia\Repositorios\TipoAtendimentoRepositorio.cs" />
+    <Compile Include="Persistencia\Repositorios\TipoNotaRepositorio.cs" />
+    <Compile Include="Persistencia\Repositorios\TipoEntradaRepositorio.cs" />
+    <Compile Include="Persistencia\Repositorios\TipoPagamentoRepositorio.cs" />
+    <Compile Include="Persistencia\Repositorios\TipoTelefoneRepositorio.cs" />
+    <Compile Include="Persistencia\Repositorios\TipoTituloRepositorio.cs" />
+    <Compile Include="Persistencia\Repositorios\TituloapagarRepositorio.cs" />
+    <Compile Include="Persistencia\Repositorios\TituloRepositorio.cs" />
+    <Compile Include="Persistencia\Repositorios\UsuarioRepositorio.cs" />
+    <Compile Include="Persistencia\UnitOfWork.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

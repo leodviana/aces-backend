@@ -1,0 +1,170 @@
+﻿@model GtecIt.ViewModels.TipoTituloIndexViewModel
+
+@{
+    ViewBag.Title = "Tipos de Titulo";
+}
+
+
+@using (Html.BeginForm("Index", "TipoTitulo", FormMethod.Get, new { @class = "form-inline", @role = "form" }))
+{
+
+    <fieldset>
+        <legend>@ViewBag.Title</legend>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Descricao, new { @class = "control-label" })
+            @Html.TextBoxFor(x => x.Descricao, new { @class = "form-control", @placeholder = "Descrição do Documento", @autofocus = "autofocus" })
+        </div>
+        <button name="tipoacao" type="submit" value="consultatodos" class="btn btn-primary">
+            <i class="glyphicon glyphicon-search"></i> Consultar
+        </button>
+
+        <a id="btnNovo" href="#" class="btn btn-primary">
+            <span class="glyphicon glyphicon-plus"></span> Novo
+        </a>
+    </fieldset>
+}
+@if (Model != null && Model.Grid.Any())
+{
+    <div id="grid ">
+        <hr />
+        <table id="tabelaGrid" class="table table-bordered table-striped table-hover table-responsive dt-responsive">
+            <thead>
+                <tr>
+                    <th>Descrição</th>
+                    <th class="text-center"></th>
+                    <th class="text-center"></th>
+                </tr>
+            </thead>
+            <tbody id="corpoTabelaGrid">
+                @foreach (var item in Model.Grid)
+                {
+                    <tr class="@item.Codigo">
+                        <td>@item.Descricao</td>
+                        <td class="text-center col-sm-1">
+                            <a href="#" class="glyphicon glyphicon-pencil btnGridEditar" data-id="@item.Codigo"></a>
+                        </td>
+                        <td class="text-center col-sm-1">
+                            <a href="#" class="glyphicon glyphicon-trash btnGridExcluir" data-toggle="modal" data-target="#modalExclusao" data-id="@item.Codigo"></a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+<div id="modalExclusao" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Exclusão de registro</h4>
+            </div>
+            <div class="modal-body">
+                <p class="text-center">Deseja realmente excluir este registro? </p>
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="btn btn-primary " id="btnModalExclusaoConfirmar">
+                    <span class="glyphicon glyphicon-ok"></span> Confirma
+                </a>
+                &nbsp;&nbsp;
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="btnModalExclusaoCancelar">
+                    <span class="glyphicon glyphicon-remove"></span> Cancelar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $('#tabelaGrid').DataTable();
+        });
+
+        $('#btnNovo').click(function (e) {
+            e.preventDefault();
+            var url = '@Url.Action("Create", "Tipotitulo")';
+
+            var modal, modalDialog, modalContent;
+            modal = $('<div id="modalInclusao" class="modal fade" "/>');
+            modalDialog = $('<div class="modal-dialog" />');
+            modalContent = $('<div class="modal-content" />');
+
+            modal.modal('hide')
+                .append(modalDialog)
+                .on('hidden.bs.modal', function () { $(this).remove(); })
+                .appendTo('body');
+
+
+            modalDialog.append(modalContent);
+
+            $.get(url, function (data) {
+                modalContent.html(data);
+                modal.on('show.bs.modal', function () { $(this).find('input:first').focus(); });
+
+                modal.modal('show');
+            });
+        });
+
+        $('.btnGridEditar').click(function (e) {
+            e.preventDefault();
+            var url = '@Url.Action("Edit", "TipoTitulo")' + '?codigo=' + $(this).data('id');
+
+            var modal, modalDialog, modalContent;
+            modal = $('<div id="modalEdicao" class="modal fade" "/>');
+            modalDialog = $('<div class="modal-dialog" />');
+            modalContent = $('<div class="modal-content" />');
+
+            modal.modal('hide')
+             .append(modalDialog)
+             .on('hidden.bs.modal', function () { $(this).remove(); })
+             .appendTo('body');
+
+            modalDialog.append(modalContent);
+
+            $.get(url, function (data) {
+                modalContent.html(data);
+                modal.modal('show');
+            });
+        });
+
+
+
+        $(".btnGridExcluir").click(function (e) {
+            e.preventDefault();
+            var id = $(this).data('id');
+            var linha = $("." + id);
+            $("#btnModalExclusaoConfirmar").off("click").click(function (e) {
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("Delete", "TipoTitulo")',
+                    data: {
+                        "codigo": id
+                    },
+                    success: function (data) {
+                        if (data == true) {
+                            linha.remove();
+                            $('#modalExclusao').modal('hide');
+                            if ($("#corpoTabelaGrid").children("tr").length > 0) {
+                                return true;
+                            }
+                            else {
+                                $("#grid").remove();
+                                return true;
+                            }
+                        } else {
+                            alert("Ocorreu um erro ao tentar excluir o registro.");
+                            $("#btnModalExclusaoCancelar").click();
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        alert(error);
+                    }
+                });
+            });
+        });
+
+    </script>
+}

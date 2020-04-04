@@ -1,0 +1,14 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace GtecIt.Domain.Entities
+{
+    public class Entrega
+    {
+        public int idEntrega { get; set; }
+        public string Desc_entrega { get; set; }
+    }
+}

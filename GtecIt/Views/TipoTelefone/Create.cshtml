@@ -1,0 +1,57 @@
+﻿@model GtecIt.ViewModels.TipoTelefoneEditViewModel
+
+@{
+    Layout = null;
+}
+<form id="formInclusao" class="form-horizontal" role="form">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Incluir - Tipo de Telefone</h4>
+    </div>
+    <div class="modal-body">
+
+        @Html.AntiForgeryToken()
+        <div class="row">
+            <div class="form-group">
+                <label for="Descricao" class="col-md-2 control-label">Descrição</label>
+                <div class="col-md-5">
+                    <input id="Descricao" name="Descricao" type="text"
+                           class="form-control" maxlength="50" required autofocus>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" id="btnModalIncluirConfirmar" class="btn btn-primary">
+            <span class="glyphicon glyphicon-ok"></span> Confirmar
+        </button>
+        &nbsp;&nbsp;
+        <button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancelar</button>
+    </div>
+</form>
+
+<script type="text/javascript">
+    
+    $('#formInclusao').on('submit', function (e) {
+        e.preventDefault();
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("Create", "TipoTelefone")',
+            data: $("#formInclusao").serialize(),
+            success: function (result) {
+                if (result == true) {
+                    location.reload();
+                    $("modalInclusao").modal('hide');
+                } else {
+                    alert("Ocorreu um erro.");
+                }
+            },
+            error: function (xhr, status, error) {
+                alert(error);
+            }
+        });
+    });
+
+    
+</script>
+

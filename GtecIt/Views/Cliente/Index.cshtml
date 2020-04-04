@@ -1,0 +1,187 @@
+﻿@using Microsoft.Ajax.Utilities
+@model GtecIt.ViewModels.ClienteIndexViewModel
+
+
+<h1></h1>
+@{
+    ViewBag.Title = "Alunos";
+}
+
+
+@using (Html.BeginForm("Index", "Cliente", FormMethod.Get, new { @class = "form-inline", @role = "form" }))
+{
+
+    <fieldset>
+        <legend>@ViewBag.Title</legend>
+        <div class="form-group">
+           
+            @Html.TextBoxFor(x => x.Nome, new { @class = "form-control", @placeholder = "Nome", @autofocus = "autofocus" })
+        </div>
+        <button name="tipoacao" type="submit" value="consultatodos" class="btn btn-primary">
+            <i class="glyphicon glyphicon-search"></i> Consultar
+        </button>
+
+        <a id="btnNovo" href="@Url.Action("Create", "Cliente", new {origem = "cliente",orcamento = 0})" class="btn btn-primary">
+            <span class="glyphicon glyphicon-plus"></span> Novo
+        </a>
+
+    </fieldset>
+}
+@if (Model != null && Model.Grid.Any())
+{
+    <div id="grid ">
+        <hr />
+        <table id="tabelaGrid" class="table table-bordered table-striped table-hover table-responsive dt-responsive">
+            <thead>
+                <tr>
+                    <th class="col-sm-1">Cliente Id.</th>
+                    <th class="col-sm-5">Nome</th>
+                    <th class="col-sm-2">Email</th>
+                    <th class="col-sm-2">Telefone 01</th>
+                    <th class="col-sm-2">Telefone 02</th>
+                    
+                    <th class="col-sm-2">Ativo</th>
+
+                    <th class="text-center"></th>
+                    <th class="text-center"></th>
+                </tr>
+
+            </thead>
+            <tbody id="corpoTabelaGrid">
+                @foreach (var item in Model.Grid)
+                {
+                    string fone = "";
+                    if (item.grlbasic.ddd_telefone.IsNullOrWhiteSpace())
+                    {
+                        fone = "";
+                    }
+                    else
+                    {
+                        var fone_aux = item.grlbasic.ddd_telefone.Replace("(","");
+
+                        fone_aux = fone_aux.Replace(")", "");
+                        fone_aux = fone_aux.Replace("-", "");
+                        if (item.grlbasic.ddd_telefone.Length <= 10)
+                        {
+
+                            fone = String.Format("{0:(##) ####-#####}", Convert.ToInt64(fone_aux));
+                        }
+                        else
+                        {
+                            fone = String.Format("{0:(##) ####-#####}", Convert.ToInt64(fone_aux));
+                        }
+                    }
+                    string fone2 = "";
+                    if (item.grlbasic.ddd_telefone2.IsNullOrWhiteSpace())
+                    {
+                        fone2 = "";
+                    }
+                    else
+                    {
+
+                        if (item.grlbasic.ddd_telefone2.Length <= 10)
+                        {
+                            fone2 = String.Format("{0:(##) ####-#####}", Convert.ToInt64(item.grlbasic.ddd_telefone2));
+                        }
+                        else
+                        {
+                            fone2 = String.Format("{0:(##) ####-#####}", Convert.ToInt64(item.grlbasic.ddd_telefone2));
+                        }
+                    }
+
+                    <tr class="@item.id_Grlcliente">
+                        <td>@item.id_Grlcliente</td>
+                        
+                        <td>@item.grlbasic.nome</td>
+                        <td>@item.grlbasic.email</td>
+                        <td>@fone</td>
+                        <td>@fone2</td>
+                        
+                        <td>@item.Ativo.ToUpper()</td>
+
+                        <td class="text-center col-sm-1">
+                            <a href="@Url.Action("Edit", new RouteValueDictionary
+                                     {
+                                         {"codigo", item.id_Grlcliente}
+                                     })" />
+                            <span class="glyphicon glyphicon-pencil" />
+                        </td>
+                        <td class="text-center col-sm-1">
+                            <a href="#" class="glyphicon glyphicon-trash btnGridExcluir" data-toggle="modal" data-target="#modalExclusao" data-id="@item.id_Grlcliente" data-status="@item.Ativo"></a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+<div id="modalExclusao" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Exclusão de registro</h4>
+            </div>
+            <div class="modal-body">
+                <p class="text-center">Deseja realmente excluir este registro? </p>
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="btn btn-primary " id="btnModalExclusaoConfirmar">
+                    <span class="glyphicon glyphicon-ok"></span> Confirma
+                </a>
+                &nbsp;&nbsp;
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="btnModalExclusaoCancelar">
+                    <span class="glyphicon glyphicon-remove"></span> Cancelar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+
+        $(document).ready(function() {
+            $('#tabelaGrid').DataTable();
+        });
+
+
+        $(".btnGridExcluir").click(function(e) {
+            e.preventDefault();
+            var id = $(this).data('id');
+            var status = $(this).data('status');
+            var linha = $("." + id);
+            $("#btnModalExclusaoConfirmar").off("click").click(function(e) {
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("Delete", "Cliente")',
+                    data: {
+                        "codigo": id,
+                        "status": status
+                    },
+                    success: function(data) {
+                        if (data == true) {
+                            location.reload();
+                            //linha.remove();
+                            $('#modalExclusao').modal('hide');
+                            if ($("#corpoTabelaGrid").children("tr").length > 0) {
+                                return true;
+                            } else {
+                                $("#grid").remove();
+                                return true;
+                            }
+                        } else {
+                            alert("Ocorreu um erro ao tentar excluir o registro.");
+                            $("#btnModalExclusaoCancelar").click();
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        alert(error);
+                    }
+                });
+            });
+        });
+
+    </script>
+}

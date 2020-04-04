@@ -1,0 +1,336 @@
+﻿@model GtecIt.ViewModels.ProdutoCreateViewModel
+
+@{
+    ViewBag.Title = "Incluir - Procedimentos";
+}
+
+@using (Html.BeginForm("Create", "Produto", FormMethod.Post))
+{
+
+    @Html.AntiForgeryToken()
+    <fieldset>
+        <legend>@ViewBag.Title</legend>
+        @if (!string.IsNullOrEmpty(ViewBag.Error))
+        {
+            <div class="danger">
+                @ViewBag.Error.ToString()
+            </div>
+        }
+        <div id="panelgerais" class="panel panel-default ">
+            <div class="panel-heading">
+                Dados Gerais
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    
+                    <div class="col-sm-2">
+                        <label>Codigo</label>
+                        <input class="form-control " name="cd_produto" type="text" required />
+                    </div>
+                    <div class="col-sm-10">
+                        <label>Procedimento</label>
+                        <input class="form-control" name="desc_produto" type="text" required />
+                    </div>
+                    
+                </div>
+                <h1></h1>
+                <div class="row">
+                    <div class="col-sm-1">
+                        <div class="form-group">
+                            <label>Cod.</label>
+                            <input type="text" class="form-control" id="CodigoGrupo" name="Id_stqcdgrp" data-url="@Url.Action("ObterDescricaoGrupo", "Grupo")" onkeypress=" return SomenteNumero() ">
+
+                        </div>
+                    </div>
+                    <div class="col-sm-5">
+                        <label>Grupo </label>
+                        <div class="input-group">
+                            <input type="text" readonly id="NomeGrupo" name="NomeGrupo" class="form-control">
+                            <div class="input-group-btn">
+                                <button type="button" id="open-Grupo" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span></button>
+                                <button type="button" style="margin-left: 5px" class="btn btn-primary" data-toggle="modal" data-target="#modalIncluirGrupo"><span class="glyphicon glyphicon-plus"></span></button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-sm-1">
+                        <div class="form-group">
+                            <label>Cod.</label>
+                            <input type="text" class="form-control" id="CodigoSubGrupo" name="Id_stqsbgrp" data-url="@Url.Action("ObterDescricaoSubgrupo", "Subgrupo")"  onkeypress=" return SomenteNumero() ">
+
+                        </div>
+                    </div>
+                    <div class="col-sm-5">
+                        <label>Subgrupo </label>
+                        <div class="input-group">
+                            <input type="text" readonly id="NomeSubGrupo" name="NomeSubgrupo" class="form-control">
+                            <div class="input-group-btn">
+                                <button type="button" id="open-SubGrupo" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span></button>
+                                <button type="button" style="margin-left: 5px" class="btn btn-primary" data-toggle="modal" data-target="#modalIncluirSubGrupo"><span class="glyphicon glyphicon-plus"></span></button>
+                                                                                                                                         
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                
+            </div>
+        </div>
+        <h1></h1>
+        
+    </fieldset>
+    <div class="row">
+        <div class="form-group col-sm-1">
+            <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-floppy-saved"></span> Salvar</button>
+        </div>
+        <div class="form-group col-sm-1">
+            <a id="btnVoltar" href="@Url.Action("Index")" class=" btn btn-primary">
+                <span class="glyphicon glyphicon-arrow-left"></span> Voltar
+            </a>
+        </div>
+        <div class="form-group col-sm-1">
+            <a id="btnNovo" href="@Url.Action("Create")" class="btn btn-primary">
+                <span class="glyphicon glyphicon-erase"></span> Limpar
+            </a>
+        </div>
+
+    </div>
+
+}
+<div class="modal fade" id="modalGrupo" data-carregadefault="true" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Consulta de Grupos</h4>
+            </div>
+            <form id="formGrupo" data-url="@Url.Action("ObterGrupo", "Grupo")">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="form-group col-sm-4">
+                            <label>Pesquisar por:</label>
+
+                            <select class="form-control" id="tipoConsultaModalGrupo" name="tipoConsultaModalGrupo">
+                                <option value="codigo" selected>Código</option>
+                                <option value="descricao">Descrição</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-sm-8">
+                            <label>Filtro</label>
+                            <input type="text" class="form-control" id="descricaoModalGrupo" name="descricaoModalGrupo" onkeypress="return SomenteNumero()" required="required" />
+
+                        </div>
+                    </div>
+                    <div class="row" id="body">
+                        <table class="table table-condensed table-hover table-responsive">
+                            <thead>
+                                <tr style="background-color:#F8F8F8">
+                                    <th class="col-sm-2 text-center">Código</th>
+                                    <th>Descrição</th>
+                                    <th>&nbsp;</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="tabelaGrupo"></tbody>
+
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span> Pesquisar</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalSubGrupo" data-carregadefault="true" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Consulta de Subgrupos</h4>
+            </div>
+            <form id="formSubGrupo" data-url="@Url.Action("ObterSubGrupo", "SubGrupo")">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="form-group col-sm-4">
+                            <label>Pesquisar por:</label>
+
+                            <select class="form-control" id="tipoConsultaModalSubGrupo" name="tipoConsultaModalSubGrupo">
+                                <option value="codigo" selected>Código</option>
+                                <option value="descricao">Descrição</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-sm-8">
+                            <label>Filtro</label>
+                            <input type="text" class="form-control" id="descricaoModalSubGrupo" name="descricaoModalSubGrupo" onkeypress="return SomenteNumero()" required="required" />
+
+                        </div>
+                    </div>
+                    <div class="row" id="body">
+                        <table class="table table-condensed table-hover table-responsive">
+                            <thead>
+                                <tr style="background-color:#F8F8F8">
+                                    <th class="col-sm-2 text-center">Código</th>
+                                    <th>Descrição</th>
+                                    <th>&nbsp;</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="tabelaSubGrupo"></tbody>
+
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span> Pesquisar</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+                            
+<div class="modal fade" id="modalIncluirGrupo" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Incluir - Grupo</h4>
+            </div>
+                      
+            <form id="formInclusaoGrupo" class="form-horizontal" role="form">
+                <div class="modal-body">
+
+                    @Html.AntiForgeryToken()
+                    <div class="row">
+                        <div class="form-group">
+                            <label for="descricao" class="col-md-2 control-label">Descrição</label>
+                            <div class="col-md-5">
+                                <input id="desc_grupo" name="desc_grupo" type="text"
+                                       class="form-control" maxlength="50" required autofocus>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" id="btnModalIncluirConfirmar" class="btn btn-primary">
+                        <span class="glyphicon glyphicon-floppy-disk"></span> Salvar
+                    </button>
+                    &nbsp;&nbsp;
+                    <button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+                            
+<div class="modal fade" id="modalIncluirSubGrupo" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Incluir - Subgrupo</h4>
+            </div>
+                      
+            <form id="formInclusaoSubGrupo" class="form-horizontal" role="form">
+                <div class="modal-body">
+
+                    @Html.AntiForgeryToken()
+                    <div class="row">
+                        <div class="form-group">
+                            <label for="descricao" class="col-md-2 control-label">Descrição</label>
+                            <div class="col-md-5">
+                                <input id="desc_subgrupo" name="desc_subgrupo" type="text"
+                                       class="form-control" maxlength="50" required autofocus>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" id="btnModalIncluirConfirmar" class="btn btn-primary">
+                        <span class="glyphicon glyphicon-floppy-disk"></span> Salvar
+                    </button>
+                    &nbsp;&nbsp;
+                    <button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+    $(document).ready(function () {
+
+        function clearDiv(div) {
+            $(div).
+                   find(':text, :password, textarea').attr('value', '').end().
+                   find(':checkbox, :radio').attr('checked', false).end().
+                   find('select').attr('selectedIndex', 0);
+        }
+
+    });
+
+    $('#Limpar').on('reset', function (e) {
+
+
+        find(':text, :password, textarea').attr('value', '').end().
+        find(':checkbox, :radio').attr('checked', false).end().
+        find('select').attr('selectedIndex', 0);
+
+
+    });
+
+    $('#formInclusaoGrupo').on('submit', function (e) {
+        e.preventDefault();
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("CreateModal", "Grupo")',
+                data: $("#formInclusaoGrupo").serialize(),
+                success: function (result) {
+                    if (result == true) {
+                        $("#modalIncluirGrupo").modal('hide');
+                        $("#modalIncluirGrupo").find('#desc_grupo').val("");
+                        $('#NomeGrupo').val(result.desc_grupo);
+                        $('#CodigoGrupo').val(result.Id_stqcdgrp);
+                    } else {
+                        alert("Ocorreu um erro.");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    alert(error);
+                }
+            });
+        });
+
+        $('#formInclusaoSubGrupo').on('submit', function (e) {
+            e.preventDefault();
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("CreateModal", "SubGrupo")',
+                data: $("#formInclusaoSubGrupo").serialize(),
+                success: function (result) {
+                    if (result == true) {
+                        $("#modalIncluirSubGrupo").modal('hide');
+                        $("#modalIncluirSubGrupo").find('#desc_subgrupo').val("");
+                        $('#NomeSubGrupo').val(result.desc_subgrupo);
+                        $('#CodigoSubGrupo').val(result.Id_stqsbgrp);
+                    } else {
+                        alert("Ocorreu um erro.");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    alert(error);
+                }
+            });
+        });
+
+    </script>
+    
+    @Scripts.Render("~/Scripts/gtec/modal.Grupo.js")
+    @Scripts.Render("~/Scripts/gtec/modal.SubGrupo.js")
+}

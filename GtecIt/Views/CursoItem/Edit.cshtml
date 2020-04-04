@@ -1,0 +1,167 @@
+﻿@model GtecIt.ViewModels.OrcamentoItemEditViewModel
+
+@{
+    Layout = null;
+}
+<form id="formEdicao" class="form-horizontal" role="form">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Editar - Itens Orçamento</h4>
+    </div>
+    <div class="modal-body">
+
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(x => Model.id_stqporcamento)
+        @Html.HiddenFor(x => Model.id_stqitorcamento)
+        <div class="form-group">
+            <div class="col-sm-6">
+                <label>Procedimento</label>
+                @Html.DropDownListFor(x => x.id_stqcdprd, Model.DropdownProduto, "Selecione...", new { @class = "form-control", @name = "NomeProduto", @id = "NomeProduto" })
+
+            </div>
+
+            <div class="col-md-2">
+                <label>Quantidade</label>
+                @Html.TextBoxFor(model => model.qtd, new { @class = "form-control", @name = "qtd", @id = "qtd" })
+            </div>
+            <div class="col-md-4">
+                <label>Vl. Unit.</label>
+
+                @Html.TextBoxFor(model => model.Vl_unitario, new { @class = "form-control ", @name = "vl_unitario", @id = "vl_unitario" })
+            </div>
+
+        </div>
+        <div class="form-group">
+            <div class="col-sm-4">
+                <label>Desconto</label>
+
+                @Html.TextBoxFor(model => model.desconto, new { @class = "form-control ", @name = "desconto", @id = "desconto" })
+            </div>
+            <div class="col-sm-4">
+                <label>Desconto %</label>
+
+                @Html.TextBoxFor(model => model.descontoperc, new { @class = "form-control ", @name = "descontoperc", @id = "descontoperc" })
+            </div>
+
+            <div class="col-sm-4">
+                <label>Vl.Total</label>
+                @Html.TextBoxFor(model => model.Valor_total, new { @class = "form-control dinheiro", @name = "vl_total", @id = "vl_total" })
+            </div>
+
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-ok"></span> Confirmar</button>
+        &nbsp;&nbsp;
+        <button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancelar</button>
+    </div>
+</form>
+
+<script src="~/Scripts/defaults.js"></script>
+@Scripts.Render("~/Scripts/gtec/modal.Produto.js")
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        calcula_valor_total();
+    });
+
+   
+    
+    $('#formEdicao').on('submit', function (e) {
+        e.preventDefault();
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("Edit", "CursoItem")',
+            data: $("#formEdicao").serialize(),
+            success: function (result) {
+                if (result == true) {
+                    location.reload();
+                    $("#modalEdicao").modal('hide');
+                } else {
+                    alert("Esse registro foi atualizado ou excluído em outro local. Por favor, recarregue a página");
+                }
+            },
+            error: function (xhr, status, error) {
+                alert(error);
+            }
+        });
+    });
+    function calcula_valor_total() {
+
+        var  vl_total = 0.00;
+        var  qtd = 0;
+        var   vl_unit = 0.00;
+        var  vl_desconto = 0.00;
+        var    vl_perc = 0.00;
+
+
+        qtd = (document.getElementById('qtd'));
+
+        if (qtd.value == '') {
+
+            qtd = 0;
+        } else
+        {
+            qtd = (document.getElementById('qtd').value.replace(",","."));
+
+
+        }
+
+        vl_unit = (document.getElementById('vl_unitario'));
+        if (vl_unit.value == '')
+        {
+
+            vl_unit = 0;
+        }
+        else
+        {
+            vl_unit = (document.getElementById('vl_unitario').value.replace(".", "").replace(".", "."));
+            vl_unit = parseFloat(vl_unit);
+
+        }
+
+        vl_desconto = (document.getElementById('desconto'));
+        if (vl_desconto.value == '')
+        {
+
+            vl_desconto = 0;
+        }
+        else
+        {
+            vl_desconto = (document.getElementById('desconto').value.replace(",", "."));
+        }
+
+        vl_perc = (document.getElementById('descontoperc'));
+        if (vl_perc.value == '') {
+
+            vl_perc = 0;
+        }
+        else {
+            vl_perc = (document.getElementById('descontoperc').value.replace(",", "."));
+        }
+
+        vl_total = (qtd * vl_unit) - vl_desconto;
+        vl_total = vl_total - (vl_total * (vl_perc / 100));
+        
+        $("#vl_total").val(vl_total);
+        
+        
+    }
+
+    
+    $('#qtd').blur(function(e) {
+        calcula_valor_total();
+    });
+
+    $('#vl_unitario').blur(function (e) {
+        calcula_valor_total();
+    });
+    $('#desconto').blur(function (e) {
+        calcula_valor_total();
+    });
+    $('#descontoperc').blur(function (e) {
+        calcula_valor_total();
+    });
+
+</script>

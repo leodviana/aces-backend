@@ -1,0 +1,100 @@
+﻿@model GtecIt.ViewModels.NotaEntradaItemCreateViewModel
+
+@{
+    Layout = null;
+}
+
+<form id="formInclusao" class="form-horizontal" role="form">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Incluir - Itens Orçamento</h4>
+    </div>
+    <div class="modal-body">
+
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(x => Model.id_stqnoten)
+        @Html.HiddenFor(x => x.id_stqnoten)
+        <div class="form-group">
+            <div class="col-sm-6">
+                <label>Procedimento</label>
+                @Html.DropDownListFor(x => x.cd_produto, Model.DropdownProduto, "Selecione...", new { @class = "form-control", @name = "NomeProduto", @id = "NomeProduto" })
+            </div>
+
+            <div class="col-md-2">
+                <label>Quantidade</label>
+                
+                @Html.TextBoxFor(x => x.qtd_entrada, new { @class = "form-control", @name = "qtd_entrada", @id = "qtd_entrada", required = "required" })
+            </div>
+            
+
+            <div class="col-sm-4">
+                <label>Vl.Total</label>
+                @Html.TextBoxFor(model => model.valor_total, new { @class = "form-control dinheiro", @name = "valor_total", @id = "valor_total", required = "required" })
+            </div>
+
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-ok"></span> Confirmar</button>
+        &nbsp;&nbsp;
+        <button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancelar</button>
+    </div>
+</form>
+
+@Scripts.Render("~/bundles/mask")
+@Scripts.Render("~/Scripts/gtec/modal.Produto.js")
+<script type="text/javascript">
+
+
+    $('.dinheiro').maskMoney({
+        decimal: ",",
+        thousands: ".",
+        allowZero: true,
+        defaultZero: true
+    });
+
+    
+    
+    $('#formInclusao').on('submit', function (e) {
+        var vl_unit = $('#qtd_entrada').val();
+        if (vl_unit.length > 0) {
+            vl_unit = vl_unit.replace(",", ".");
+            vl_unit = parseFloat(vl_unit);
+        }
+        if (vl_unit <= 0) {
+            alert("Favor informar a quantidade ");
+            return false;
+        }
+        var vl_unit = $('#valor_total').val();
+        if (vl_unit.length > 0) {
+            vl_unit = vl_unit.replace(",", ".");
+            vl_unit = parseFloat(vl_unit);
+        }
+        if (vl_unit <= 0) {
+            alert("Favor informar o valor total ");
+            return false;
+        }
+        e.preventDefault();
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("Create", "NotaEntradaItem")',
+            data: $("#formInclusao").serialize(),
+            success: function (result) {
+                if (result == true) {
+                    location.reload();
+                    $("modalInclusao").modal('hide');
+                } else {
+                    alert("Ocorreu um erro.");
+                }
+            },
+            error: function (xhr, status, error) {
+                alert(error);
+            }
+        });
+    });
+
+   
+
+
+</script>

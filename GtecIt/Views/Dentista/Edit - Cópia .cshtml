@@ -1,0 +1,460 @@
+﻿@model GtecIt.ViewModels.DentistaEditViewModel
+<h1></h1>
+@{
+    ViewBag.Title = "Edição - Vendedor";
+}
+
+@using (Html.BeginForm("Edit", "Dentista", FormMethod.Post))
+{
+
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(x => x.Idgrlbasic.Id_grlbasico)
+    <fieldset>
+        <legend>@ViewBag.Title</legend>
+        @if (!string.IsNullOrEmpty(ViewBag.Error))
+        {
+            <div class="danger">
+                @ViewBag.Error.ToString()
+            </div>
+        }
+        <div id="panelgerais" class="panel panel-default ">
+            <div class="panel-heading">
+                Dados Gerais
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    @Html.HiddenFor(x => x.id_grldentista)
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <label>Codigo Básico</label>
+
+                            @Html.TextBoxFor(x => x.Id_grlbasico, new { @class = "form-control ", @name = "CodigoPessoa", @id = "CodigoPessoa", @readonly = "true", data_url = @Url.Action("ObterDescricaonome", "Pessoa"), onkeypress = "return SomenteNumero()" })
+
+                        </div>
+                    </div>
+                    <div class="col-sm-9">
+                        <label>Nome</label>
+                        <div class="input-group">
+
+                            @Html.TextBoxFor(x => x.Idgrlbasic.nome, new { @class = "form-control ", @name = "NomePessoa", @id = "NomePessoa", @readonly = "true" })
+                            <div class="input-group-btn">
+                                <button type="button" id="open-Pessoa" class="btn btn-primary" disabled="true"><span class="glyphicon glyphicon-search"></span></button>
+
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+                <div class="row">
+                    <div class="col-sm-4">
+
+                        <label>Contato</label>
+
+                        @Html.TextBoxFor(x => x.Idgrlbasic.contato, new {@class = "form-control ", @name = "contato", @id = "contato", @readonly = "true"})
+
+                    </div>
+                    <div class="col-sm-4">
+
+                        <label>Email</label>
+
+                        @Html.TextBoxFor(x => x.Idgrlbasic.email, new {@class = "form-control ", @name = "email", @id = "email", @readonly = "true"})
+
+                    </div>
+                    <div class="col-sm-4">
+                        <label>Email 02</label>
+                        @Html.TextBoxFor(x => x.Idgrlbasic.Email2, new {@class = "form-control ", @name = "email2", @id = "email2", @readonly = "true"})
+                    </div>
+                    
+                </div>
+
+                <h1></h1>
+                <div class="row">
+                    <div class="col-sm-2">
+                        <label>CPF</label>
+                        @Html.TextBoxFor(x => x.Idgrlbasic.cpf,new {@class = "form-control ", @name = "cpf", @id = "cpf", @readonly = "true"})
+                    </div>
+
+                    <div class="col-sm-2">
+                        <label>RG</label>
+                        @Html.TextBoxFor(x => x.Idgrlbasic.rg, new { @class = "form-control ", @name = "rg", @id = "rg", @readonly = "true" })
+                    </div>
+                    <div class="col-sm-2">
+                        <label>Telefone 01</label>
+                        @Html.TextBoxFor(x => x.Idgrlbasic.ddd_telefone, new { @class = "form-control ", @name = "fone01", @id = "fone01", @readonly = "true" })
+                    </div>
+                    <div class="col-sm-2">
+                        <label>Telefone 01</label>
+                        @Html.TextBoxFor(x => x.Idgrlbasic.ddd_telefone, new {@class = "form-control ", @name = "fone01", @id = "fone01", @readonly = "true"})
+                    </div>
+
+                    <div class="col-sm-2">
+                        <label>Telefone02</label>
+                        @Html.TextBoxFor(x => x.Idgrlbasic.ddd_telefone2, new {@class = "form-control ", @name = "fone02", @id = "fone02", @readonly = "true"})
+                    </div>
+
+
+
+                    <div class="col-sm-2">
+                        <label>Ativo</label>
+                        @Html.DropDownListFor(x => x.Ativo, Model.Dropdownativo, new {@class = "form-control", @required = "true"})
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+        <div id="panelEndereco" class="panel panel-default ">
+            <div class="panel-heading">
+
+                <button id="btnNovoEndereco" type="button" style="margin-left: 5px" class="btn btn-primary" data-id="@Model.Id_grlbasico">Endereço <span class="glyphicon glyphicon-plus"></span></button>
+
+            </div>
+            <div class="panel-body">
+
+                <div class="row">
+                    @if (Model != null && Model.Idgrlbasic.Enderecos != null && Model.Idgrlbasic.Enderecos.Any())
+                    {
+                        <div id="grid ">
+
+                            <table id="tabelaGrid" class="table table-bordered table-striped table-hover table-responsive dt-responsive">
+                                <thead>
+                                    <tr>
+                                        <th>Cep</th>
+                                        <th>Logradouro</th>
+                                        <th>Complemento</th>
+                                        <th>Bairro</th>
+
+                                        <th class="text-center"></th>
+                                        <th class="text-center"></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="corpoTabelaGrid">
+                                    @foreach (var item in Model.Idgrlbasic.Enderecos)
+                                    {
+                                        <tr class="@item.Id_Grendbasico">
+                                            <td>@item.Cep</td>
+                                            <td>@item.Logradouro</td>
+                                            <td>@item.Complemento</td>
+                                            <td>@item.Bairro</td>
+
+                                            <td class="text-center col-sm-1">
+                                                <a href="#" class="glyphicon glyphicon-pencil btnGridEditarEndereco" data-id="@item.Id_Grendbasico"></a>
+                                            </td>
+                                            <td class="text-center col-sm-1">
+                                                <a href="#" class="glyphicon glyphicon-trash btnGridExcluirEndereco" data-toggle="modal" data-target="#modalExclusao" data-id="@item.Id_Grendbasico"></a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                </div>
+
+            </div>
+
+
+        </div>
+    </fieldset>
+
+
+   
+
+
+    <h1></h1>
+    <div class="row">
+        <div class="form-group col-sm-1">
+            <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-floppy-saved"></span> Salvar</button>
+        </div>
+        <div class="form-group col-sm-1">
+            <a id="btnVoltar" href="@Url.Action("Index")" class=" btn btn-primary">
+                <span class="glyphicon glyphicon-arrow-left"></span> Voltar
+            </a>
+        </div>
+
+
+    </div>
+
+}
+<div class="modal fade" id="modalIncluirEndereco" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Incluir - Endereço</h4>
+            </div>
+            <form id="formInclusaoEndereco" class="form-horizontal" role="form">
+                <div class="modal-body">
+
+                    @Html.AntiForgeryToken()
+                    <div class="row">
+                        <div class="form-group">
+                            <label for="descricao" class="col-md-2 control-label">Descrição</label>
+                            <div class="col-md-5">
+                                <input id="descricao" name="descricao" type="text"
+                                       class="form-control" maxlength="50" required autofocus>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" id="btnModalIncluirConfirmar" class="btn btn-primary">
+                        <span class="glyphicon glyphicon-floppy-disk"></span> Salvar
+                    </button>
+                    &nbsp;&nbsp;
+                    <button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalPessoa" data-carregadefault="true" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Consulta Cadastro Básico</h4>
+            </div>
+            <form id="formPessoa" data-url="@Url.Action("ObterPessoa", "Pessoa")">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="form-group col-sm-4">
+                            <label>Pesquisar por:</label>
+
+                            <select class="form-control" id="tipoConsultaModalPessoa" name="tipoConsultaModalPessoa">
+                                <option value="codigo" selected>Código</option>
+                                <option value="descricao">Nome</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-sm-8">
+                            <label>Filtro</label>
+                            <input type="text" class="form-control" id="descricaoModalPessoa" name="descricaoModalPessoa" onkeypress="return SomenteNumero()" required="required" />
+
+                        </div>
+                    </div>
+                    <div class="row" id="body">
+                        <table class="table table-condensed table-hover table-responsive">
+                            <thead>
+                                <tr style="background-color:#F8F8F8">
+                                    <th class="col-sm-2 text-center">Código</th>
+                                    <th>Descrição</th>
+                                    <th>&nbsp;</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="tabelaPessoa"></tbody>
+
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span> Pesquisar</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+
+<div id="modalExclusao" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Exclusão de registro</h4>
+            </div>
+            <div class="modal-body">
+                <p class="text-center">Deseja realmente excluir este registro? </p>
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="btn btn-primary " id="btnModalExclusaoConfirmar">
+                    <span class="glyphicon glyphicon-ok"></span> Confirma
+                </a>
+                &nbsp;&nbsp;
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="btnModalExclusaoCancelar">
+                    <span class="glyphicon glyphicon-remove"></span> Cancelar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>
+
+        $('#btnNovoEndereco').click(function (e) {
+            e.preventDefault();
+
+            var url = '@Url.Action("Create", "Endereco")' + '?codigo=' + $(this).data('id');
+
+            var modal, modalDialog, modalContent;
+            modal = $('<div id="modalInclusao" class="modal fade" "/>');
+            modalDialog = $('<div class="modal-dialog modal-lg" />');
+            modalContent = $('<div class="modal-content" />');
+
+            modal.modal('hide')
+                .append(modalDialog)
+                .on('hidden.bs.modal', function () { $(this).remove(); })
+                .appendTo('body');
+
+
+            modalDialog.append(modalContent);
+
+            $.get(url, function (data) {
+                modalContent.html(data);
+                modal.on('show.bs.modal', function () { $(this).find('input:first').focus(); });
+                modal.modal('show');
+            });
+        });
+
+        $(".btnGridExcluirEndereco").click(function (e) {
+            e.preventDefault();
+            var id = $(this).data('id');
+
+            var linha = $("." + id);
+            $("#btnModalExclusaoConfirmar").off("click").click(function (e) {
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("Delete", "Endereco")',
+                    data: {
+                        "codigo": id
+                    },
+                    success: function (data) {
+                        if (data == true) {
+                            linha.remove();
+                            $('#modalExclusao').modal('hide');
+                            if ($("#corpoTabelaGrid").children("tr").length > 0) {
+                                return true;
+                            }
+                            else {
+                                $("#grid").remove();
+                                return true;
+                            }
+                        } else {
+                            alert("Ocorreu um erro ao tentar excluir o registro.");
+                            $("#btnModalExclusaoCancelar").click();
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        alert(error);
+                    }
+                });
+            });
+        });
+
+        $('.btnGridEditarEndereco').click(function (e) {
+            e.preventDefault();
+            var url = '@Url.Action("Edit", "Endereco")' + '?codigo=' + $(this).data('id');
+
+            var modal, modalDialog, modalContent;
+            modal = $('<div id="modalEdicao" class="modal fade" "/>');
+            modalDialog = $('<div class="modal-dialog modal-lg" />');
+            modalContent = $('<div class="modal-content" />');
+
+            modal.modal('hide')
+             .append(modalDialog)
+             .on('hidden.bs.modal', function () { $(this).remove(); })
+             .appendTo('body');
+
+            modalDialog.append(modalContent);
+
+            $.get(url, function (data) {
+                modalContent.html(data);
+                modal.modal('show');
+            });
+        });
+
+
+        //cefalometrias
+        $('#btnNovo').click(function (e) {
+            e.preventDefault();
+
+            var url = '@Url.Action("Create", "CefalometriaItem")' + '?codigo=' + $(this).data('id');
+
+            var modal, modalDialog, modalContent;
+            modal = $('<div id="modalInclusao" class="modal fade" "/>');
+            modalDialog = $('<div class="modal-dialog modal-lg" />');
+            modalContent = $('<div class="modal-content" />');
+
+            modal.modal('hide')
+                .append(modalDialog)
+                .on('hidden.bs.modal', function () { $(this).remove(); })
+                .appendTo('body');
+
+
+            modalDialog.append(modalContent);
+
+            $.get(url, function (data) {
+                modalContent.html(data);
+                modal.on('show.bs.modal', function () { $(this).find('input:first').focus(); });
+                modal.modal('show');
+            });
+        });
+        $(document).ready(function () {
+
+
+            function clearDiv(div) {
+                $(div).
+                    find(':text, :password, textarea').attr('value', '').end().
+                    find(':checkbox, :radio').attr('checked', false).end().
+                    find('select').attr('selectedIndex', 0);
+            }
+
+        });
+
+        $(".btnGridExcluir").click(function (e) {
+            e.preventDefault();
+            var id = $(this).data('id');
+            var linha = $("." + id);
+            $("#btnModalExclusaoConfirmar").off("click").click(function (e) {
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("Delete", "CefalometriaItem")',
+                    data: {
+                        "codigo": id
+                    },
+                    success: function (data) {
+                        if (data == true) {
+                            location.reload();
+                            linha.remove();
+                            $('#modalExclusao').modal('hide');
+                            if ($("#corpoTabelaGrid").children("tr").length > 0) {
+                                return true;
+                            } else {
+                                $("#grid").remove();
+                                return true;
+                            }
+                        } else {
+                            alert("Ocorreu um erro ao tentar excluir o registro.");
+                            $("#btnModalExclusaoCancelar").click();
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        alert(error);
+                    }
+                });
+            });
+        });
+
+        $('#Limpar').on('reset', function (e) {
+
+
+            find(':text, :password, textarea').attr('value', '').end().
+                find(':checkbox, :radio').attr('checked', false).end().
+                find('select').attr('selectedIndex', 0);
+
+
+        });
+
+    </script>
+    @Scripts.Render("~/Scripts/gtec/modal.tipotelefone.js")
+    @Scripts.Render("~/Scripts/gtec/modal.tpfone2.js")
+    @Scripts.Render("~/Scripts/gtec/modal.sexo.js")
+    @Scripts.Render("~/Scripts/gtec/modal.estado.js")
+    @Scripts.Render("~/Scripts/gtec/modal.profissao.js")
+    @Scripts.Render("~/Scripts/gtec/modal.pessoa.js")
+}

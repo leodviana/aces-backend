@@ -1,0 +1,158 @@
+﻿@model GtecIt.ViewModels.AulaCreateViewModel
+
+@{
+    Layout = null;
+}
+<script src="@Url.Content("~/Scripts/jquery.validate.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")" type="text/javascript"></script>
+<script src="~/Scripts/methods_pt.js"></script>
+
+
+<form id="formInclusao" class="form-horizontal" role="form">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Incluir - Aulas</h4>
+    </div>
+    <div class="modal-body">
+
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(x => Model.id_Stqcporcamento)
+        @Html.HiddenFor(x => Model.id_grldentista)
+        <div id="divErros">
+        </div>
+        <div class="row">
+            <div class="col-sm-2">
+                <label>Inicio Contrato</label>
+                @Html.TextBoxFor(x => x.Inicio_contrato, "{0:dd/MM/yyyy}", new { @class = "form-control default-date-picker", @autofocus = "autofocus", @name = "dt_inicio", @id = "dt_inicio", @Readonly = true })
+                @Html.ValidationMessageFor(model => model.Inicio_contrato, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-sm-2">
+                <label>Renov. Contrato</label>
+                @Html.TextBoxFor(x => x.Vencimento_contrato, "{0:dd/MM/yyyy}", new { @class = "form-control default-date-picker", @autofocus = "autofocus", @name = "dt_inicio", @id = "dt_inicio", @Readonly = true })
+                @Html.ValidationMessageFor(model => model.Vencimento_contrato, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-sm-2">
+                <label>Qtd. Aulas</label>
+                @Html.TextBoxFor(x => x.qtd_aulas, new { @class = "form-control ", @autofocus = "autofocus", @name = "qtd_aulas", @id = "qtd_aulas", @Readonly = true })
+                @Html.ValidationMessageFor(model => model.qtd_aulas, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-sm-6">
+                <label>Professor</label>
+                @Html.TextBoxFor(x => x.nome_dentista, new { @class = "form-control ", @autofocus = "autofocus", @name = "qtd_aulas", @id = "qtd_aulas", @Readonly = true })
+
+
+            </div>
+
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-sm-12">
+                @if (Model != null && Model.horarios != null && Model.horarios.Any())
+                {
+
+                    <div id="grid ">
+
+                        <table id="tabelaGrid" class="table table-bordered table-striped table-hover table-responsive dt-responsive">
+                            <thead>
+                                <tr>
+                                    <th>Dia</th>
+                                    <th>Horário</th>
+                                    <th class="text-center"></th>
+                                    <th class="text-center"></th>
+
+                                </tr>
+                            </thead>
+                            <tbody id="corpoTabelaGrid">
+                                @foreach (var item in Model.horarios)
+                                {
+
+                                    <tr class="@item.idgercdhorarioProf">
+
+                                        <td>@item.Dia</td>
+                                        <td>@item.horario</td>
+                                        <td class="text-center col-sm-1">
+                                            <span class="glyphicon glyphicon-pencil" title="Edição de Procedimentos"></span>
+                                        </td>
+                                        <td class="text-center col-sm-1">
+                                            <span class="glyphicon glyphicon-trash" title="Exclusão de Procedimentos"></span>
+                                        </td>
+
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+
+
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-ok"></span> Confirmar</button>
+        &nbsp;&nbsp;
+        <button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancelar</button>
+    </div>
+
+</form>
+
+@Scripts.Render("~/bundles/mask")
+@Scripts.Render("~/Scripts/gtec/modal.Produto.js")
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
+<script type="text/javascript">
+    $('#dtp1,#dtp2').datetimepicker({
+        format: 'HH:mm A'
+    });
+
+    $('.dinheiro').maskMoney({
+        decimal: ",",
+        thousands: ".",
+        allowZero: true,
+        defaultZero: true
+    });
+
+
+        $('#formInclusao').on('submit', function (e) {
+
+        e.preventDefault();
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("Create", "Aula")',
+            data: $("#formInclusao").serialize(),
+            success: function (result) {
+                if (result.Sucesso == true)
+                {
+                    location.reload();
+                    $("modalInclusao").modal('hide');
+                }
+                else
+                {
+
+
+
+                    $("#divErros").empty();
+
+                    var i = 0;
+                    $(result.msg).each(function () {
+
+
+                        $("#divErros").append("<p style=color:red>" + "* " + result.msg[i] + "</p>");
+
+                        i = i + 1;
+
+                        //crie uma divErros em sua modal.
+                    });
+
+
+                }
+            },
+            error: function (xhr, status, error) {
+                alert(error);
+            }
+        });
+    });
+
+
+
+
+</script>

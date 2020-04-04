@@ -1,0 +1,864 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
+  <Import Project="..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{099B71A1-AB9D-4E88-82CC-1547DAA06C8A}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>GtecIt</RootNamespace>
+    <AssemblyName>GtecIt</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <Use64BitIISExpress />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AutoMapper, Version=3.3.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.3.3.1\lib\net40\AutoMapper.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="AutoMapper.Net4, Version=3.3.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.3.3.1\lib\net40\AutoMapper.Net4.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="CrystalDecisions.CrystalReports.Design, Version=13.0.3500.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.CrystalReports.Engine, Version=13.0.3500.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.Enterprise.Viewing.ReportSource, Version=13.0.3500.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="CrystalDecisions.ReportSource, Version=13.0.3500.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.Shared, Version=13.0.3500.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="GtecIt.Domain">
+      <HintPath>..\GtecIt.Domain\bin\Debug\GtecIt.Domain.dll</HintPath>
+    </Reference>
+    <Reference Include="GtecIt.Infra.Data">
+      <HintPath>..\GtecIt.Infra.Data\bin\Debug\GtecIt.Infra.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AI.Agent.Intercept, Version=2.0.6.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.Agent.Intercept.2.0.6\lib\net45\Microsoft.AI.Agent.Intercept.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.DependencyCollector, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.DependencyCollector.2.2.0\lib\net45\Microsoft.AI.DependencyCollector.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.PerfCounterCollector, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.PerfCounterCollector.2.2.0\lib\net45\Microsoft.AI.PerfCounterCollector.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.ServerTelemetryChannel, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel.2.2.0\lib\net45\Microsoft.AI.ServerTelemetryChannel.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.Web, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.Web.2.2.0\lib\net45\Microsoft.AI.Web.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.WindowsServer, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.WindowsServer.2.2.0\lib\net45\Microsoft.AI.WindowsServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.ApplicationInsights, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.2.2.0\lib\net45\Microsoft.ApplicationInsights.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=6d32ff45e0ccc69f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.4.0.1\lib\net45\Microsoft.Practices.Unity.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity.Configuration, Version=4.0.0.0, Culture=neutral, PublicKeyToken=6d32ff45e0ccc69f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.4.0.1\lib\net45\Microsoft.Practices.Unity.Configuration.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=6d32ff45e0ccc69f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.Mvc.4.0.1\lib\net45\Microsoft.Practices.Unity.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity.RegistrationByConvention, Version=4.0.0.0, Culture=neutral, PublicKeyToken=6d32ff45e0ccc69f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.4.0.1\lib\net45\Microsoft.Practices.Unity.RegistrationByConvention.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MySql.Data, Version=6.9.9.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <HintPath>..\packages\MySql.Data.6.9.9\lib\net45\MySql.Data.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MySql.Data.Entity.EF6, Version=6.9.9.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <HintPath>..\packages\MySql.Data.Entity.6.9.9\lib\net45\MySql.Data.Entity.EF6.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Http, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.3\lib\net45\System.Web.Http.WebHost.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http">
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest">
+    </Reference>
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Optimization">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="WebActivatorEx, Version=2.0.0.0, Culture=neutral, PublicKeyToken=7b26dc2a43f6a0d4, processorArchitecture=MSIL">
+      <HintPath>..\packages\WebActivatorEx.2.0\lib\net40\WebActivatorEx.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="WebGrease">
+      <Private>True</Private>
+      <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
+    </Reference>
+    <Reference Include="Antlr3.Runtime">
+      <Private>True</Private>
+      <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\AutoMapperConfig.cs" />
+    <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\UnityConfig.cs" />
+    <Compile Include="App_Start\UnityMvcActivator.cs" />
+    <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Binders\DateTimeModelBinder.cs" />
+    <Compile Include="Binders\DecimalModelBinder.cs" />
+    <Compile Include="Controllers\Api\BancoapiController.cs" />
+    <Compile Include="Controllers\Api\testeController.cs" />
+    <Compile Include="Controllers\HorarioProfessorController.cs" />
+    <Compile Include="Controllers\ClienteController.cs" />
+    <Compile Include="Controllers\DentistaController.cs" />
+    <Compile Include="Controllers\FornecedorController.cs" />
+    <Compile Include="Controllers\CentrodeCustoController.cs" />
+    <Compile Include="Controllers\AulaController.cs" />
+    <Compile Include="Controllers\PessoaController.cs" />
+    <Compile Include="Controllers\PlanoController.cs" />
+    <Compile Include="Controllers\NotaEntradaController.cs" />
+    <Compile Include="Controllers\NotaEntradaItemController.cs" />
+    <Compile Include="Controllers\CursoController.cs" />
+    <Compile Include="Controllers\CursoItemController.cs" />
+    <Compile Include="Controllers\PrecoPlanoController.cs" />
+    <Compile Include="Controllers\TituloapagarController.cs" />
+    <Compile Include="Controllers\TituloController.cs" />
+    <Compile Include="Controllers\TipoTituloController.cs" />
+    <Compile Include="Controllers\TipoTelefoneController.cs" />
+    <Compile Include="Controllers\TipoPagamentoController.cs" />
+    <Compile Include="Controllers\SubGrupoController.cs" />
+    <Compile Include="Controllers\SexoController.cs" />
+    <Compile Include="Controllers\RelatorioController.cs" />
+    <Compile Include="Controllers\ProfissaoController.cs" />
+    <Compile Include="Controllers\PrecoController.cs" />
+    <Compile Include="Controllers\PessoaControllercerto.cs" />
+    <Compile Include="Controllers\OrcamentoItemController.cs" />
+    <Compile Include="Controllers\OrcamentoController.cs" />
+    <Compile Include="Controllers\GrupoController.cs" />
+    <Compile Include="Controllers\EstadoCivilController.cs" />
+    <Compile Include="Controllers\EnderecoController.cs" />
+    <Compile Include="Controllers\ClienteControllercerto.cs" />
+    <Compile Include="Controllers\CefalometriaController.cs" />
+    <Compile Include="Controllers\BancoController.cs" />
+    <Compile Include="Controllers\CefalometriaItemController.cs" />
+    <Compile Include="Controllers\ConvenioController.cs" />
+    <Compile Include="Controllers\DentistaControllercerto.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\ProdutoController .cs" />
+    <Compile Include="Filters\CompressFilter.cs" />
+    <Compile Include="Filters\SessionExpireFilter.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="HTMLHelpers\CustomHelpers.cs" />
+    <Compile Include="Models\DataSet1.cs">
+      <DependentUpon>DataSet1.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DataSet11.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DataSet1.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reports\CrystalReport11.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CrystalReport1.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\CrystalReport21.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CrystalReport2.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\Entidades\Rel001.cs" />
+    <Compile Include="Reports\Rel001- Impressão de Atendimento1.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Rel001- Impressão de Atendimento.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\Rel010 - Cursos por periodo.cs">
+      <DependentUpon>Rel010 - Cursos por periodo.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Reports\Rel002 - Titulos a Receber por periodo1.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Rel002 - Titulos a Receber por periodo.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\Rel003 - Atendimentos por periodo Sintético1.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Rel003 - Atendimentos por periodo Sintético.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\Rel003-Etiquetamodelo011.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Rel003-Etiquetamodelo01.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\Rel004 - Titulos a Receber por periodo1.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Rel004 - Titulos a Receber por periodo.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\Rel005 - Atendimentos Cancelados por periodo1.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Rel005 - Atendimentos Cancelados por periodo.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\Rel006 - Atendimentos sem titulos a receber por periodo1.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Rel006 - Atendimentos sem titulos a receber por periodo.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\Rel007 - Atendimentos por Dentista1.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Rel007 - Atendimentos por Dentista.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\Rel008 - Atendimentos por Dentista sintetico1.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Rel008 - Atendimentos por Dentista sintetico.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\Rel009 - Exames por Dentista1.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Rel009 - Exames por Dentista.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Util\Auditoria.cs" />
+    <Compile Include="Util\FiltroDeCaracteres.cs" />
+    <Compile Include="Util\GerenciaSession.cs" />
+    <Compile Include="Util\GerenciaSessoinBase.cs" />
+    <Compile Include="ViewModels\Aula\AulaCreateViewModel.cs" />
+    <Compile Include="ViewModels\Aula\AulaEditViewModel.cs" />
+    <Compile Include="ViewModels\Aula\AulaGridViewModel.cs" />
+    <Compile Include="ViewModels\Aula\AulaIndexViewModel.cs" />
+    <Compile Include="ViewModels\Banco\BancoCreateViewModel.cs" />
+    <Compile Include="ViewModels\Banco\BancoEditViewModel.cs" />
+    <Compile Include="ViewModels\Banco\BancoGridViewModel.cs" />
+    <Compile Include="ViewModels\Banco\BancoIndexViewModel.cs" />
+    <Compile Include="ViewModels\CefalometriaItem\CefalometriaItemCreateViewModel.cs" />
+    <Compile Include="ViewModels\CefalometriaItem\CefalometriaItemEditViewModel.cs" />
+    <Compile Include="ViewModels\CefalometriaItem\CefalometriaItemGridViewModel.cs" />
+    <Compile Include="ViewModels\CefalometriaItem\CefalometriaItemIndexViewModel.cs" />
+    <Compile Include="ViewModels\Cefalometria\CefalometriaCreateViewModel.cs" />
+    <Compile Include="ViewModels\Cefalometria\CefalometriaEditViewModel.cs" />
+    <Compile Include="ViewModels\Cefalometria\CefalometriaGridViewModel.cs" />
+    <Compile Include="ViewModels\Cefalometria\CefalometriaIndexViewModel.cs" />
+    <Compile Include="ViewModels\Centro de Custo\CentrodeCustoCreateViewModel.cs" />
+    <Compile Include="ViewModels\Centro de Custo\CentrodeCustoEditViewModel.cs" />
+    <Compile Include="ViewModels\Centro de Custo\CentrodeCustoGridViewModel.cs" />
+    <Compile Include="ViewModels\Centro de Custo\CentrodeCustoIndexViewModel.cs" />
+    <Compile Include="ViewModels\Clientecerto\ClienteCreateViewModelx.cs" />
+    <Compile Include="ViewModels\Clientecerto\ClienteEditViewModelx.cs" />
+    <Compile Include="ViewModels\Clientecerto\ClienteGridViewModelx.cs" />
+    <Compile Include="ViewModels\Clientecerto\ClienteIndexViewModelx.cs" />
+    <Compile Include="ViewModels\Cliente\ClienteCreateViewModel.cs" />
+    <Compile Include="ViewModels\Cliente\ClienteEditViewModel.cs" />
+    <Compile Include="ViewModels\Cliente\ClienteGridViewModel.cs" />
+    <Compile Include="ViewModels\Cliente\ClienteIndexViewModel.cs" />
+    <Compile Include="ViewModels\Convenio\ConvenioCreateViewModel.cs" />
+    <Compile Include="ViewModels\Convenio\ConvenioEditViewModel.cs" />
+    <Compile Include="ViewModels\Convenio\ConvenioGridViewModel.cs" />
+    <Compile Include="ViewModels\Convenio\ConvenioIndexViewModel.cs" />
+    <Compile Include="ViewModels\Dentistacerto\DentistaCreateViewModelx.cs" />
+    <Compile Include="ViewModels\Dentistacerto\DentistaEditViewModelx.cs" />
+    <Compile Include="ViewModels\Dentistacerto\DentistaGridViewModelx.cs" />
+    <Compile Include="ViewModels\Dentistacerto\DentistaIndexViewModelx.cs" />
+    <Compile Include="ViewModels\Dentista\DentistaCreateViewModel.cs" />
+    <Compile Include="ViewModels\Dentista\DentistaEditViewModel.cs" />
+    <Compile Include="ViewModels\Dentista\DentistaGridViewModel.cs" />
+    <Compile Include="ViewModels\Dentista\DentistaIndexViewModel.cs" />
+    <Compile Include="ViewModels\Empresa\EmpresaCreateViewModel.cs" />
+    <Compile Include="ViewModels\Empresa\EmpresaEditViewModel.cs" />
+    <Compile Include="ViewModels\Empresa\EmpresaGridViewModel.cs" />
+    <Compile Include="ViewModels\Empresa\EmpresaIndexViewModel.cs" />
+    <Compile Include="ViewModels\Empresa\EmpresaLogadoViewModel.cs" />
+    <Compile Include="ViewModels\Endereco\EnderecoCreateViewModel.cs" />
+    <Compile Include="ViewModels\Endereco\EnderecoEditViewModel.cs" />
+    <Compile Include="ViewModels\Endereco\EnderecoGridViewModel.cs" />
+    <Compile Include="ViewModels\Endereco\EnderecoIndexViewModel.cs" />
+    <Compile Include="ViewModels\Entrega\EntregaCreateViewModel.cs" />
+    <Compile Include="ViewModels\Entrega\EntregaEditViewModel.cs" />
+    <Compile Include="ViewModels\Entrega\EntregaGridViewModel.cs" />
+    <Compile Include="ViewModels\Entrega\EntregaIndexViewModel.cs" />
+    <Compile Include="ViewModels\Estado Civil\EstadocivilCreateViewModel.cs" />
+    <Compile Include="ViewModels\Estado Civil\EstadoCivilEditViewModel.cs" />
+    <Compile Include="ViewModels\Estado Civil\EstadoCivilGridViewModel.cs" />
+    <Compile Include="ViewModels\Estado Civil\EstadoCivilIndexViewModel.cs" />
+    <Compile Include="ViewModels\Fornecedor\FornecedorCreateViewModel.cs" />
+    <Compile Include="ViewModels\Fornecedor\FornecedorEditViewModel.cs" />
+    <Compile Include="ViewModels\Fornecedor\FornecedorGridViewModel.cs" />
+    <Compile Include="ViewModels\Fornecedor\FornecedorIndexViewModel.cs" />
+    <Compile Include="ViewModels\Grupo\GrupoCreateViewModel.cs" />
+    <Compile Include="ViewModels\Grupo\GrupoEditViewModel.cs" />
+    <Compile Include="ViewModels\Grupo\GrupoGridViewModel.cs" />
+    <Compile Include="ViewModels\Grupo\GrupoIndexViewModel.cs" />
+    <Compile Include="ViewModels\HorarioProfessor\HorarioProfessorCreateViewModel.cs" />
+    <Compile Include="ViewModels\HorarioProfessor\HorarioProfessorEditViewModel.cs" />
+    <Compile Include="ViewModels\HorarioProfessor\HorarioProfessorGridViewModel.cs" />
+    <Compile Include="ViewModels\HorarioProfessor\HorarioProfessorIndexViewModel.cs" />
+    <Compile Include="ViewModels\MensagemAuxiliarViewModel.cs" />
+    <Compile Include="ViewModels\NotaEntradaItem\NotaEntradaItemCreateViewModel.cs" />
+    <Compile Include="ViewModels\NotaEntradaItem\NotaEntradaItemEditViewModel.cs" />
+    <Compile Include="ViewModels\NotaEntradaItem\NotaEntradaItemGridViewModel.cs" />
+    <Compile Include="ViewModels\NotaEntradaItem\NotaEntradaItemIndexViewModel.cs" />
+    <Compile Include="ViewModels\NotaEntrada\NotaEntradaCreateViewModel.cs" />
+    <Compile Include="ViewModels\NotaEntrada\NotaEntradaEditViewModel.cs" />
+    <Compile Include="ViewModels\NotaEntrada\NotaEntradaGridViewModel.cs" />
+    <Compile Include="ViewModels\NotaEntrada\NotaEntradaIndexViewModel.cs" />
+    <Compile Include="ViewModels\OrcamentoItem\OrcamentoItemCreateViewModel.cs" />
+    <Compile Include="ViewModels\OrcamentoItem\OrcamentoItemEditViewModel.cs" />
+    <Compile Include="ViewModels\OrcamentoItem\OrcamentoItemGridViewModel.cs" />
+    <Compile Include="ViewModels\OrcamentoItem\OrcamentoItemIndexViewModel.cs" />
+    <Compile Include="ViewModels\Orcamento\OrcamentoCreateViewModel.cs" />
+    <Compile Include="ViewModels\Orcamento\OrcamentoEditViewModel.cs" />
+    <Compile Include="ViewModels\Orcamento\OrcamentoGridViewModel.cs" />
+    <Compile Include="ViewModels\Orcamento\OrcamentoIndexViewModel.cs" />
+    <Compile Include="ViewModels\PedidoItem\PedidoItemCreateViewModel.cs" />
+    <Compile Include="ViewModels\PedidoItem\PedidoItemEditViewModel.cs" />
+    <Compile Include="ViewModels\Pedido\PedidoCreateViewModel.cs" />
+    <Compile Include="ViewModels\Pedido\PedidoEditViewModel.cs" />
+    <Compile Include="ViewModels\Pedido\PedidoGridViewModel.cs" />
+    <Compile Include="ViewModels\Pedido\PedidoIndexViewModel.cs" />
+    <Compile Include="ViewModels\Pessoacerto\PessoaCreateViewModelx.cs" />
+    <Compile Include="ViewModels\Pessoacerto\PessoaEditViewModelx.cs" />
+    <Compile Include="ViewModels\Pessoacerto\PessoaGridViewModelx.cs" />
+    <Compile Include="ViewModels\Pessoacerto\PessoaIndexViewModelx.cs" />
+    <Compile Include="ViewModels\Pessoacerto\PessoaSimpleViewModelx.cs" />
+    <Compile Include="ViewModels\Pessoacerto\PessoaViewModelx.cs" />
+    <Compile Include="ViewModels\Pessoa\PessoaCreateViewModel.cs" />
+    <Compile Include="ViewModels\Pessoa\PessoaEditViewModel.cs" />
+    <Compile Include="ViewModels\Pessoa\PessoaGridViewModel.cs" />
+    <Compile Include="ViewModels\Pessoa\PessoaIndexViewModel.cs" />
+    <Compile Include="ViewModels\Pessoa\PessoaSimpleViewModel.cs" />
+    <Compile Include="ViewModels\Pessoa\PessoaViewModel.cs" />
+    <Compile Include="ViewModels\Plano\PlanoCreateViewModel.cs" />
+    <Compile Include="ViewModels\Plano\PlanoEditViewModel.cs" />
+    <Compile Include="ViewModels\Plano\PlanoGridViewModel.cs" />
+    <Compile Include="ViewModels\Plano\PlanoIndexViewModel.cs" />
+    <Compile Include="ViewModels\PrecoPlano\PrecoPlanoCreateViewModel.cs" />
+    <Compile Include="ViewModels\PrecoPlano\PrecoPlanoEditViewModel.cs" />
+    <Compile Include="ViewModels\PrecoPlano\PrecoPlanoGridViewModel.cs" />
+    <Compile Include="ViewModels\PrecoPlano\PrecoPlanoIndexViewModel.cs" />
+    <Compile Include="ViewModels\Preco\PrecoCreateViewModel.cs" />
+    <Compile Include="ViewModels\Preco\PrecoEditViewModel.cs" />
+    <Compile Include="ViewModels\Preco\PrecoGridViewModel.cs" />
+    <Compile Include="ViewModels\Preco\PrecoIndexViewModel.cs" />
+    <Compile Include="ViewModels\Produto\ProdutoCreateViewModel.cs" />
+    <Compile Include="ViewModels\Produto\ProdutoEditViewModel.cs" />
+    <Compile Include="ViewModels\Produto\ProdutoGridViewModel.cs" />
+    <Compile Include="ViewModels\Produto\ProdutoIndexViewModel.cs" />
+    <Compile Include="ViewModels\Profisao\ProfissaoCreateViewModel.cs" />
+    <Compile Include="ViewModels\Profisao\ProfissaoEditViewModel.cs" />
+    <Compile Include="ViewModels\Profisao\ProfissaoGridViewModel.cs" />
+    <Compile Include="ViewModels\Profisao\ProfissaoIndexViewModel.cs" />
+    <Compile Include="ViewModels\Relatorio\GerarelatorioViewModel.cs" />
+    <Compile Include="ViewModels\Relatorio\RelGeralViewlModel.cs" />
+    <Compile Include="ViewModels\Sexo\SexoCreateViewModel.cs" />
+    <Compile Include="ViewModels\Sexo\SexoEditViewModel.cs" />
+    <Compile Include="ViewModels\Sexo\SexoGridViewModel.cs" />
+    <Compile Include="ViewModels\Sexo\SexoIndexViewModel.cs" />
+    <Compile Include="ViewModels\Subgrupo\SubGrupoCreateViewModel.cs" />
+    <Compile Include="ViewModels\Subgrupo\SubGrupoEditViewModel.cs" />
+    <Compile Include="ViewModels\Subgrupo\SubGrupoGridViewModel.cs" />
+    <Compile Include="ViewModels\Subgrupo\SubGrupoIndexViewModel.cs" />
+    <Compile Include="ViewModels\TipoPagamentoCreateViewModel.cs" />
+    <Compile Include="ViewModels\TipoPagamentoEditViewModel.cs" />
+    <Compile Include="ViewModels\TipoPagamentoGridViewModel.cs" />
+    <Compile Include="ViewModels\TipoPagamentoIndexViewModel.cs" />
+    <Compile Include="ViewModels\TipoTelefone\TipoTelefoneCreateViewModel.cs" />
+    <Compile Include="ViewModels\TipoTelefone\TipoTelefoneEditViewModel.cs" />
+    <Compile Include="ViewModels\TipoTelefone\TipoTelefoneGridViewModel.cs" />
+    <Compile Include="ViewModels\TipoTelefone\TipoTelefoneIndexViewModel.cs" />
+    <Compile Include="ViewModels\TipoTitulo\TipoTituloCreateViewModel.cs" />
+    <Compile Include="ViewModels\TipoTitulo\TipoTituloEditViewModel.cs" />
+    <Compile Include="ViewModels\TipoTitulo\TipoTituloGridViewModel.cs" />
+    <Compile Include="ViewModels\TipoTitulo\TipoTituloIndexViewModel.cs" />
+    <Compile Include="ViewModels\Tituloapagar\TituloapagarCreateViewModel.cs" />
+    <Compile Include="ViewModels\Tituloapagar\TituloapagarEditViewModel.cs" />
+    <Compile Include="ViewModels\Tituloapagar\TituloapagarGridViewModel.cs" />
+    <Compile Include="ViewModels\Tituloapagar\TituloapagarIndexViewModel.cs" />
+    <Compile Include="ViewModels\Titulo\TituloCreateViewModel.cs" />
+    <Compile Include="ViewModels\Titulo\TituloEditViewModel.cs" />
+    <Compile Include="ViewModels\Titulo\TituloGridViewModel.cs" />
+    <Compile Include="ViewModels\Titulo\TituloIndexViewModel.cs" />
+    <Compile Include="ViewModels\Usuario\UsuarioCreateViewModel.cs" />
+    <Compile Include="ViewModels\Usuario\UsuarioEditViewModel.cs" />
+    <Compile Include="ViewModels\Usuario\UsuarioGridViewModel.cs" />
+    <Compile Include="ViewModels\Usuario\UsuarioIndexViewModel.cs" />
+    <Compile Include="ViewModels\Usuario\UsuarioLogadoViewModel.cs" />
+    <Compile Include="ViewModels\Usuario\UsuarioSimpleViewModel.cs" />
+    <Compile Include="ViewModels\Usuario\UsuarioTrocaSenhaViewModel.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\bootstrap-datetimepicker.min.css" />
+    <Content Include="Content\bootstrap-theme.css" />
+    <Content Include="Content\bootstrap-theme.min.css" />
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\dataTables.bootstrap.css" />
+    <Content Include="Content\dataTables.responsive.css" />
+    <Content Include="Content\typeahead.css" />
+    <Content Include="favicon.ico" />
+    <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Global.asax" />
+    <Content Include="Content\Site.css" />
+    <Content Include="Images\target-login.PNG" />
+    <Content Include="imgs\logo-perboyre-castelo-clinica.PNG" />
+    <Content Include="Scripts\bloodhound.js" />
+    <Content Include="Scripts\bloodhound.min.js" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="ApplicationInsights.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\bootstrap-theme.css.map" />
+    <Content Include="Content\bootstrap.css.map" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="Models\DataSet1.xsc">
+      <DependentUpon>DataSet1.xsd</DependentUpon>
+    </Content>
+    <None Include="Models\DataSet1.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>DataSet11.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="Models\DataSet1.xss">
+      <DependentUpon>DataSet1.xsd</DependentUpon>
+    </Content>
+    <None Include="Properties\PublishProfiles\autentica.pubxml" />
+    <None Include="Properties\PublishProfiles\Itescola.pubxml" />
+    <None Include="Scripts\jquery-2.2.4.intellisense.js" />
+    <Content Include="Scripts\dataTables.bootstrap.js" />
+    <Content Include="Scripts\dataTables.responsive.js" />
+    <Content Include="Scripts\defaults.js" />
+    <Content Include="Scripts\gtec\agenda.js" />
+    <Content Include="Scripts\gtec\modal.cliente.js" />
+    <Content Include="Scripts\gtec\modal.dentista.js" />
+    <Content Include="Scripts\gtec\modal.estado.js" />
+    <Content Include="Scripts\gtec\modal.fornecedor.js" />
+    <Content Include="Scripts\gtec\modal.Grupo.js" />
+    <Content Include="Scripts\gtec\modal.pessoa.js" />
+    <Content Include="Scripts\gtec\modal.produto.js" />
+    <Content Include="Scripts\gtec\modal.profissao.js" />
+    <Content Include="Scripts\gtec\modal.sexo.js" />
+    <Content Include="Scripts\gtec\modal.SubGrupo.js" />
+    <Content Include="Scripts\gtec\modal.tipotelefone.js" />
+    <Content Include="Scripts\gtec\modal.tpfone2.js" />
+    <Content Include="Scripts\jquery-2.2.4.js" />
+    <Content Include="Scripts\jquery-2.2.4.min.js" />
+    <Content Include="Scripts\jquery-2.2.4.min.map" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.dataTables.js" />
+    <Content Include="Scripts\jquery.dataTables.min.js" />
+    <Content Include="Scripts\jquery.inputmask.min.js" />
+    <Content Include="Scripts\jquery.maskMoney.min.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\methods_pt.js" />
+    <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\respond.js" />
+    <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\typeahead.bundle.js" />
+    <Content Include="Scripts\typeahead.bundle.min.js" />
+    <Content Include="Scripts\typeahead.jquery.js" />
+    <Content Include="Scripts\typeahead.jquery.min.js" />
+    <Content Include="Scripts\_references.js" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Views\Web.config" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Home\About.cshtml" />
+    <Content Include="Views\Home\Contact.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Scripts\Portuguese-Brasil.json" />
+    <Content Include="Views\Banco\Create.cshtml" />
+    <Content Include="Views\Banco\Edit.cshtml" />
+    <Content Include="Views\Banco\Index.cshtml" />
+    <Content Include="Views\Login\Create.cshtml" />
+    <Content Include="Views\Login\Edit.cshtml" />
+    <Content Include="Views\Login\Index.cshtml" />
+    <Content Include="Views\Login\Index2.cshtml" />
+    <Content Include="Views\Cefalometria\Create.cshtml" />
+    <Content Include="Views\Cefalometria\Edit.cshtml" />
+    <Content Include="Views\Cefalometria\Index.cshtml" />
+    <Content Include="Views\CefalometriaItem\Create.cshtml" />
+    <Content Include="Views\Clientecerto\Create.cshtml" />
+    <Content Include="Views\Clientecerto\Edit.cshtml" />
+    <Content Include="Views\Clientecerto\Index.cshtml" />
+    <Content Include="Views\Convenio\Create.cshtml" />
+    <Content Include="Views\Convenio\Edit.cshtml" />
+    <Content Include="Views\Convenio\Index.cshtml" />
+    <Content Include="Views\Dentistacerto\Create.cshtml" />
+    <Content Include="Views\Dentistacerto\Edit.cshtml" />
+    <Content Include="Views\Dentistacerto\Index.cshtml" />
+    <Content Include="Views\Endereco\Create.cshtml" />
+    <Content Include="Views\Endereco\Edit.cshtml" />
+    <Content Include="Views\Endereco\Index.cshtml" />
+    <Content Include="Views\EstadoCivil\Create.cshtml" />
+    <Content Include="Views\EstadoCivil\Edit.cshtml" />
+    <Content Include="Views\EstadoCivil\Index.cshtml" />
+    <Content Include="Views\Grupo\Create.cshtml" />
+    <Content Include="Views\Grupo\Edit.cshtml" />
+    <Content Include="Views\Grupo\Index.cshtml" />
+    <Content Include="Views\Orcamento\Create.cshtml" />
+    <Content Include="Views\Orcamento\Edit.cshtml" />
+    <Content Include="Views\Orcamento\geraRelatorio.cshtml" />
+    <Content Include="Views\Orcamento\Index.cshtml" />
+    <Content Include="Views\Orcamento\RelatorioVenda.cshtml" />
+    <Content Include="Views\OrcamentoItem\Create.cshtml" />
+    <Content Include="Views\OrcamentoItem\Edit.cshtml" />
+    <Content Include="Views\OrcamentoItem\Index.cshtml" />
+    <Content Include="Views\Preco\Create.cshtml" />
+    <Content Include="Views\Preco\Edit.cshtml" />
+    <Content Include="Views\Pessoacerto\Create.cshtml" />
+    <Content Include="Views\Pessoacerto\Edit.cshtml" />
+    <Content Include="Views\Pessoacerto\Index.cshtml" />
+    <Content Include="Views\Profissao\Create.cshtml" />
+    <Content Include="Views\Profissao\Edit.cshtml" />
+    <Content Include="Views\Profissao\Index.cshtml" />
+    <Content Include="Views\Relatorio\RelAtendimentoPeriodo.cshtml" />
+    <Content Include="Views\Relatorio\RelAtendimentoPeriodocancelado.cshtml" />
+    <Content Include="Views\Relatorio\RelAtendimentoPeriodoporconnvenio.cshtml" />
+    <Content Include="Views\Relatorio\RelAtendimentoPeriodosemtitulos.cshtml" />
+    <Content Include="Views\Relatorio\RelAtendimentopordentista.cshtml" />
+    <Content Include="Views\Relatorio\RelAtendimentopordentistasintetico.cshtml" />
+    <Content Include="Views\Relatorio\RelExamespordentista.cshtml" />
+    <Content Include="Views\Relatorio\RelTitulosareceber.cshtml" />
+    <Content Include="Views\Produto\Create - Copy.cshtml" />
+    <Content Include="Views\Produto\Create.cshtml" />
+    <Content Include="Views\Produto\Edit.cshtml" />
+    <Content Include="Views\Produto\Index.cshtml" />
+    <Content Include="Views\Sexo\Create.cshtml" />
+    <Content Include="Views\Sexo\Edit.cshtml" />
+    <Content Include="Views\Sexo\Index.cshtml" />
+    <Content Include="Views\SubGrupo\Create.cshtml" />
+    <Content Include="Views\SubGrupo\Edit.cshtml" />
+    <Content Include="Views\SubGrupo\Index.cshtml" />
+    <Content Include="Views\TipoPagamento\Create.cshtml" />
+    <Content Include="Views\TipoPagamento\Edit.cshtml" />
+    <Content Include="Views\TipoPagamento\Index.cshtml" />
+    <Content Include="Views\TipoTelefone\Create.cshtml" />
+    <Content Include="Views\TipoTelefone\Edit.cshtml" />
+    <Content Include="Views\TipoTelefone\Index.cshtml" />
+    <Content Include="Views\TipoTitulo\Create.cshtml" />
+    <Content Include="Views\TipoTitulo\Edit.cshtml" />
+    <Content Include="Views\TipoTitulo\Index.cshtml" />
+    <Content Include="Views\Titulo\Create.cshtml" />
+    <Content Include="Views\Titulo\Edit.cshtml" />
+    <Content Include="Views\Titulo\Index.cshtml" />
+    <Content Include="Views\Titulo\Quitacao.cshtml" />
+    <Content Include="Views\Pessoacerto\Pesquisa.cshtml" />
+    <Content Include="Views\Fornecedor\Create.cshtml" />
+    <Content Include="Views\Fornecedor\Edit.cshtml" />
+    <Content Include="Views\Fornecedor\Index.cshtml" />
+    <Content Include="Views\CentrodeCusto\Create.cshtml" />
+    <Content Include="Views\CentrodeCusto\Edit.cshtml" />
+    <Content Include="Views\CentrodeCusto\Index.cshtml" />
+    <Content Include="Views\NotaEntrada\Index.cshtml" />
+    <Content Include="Views\NotaEntrada\Create.cshtml" />
+    <Content Include="Views\NotaEntrada\Edit.cshtml" />
+    <Content Include="Views\NotaEntradaItem\Edit.cshtml" />
+    <Content Include="Views\NotaEntradaItem\Create.cshtml" />
+    <Content Include="Views\Tituloapagar\Create.cshtml" />
+    <Content Include="Views\Tituloapagar\Edit.cshtml" />
+    <Content Include="Views\Tituloapagar\Quitacao.cshtml" />
+    <Content Include="Views\Curso\Create.cshtml" />
+    <Content Include="Views\Curso\Edit.cshtml" />
+    <Content Include="Views\Curso\geraRelatorio.cshtml" />
+    <Content Include="Views\Curso\Index.cshtml" />
+    <Content Include="Views\Curso\RelatorioVenda.cshtml" />
+    <Content Include="Views\CursoItem\Create.cshtml" />
+    <Content Include="Views\CursoItem\Edit.cshtml" />
+    <Content Include="Views\CursoItem\Index.cshtml" />
+    <Content Include="Views\Relatorio\RelCursoPeriodo.cshtml" />
+    <Content Include="Views\Plano\Create.cshtml" />
+    <Content Include="Views\Plano\Edit.cshtml" />
+    <Content Include="Views\Plano\Index.cshtml" />
+    <Content Include="Views\PrecoPlano\Create.cshtml" />
+    <Content Include="Views\PrecoPlano\Edit.cshtml" />
+    <Content Include="Views\Pessoa\Create.cshtml" />
+    <Content Include="Views\Pessoa\Edit.cshtml" />
+    <Content Include="Views\Pessoa\Index.cshtml" />
+    <Content Include="Views\Pessoa\Pesquisa.cshtml" />
+    <Content Include="Views\Cliente\Create.cshtml" />
+    <Content Include="Views\Cliente\Createcerto.cshtml" />
+    <Content Include="Views\Cliente\Edit.cshtml" />
+    <Content Include="Views\Cliente\Edit2.cshtml" />
+    <Content Include="Views\Cliente\Index.cshtml" />
+    <Content Include="Views\Dentista\Create.cshtml" />
+    <Content Include="Views\Dentista\Edit - Cópia .cshtml" />
+    <Content Include="Views\Dentista\Edit.cshtml" />
+    <Content Include="Views\Dentista\Index.cshtml" />
+    <Content Include="Views\Aula\Create.cshtml" />
+    <Content Include="Views\Aula\Edit.cshtml" />
+    <Content Include="Views\HorarioProfessor\Create.cshtml" />
+    <Content Include="Views\Orcamento\Renovacao.cshtml" />
+    <Content Include="Views\Orcamento\Renova.cshtml" />
+    <Content Include="Views\HorarioProfessor\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+    <Folder Include="Scripts\datetimepicker\" />
+    <Folder Include="temp\" />
+    <Folder Include="Views\PedidoItem\" />
+    <Folder Include="Views\Pedido\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="packages.config" />
+    <None Include="Project_Readme.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Reports\CrystalReport1.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>CrystalReport11.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\CrystalReport2.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>CrystalReport21.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rel001- Impressão de Atendimento.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>Rel001- Impressão de Atendimento1.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rel010 - Cursos por periodo.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>Rel010 - Cursos por periodo.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rel002 - Titulos a Receber por periodo.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>Rel002 - Titulos a Receber por periodo1.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rel003 - Atendimentos por periodo Sintético.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>Rel003 - Atendimentos por periodo Sintético1.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rel003-Etiquetamodelo01.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>Rel003-Etiquetamodelo011.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rel004 - Titulos a Receber por periodo.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>Rel004 - Titulos a Receber por periodo1.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rel005 - Atendimentos Cancelados por periodo.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>Rel005 - Atendimentos Cancelados por periodo1.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rel006 - Atendimentos sem titulos a receber por periodo.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>Rel006 - Atendimentos sem titulos a receber por periodo1.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rel007 - Atendimentos por Dentista.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>Rel007 - Atendimentos por Dentista1.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rel008 - Atendimentos por Dentista sintetico.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>Rel008 - Atendimentos por Dentista sintetico1.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rel009 - Exames por Dentista.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>Rel009 - Exames por Dentista1.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{C0C07587-41A7-46C8-8FBD-3F9C8EBE2DDC}" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>14765</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:14765/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+  </Target>
+  <Import Project="..\packages\AutoMapper.3.3.1\tools\AutoMapper.targets" Condition="Exists('..\packages\AutoMapper.3.3.1\tools\AutoMapper.targets')" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+</Project>

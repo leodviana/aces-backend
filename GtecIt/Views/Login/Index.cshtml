@@ -1,0 +1,218 @@
+﻿@{
+    Layout = null;
+    ViewBag.Title = "Login";
+}
+
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>@ViewBag.Title</title>
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <style type="text/css">
+        .form-signin {
+            max-width: 330px;
+            padding: 15px;
+            margin: 0 auto;
+        }
+
+            .form-signin .form-signin-heading, .form-signin .checkbox {
+                margin-bottom: 10px;
+            }
+
+            .form-signin .checkbox {
+                font-weight: normal;
+            }
+
+            .form-signin .form-control {
+                position: relative;
+                font-size: 16px;
+                height: auto;
+                padding: 10px;
+                -webkit-box-sizing: border-box;
+                -moz-box-sizing: border-box;
+                box-sizing: border-box;
+            }
+
+                .form-signin .form-control:focus {
+                    z-index: 2;
+                }
+
+            .form-signin input[type="text"] {
+                margin-bottom: -1px;
+                border-bottom-left-radius: 0;
+                border-bottom-right-radius: 0;
+            }
+
+            .form-signin input[type="password"] {
+                margin-bottom: 10px;
+                border-top-left-radius: 0;
+                border-top-right-radius: 0;
+            }
+
+            .form-signin img {
+                margin: 0 auto 10px;
+                display: block;
+            }
+
+        .account-wall {
+            margin-top: 20px;
+            padding: 40px 0px 20px 0px;
+            background-color: #f7f7f7;
+            -moz-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+            -webkit-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+            box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+        }
+
+            .account-wall hr {
+                width: 70%;
+                border: 0;
+                height: 1px;
+                background-image: -webkit-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0.20), rgba(0,0,0,0));
+                background-image: -moz-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0.20), rgba(0,0,0,0));
+                background-image: -ms-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0.20), rgba(0,0,0,0));
+                background-image: -o-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0.20), rgba(0,0,0,0));
+            }
+
+        .login-title {
+            color: #555;
+            font-size: 18px;
+            font-weight: 400;
+            display: block;
+        }
+
+        .sys-title {
+            color: #337ab7;
+            font-size: 18px;
+            font-weight: 400;
+            display: block;
+        }
+
+        .profile-img {
+            width: @ViewBag.comprimento
+            height:@ViewBag.Altura 
+            margin: 0 auto 10px;
+            display: block;
+        }
+
+        .need-help {
+            margin-top: 10px;
+        }
+
+        .new-account {
+            display: block;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 col-md-offset-4">
+                <h1 class="text-center login-title">Gtec</h1>
+                <div class="account-wall">
+                    <div class="text-center">
+                        
+                        <img alt="" class="profile-img" src="@Url.Content(@ViewBag.logo)">
+                        <hr/>
+                    </div>
+                    <form class="form-signin" method="POST">
+                        <div id="form-message" class="text-center">
+                            @if (!string.IsNullOrEmpty(ViewBag.Error))
+                            {
+                                <div class="alert alert-danger" role="alert"><strong>Erro!</strong>&nbsp;@ViewBag.Error.ToString()</div>
+                            }
+                            @if (!string.IsNullOrEmpty(ViewBag.Success))
+                            {
+                                <div class="alert alert-success" role="alert"><strong>Sucesso!</strong>&nbsp;@ViewBag.Success.ToString()</div>
+                            }
+                        </div>
+                        <input type="text" class="form-control" required placeholder="Login" name="cnpj" id="cnpj" maxlength="14" />
+                        <input type="password" class="form-control" required placeholder="Senha" name="senha" id="senha" maxlength="25" />
+                        <p>
+                            <button id="btnLogin" type="submit" class="btn btn-lg btn-primary btn-block">
+                                Entrar
+                            </button>
+                        </p>
+                        @*<div class="row">
+                                <p class="text-muted text-center"><a href="#" data-toggle="modal" id="open-modal">Esqueci minha senha</a></p>
+                            </div>*@
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="forgot-password-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Esqueci minha senha</h4>
+                </div>
+                <form id="forgot-password">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="login">Login:</label>
+                            <input type="text" class="form-control" id="login" name="login" required="required" />
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Enviar</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(function() {
+            $('#login').val($("#usuario").val());
+        });
+
+        $('#open-modal').click(function() {
+            $('#login').val($("#usuario").val());
+            $('#forgot-password-modal').modal('show');
+        });
+        $('#forgot-password').submit(function() {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("EsqueciSenha", "Login")',
+                data: {
+                    "login": $('#login').val()
+                },
+                success: function (data) {
+                    // Limpará o campo E-mail caso a requisição seja efetuada com sucesso.
+                    $('#login').val("");
+
+                    $('.msg').remove();
+
+                    // Todo: Implementar mensagens de sucesso e erro.
+                    if (data.Alterado) {
+                        htmlMessage = "<div class=\"alert alert-success msg\" role=\"alert\"><button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button><p class=\"text-center\">&nbsp;" + data.Mensagem + "</p></div>";
+                    } else {
+                        htmlMessage = "<div class=\"alert alert-danger msg\" role=\"alert\"><button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button><p class=\"text-center\"><strong>" + "Erro!" + "</strong>&nbsp;" + data.Mensagem + "</p></div>";
+                    }
+
+                    $('#form-message').append(htmlMessage);
+
+                    $('#forgot-password-modal').modal('hide');
+                },
+                error: function (xhr, status, error) {
+                    alert(error);
+                }
+            });
+
+            return false;
+        });
+    </script>
+</body>
+
+</html>
+

@@ -1,0 +1,465 @@
+﻿@using GtecIt.HTMLHelpers
+@model GtecIt.ViewModels.NotaEntradaCreateViewModel
+
+<h1></h1>
+@{
+    ViewBag.Title = "Atend. Financeiro - Incluir Contas a Pagar";
+}
+
+@using (Html.BeginForm("Create", "NotaEntrada", FormMethod.Post))
+{
+
+    @Html.AntiForgeryToken()
+    <fieldset>
+        <legend>@ViewBag.Title</legend>
+        <div id="panelgerais" class="panel panel-default ">
+            <div class="panel-heading">
+                Contas a pagar
+            </div>
+            <div class="panel-body">
+                <div class="row">
+
+                    <div class="col-sm-2">
+                        <label>Atendimento No.</label>
+                        <input class="form-control" name="id_orcamento" type="text" readonly />
+                    </div>
+                    <div class="col-sm-2">
+                        <label>Atendimento</label>
+                        @Html.TextBoxFor(x => x.dt_entrada, new {@class = "form-control datesimple", @autofocus = "autofocus", required = "required", @name = "Dt_orcamento", @id = "Dt_orcamento"})
+                    </div>
+
+                    <div class="col-sm-8">
+                        <label>Fornecedor</label>
+                        <div class="input-group">
+
+                            @Html.AutoCompleteFor(x => x.NomeFornecedor, "Id_grlfornecedor", Model.Id_grlfornecedor, Url.Action("AutoCompleteFornecedorPreFetch", "Fornecedor"), "a", true, "iniciarListaFornecedor")
+                            
+                            <div class="input-group-btn">
+
+                                <a id="btnVoltar" href="@Url.Action("CreateFornecedor")" class="btn btn-primary">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                </a>
+                                
+                            </div>
+                        </div>
+                        
+                    </div>
+                    
+
+                </div>
+                <h1></h1>
+                <div class="row">
+
+                    
+                    <div class="col-sm-6">
+                        <label>Centro de Custo</label>
+                        <div class="input-group">
+
+                            @Html.AutoCompleteFor(x => x.CentrodeCustos.desc_ccusto, "Id_grlcccust", Model.Id_grlcccust, Url.Action("AutoCompleteCentrodeCustoPreFetch", "CentrodeCusto"), "a", true, "iniciarListaCentrodeCusto")
+
+                            <div class="input-group-btn">
+
+                                <a id="btnNovocc" href="#" class="btn btn-primary">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                </a>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="col-sm-2">
+                        <label>Nota fiscal</label>
+                        @Html.TextBoxFor(x => x.num_nf, new {@class = "form-control", @autofocus = "autofocus",  @name = "num_nf", @id = "num_nf" })
+                    </div>
+                    <div class="col-sm-2">
+                        <label>Emissão NF.</label>
+                        @Html.TextBoxFor(x => x.dt_emissao_nf, new {@class = "form-control datesimple", @autofocus = "autofocus", @name = "dt_emissao_nf", @id = "dt_emissao_nf"})
+                    </div>
+                    <div class="col-sm-2">
+                        <label>Valor</label>
+                        @Html.TextBoxFor(x => x.valor, new { @class = "form-control ", @autofocus = "autofocus", required = "required", @name = "valor", @id = "valor" })
+                        
+                    </div>
+                </div>
+            </div>
+            <h1></h1>
+            
+        </div>
+
+
+    </fieldset>
+    <div class="row">
+        <div class="form-group col-sm-1">
+            <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-floppy-saved"></span> Salvar</button>
+        </div>
+        <div class="form-group col-sm-1">
+            <a id="btnVoltar" href="@Url.Action("Index")" class=" btn btn-primary">
+                <span class="glyphicon glyphicon-arrow-left"></span> Voltar
+            </a>
+        </div>
+
+    </div>
+
+}
+
+
+<div class="modal fade" id="modalPessoa" data-carregadefault="true" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Consulta Cadastro Básico</h4>
+            </div>
+            <form id="formPessoa" data-url="@Url.Action("ObterPessoa", "Pessoa")">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="form-group col-sm-4">
+                            <label>Pesquisar por:</label>
+
+                            <select class="form-control" id="tipoConsultaModalPessoa" name="tipoConsultaModalPessoa">
+                                <option value="codigo" selected>Código</option>
+                                <option value="descricao">Nome</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-sm-8">
+                            <label>Filtro</label>
+                            <input type="text" class="form-control" id="descricaoModalPessoa" name="descricaoModalPessoa" onkeypress="return SomenteNumero()" required="required" />
+
+                        </div>
+                    </div>
+                    <div class="row" id="body">
+                        <table class="table table-condensed table-hover table-responsive">
+                            <thead>
+                                <tr style="background-color:#F8F8F8">
+                                    <th class="col-sm-2 text-center">Código</th>
+                                    <th>Descrição</th>
+                                    <th>&nbsp;</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="tabelaPessoa"></tbody>
+
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span> Pesquisar</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modalIncluirTipoTelefone" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Incluir - Tipo de Telefone</h4>
+            </div>
+            <form id="formInclusaoTipoTelefone" class="form-horizontal" role="form">
+                <div class="modal-body">
+
+                    @Html.AntiForgeryToken()
+                    <div class="row">
+                        <div class="form-group">
+                            <label for="descricao" class="col-md-2 control-label">Descrição</label>
+                            <div class="col-md-5">
+                                <input id="descricao" name="descricao" type="text"
+                                       class="form-control" maxlength="50" required autofocus>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" id="btnModalIncluirConfirmar" class="btn btn-primary">
+                        <span class="glyphicon glyphicon-floppy-disk"></span> Salvar
+                    </button>
+                    &nbsp;&nbsp;
+                    <button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modalIncluirEndereco" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Incluir - Endereço</h4>
+            </div>
+            <form id="formInclusaoEndereco" class="form-horizontal" role="form">
+                <div class="modal-body">
+
+                    @Html.AntiForgeryToken()
+                    <div class="row">
+                        <div class="form-group">
+                            <label for="descricao" class="col-md-2 control-label">Descrição</label>
+                            <div class="col-md-5">
+                                <input id="descricao" name="descricao" type="text"
+                                       class="form-control" maxlength="50" required autofocus>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" id="btnModalIncluirConfirmar" class="btn btn-primary">
+                        <span class="glyphicon glyphicon-floppy-disk"></span> Salvar
+                    </button>
+                    &nbsp;&nbsp;
+                    <button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div id="modalExclusao" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Exclusão de registro</h4>
+            </div>
+            <div class="modal-body">
+                <p class="text-center">Deseja realmente excluir este registro? </p>
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="btn btn-primary " id="btnModalExclusaoConfirmar">
+                    <span class="glyphicon glyphicon-ok"></span> Confirma
+                </a>
+                &nbsp;&nbsp;
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="btnModalExclusaoCancelar">
+                    <span class="glyphicon glyphicon-remove"></span> Cancelar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalCliente" data-carregadefault="true" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Consulta Cliente</h4>
+            </div>
+            <form id="formCliente" data-url="@Url.Action("ObterCliente", "Cliente")">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="form-group col-sm-4">
+                            <label>Pesquisar por:</label>
+
+                            <select class="form-control" id="tipoConsultaModalCliente" name="tipoConsultaModalCliente">
+                                <option value="codigo" selected>Código</option>
+                                <option value="descricao">Nome</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-sm-8">
+                            <label>Filtro</label>
+                            <input type="text" class="form-control" id="descricaoModalCliente" name="descricaoModalCliente" onkeypress="return SomenteNumero()" required="required" />
+
+                        </div>
+                    </div>
+                    <div class="row" id="body">
+                        <table class="table table-condensed table-hover table-responsive">
+                            <thead>
+                                <tr style="background-color:#F8F8F8">
+                                    <th class="col-sm-2 text-center">Código</th>
+                                    <th>Descrição</th>
+                                    <th>&nbsp;</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="tabelaCliente"></tbody>
+
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span> Pesquisar</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalDentista" data-carregadefault="true" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Consulta Dentista</h4>
+            </div>
+            <form id="formDentista" data-url="@Url.Action("ObterDentista", "Dentista")">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="form-group col-sm-4">
+                            <label>Pesquisar por:</label>
+
+                            <select class="form-control" id="tipoConsultaModalDentista" name="tipoConsultaModalDentista">
+                                <option value="codigo" selected>Código</option>
+                                <option value="descricao">Nome</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-sm-8">
+                            <label>Filtro</label>
+                            <input type="text" class="form-control" id="descricaoModalDentista" name="descricaoModalDentista" onkeypress="return SomenteNumero()" required="required" />
+
+                        </div>
+                    </div>
+                    <div class="row" id="body">
+                        <table class="table table-condensed table-hover table-responsive">
+                            <thead>
+                                <tr style="background-color:#F8F8F8">
+                                    <th class="col-sm-2 text-center">Código</th>
+                                    <th>Descrição</th>
+                                    <th>&nbsp;</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="tabelaDentista"></tbody>
+
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span> Pesquisar</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            iniciarListaFornecedor(); //Iniciando a lista manualmente
+            iniciarListaCentrodeCusto();
+
+
+        });
+
+
+        $('#btnNovocc').click(function (e) {
+            e.preventDefault();
+            var url = '@Url.Action("Create", "CentrodeCusto")';
+
+            var modal, modalDialog, modalContent;
+            modal = $('<div id="modalInclusao" class="modal fade" "/>');
+            modalDialog = $('<div class="modal-dialog" />');
+            modalContent = $('<div class="modal-content" />');
+
+            modal.modal('hide')
+                .append(modalDialog)
+                .on('hidden.bs.modal', function () { $(this).remove(); })
+                .appendTo('body');
+
+
+            modalDialog.append(modalContent);
+
+            $.get(url, function (data) {
+                modalContent.html(data);
+                modal.on('show.bs.modal', function () { $(this).find('input:first').focus(); });
+                modal.modal('show');
+            });
+        });
+
+        $(".btnGridExcluir").click(function (e) {
+            e.preventDefault();
+            var id = $(this).data('id');
+
+            var linha = $("." + id);
+            $("#btnModalExclusaoConfirmar").off("click").click(function (e) {
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("Delete", "Endereco")',
+                    data: {
+                        "codigo": id
+                    },
+                    success: function (data) {
+                        if (data == true) {
+                            linha.remove();
+                            $('#modalExclusao').modal('hide');
+                            if ($("#corpoTabelaGrid").children("tr").length > 0) {
+                                return true;
+                            }
+                            else {
+                                $("#grid").remove();
+                                return true;
+                            }
+                        } else {
+                            alert("Ocorreu um erro ao tentar excluir o registro.");
+                            $("#btnModalExclusaoCancelar").click();
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        alert(error);
+                    }
+                });
+            });
+        });
+
+        $('.btnGridEditar').click(function (e) {
+            e.preventDefault();
+            var url = '@Url.Action("Edit", "Endereco")' + '?codigo=' + $(this).data('id');
+
+            var modal, modalDialog, modalContent;
+            modal = $('<div id="modalEdicao" class="modal fade" "/>');
+            modalDialog = $('<div class="modal-dialog modal-lg" />');
+            modalContent = $('<div class="modal-content" />');
+
+            modal.modal('hide')
+             .append(modalDialog)
+             .on('hidden.bs.modal', function () { $(this).remove(); })
+             .appendTo('body');
+
+            modalDialog.append(modalContent);
+
+            $.get(url, function (data) {
+                modalContent.html(data);
+                modal.modal('show');
+            });
+        });
+
+        $('#btnNovo').click(function (e) {
+            e.preventDefault();
+
+            var url = '@Url.Action("Create", "Endereco")' + '?codigo=' + $(this).data('id');
+
+            var modal, modalDialog, modalContent;
+            modal = $('<div id="modalInclusao" class="modal fade" "/>');
+            modalDialog = $('<div class="modal-dialog modal-lg" />');
+            modalContent = $('<div class="modal-content" />');
+
+            modal.modal('hide')
+                .append(modalDialog)
+                .on('hidden.bs.modal', function () { $(this).remove(); })
+                .appendTo('body');
+
+
+            modalDialog.append(modalContent);
+
+            $.get(url, function (data) {
+                modalContent.html(data);
+                modal.on('show.bs.modal', function () { $(this).find('input:first').focus(); });
+                modal.modal('show');
+            });
+        });
+
+
+       
+
+    </script>
+    @Scripts.Render("~/Scripts/gtec/modal.tipotelefone.js")
+    @Scripts.Render("~/Scripts/gtec/modal.tpfone2.js")
+    @Scripts.Render("~/Scripts/gtec/modal.sexo.js")
+    @Scripts.Render("~/Scripts/gtec/modal.estado.js")
+    @Scripts.Render("~/Scripts/gtec/modal.profissao.js")
+    @Scripts.Render("~/Scripts/gtec/modal.cliente.js")
+    @Scripts.Render("~/Scripts/gtec/modal.dentista.js")
+    @Scripts.Render("~/Scripts/gtec/modal.pessoa.js")
+}

@@ -1,0 +1,124 @@
+﻿@model GtecIt.ViewModels.PessoaIndexViewModel
+<script src="~/Scripts/defaults.js"></script>
+@{
+    Layout = null;
+}
+<form id="formInclusao" class="form-horizontal" role="form">
+
+
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Pesquisar - Cadastro Básico</h4>
+    </div>
+    <div class="modal-body">
+
+        @Html.AntiForgeryToken()
+        
+        <div class="row">
+
+            <div class="col-sm-6">
+
+                <div class="input-group">
+
+                    @Html.TextBoxFor(x => x.nome, new { @class = "form-control", @placeholder = "Nome", @autofocus = "autofocus" })
+                    <div class="input-group-btn">
+                        <button name="tipoacao" type="submit" value="consultatodos" class="btn btn-primary">
+                            <i class="glyphicon glyphicon-search"></i> Consultar
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <fieldset id="fspanelorcamentos">
+            <div class="row">
+                <div class="col-sm-12">
+
+                    @if (Model != null && Model.Grid.Any())
+                    {
+                        <div id="grid ">
+                            <hr />
+                            <table id="tabelaGrid" class="table table-bordered table-striped table-hover table-responsive dt-responsive">
+                                <thead>
+                                    <tr>
+                                        <th class="col-sm-1">Tipo</th>
+                                        <th class="col-sm-4">Nome</th>
+                                        <th class="col-sm-4">Razão Social</th>
+                                        <th class="col-sm-1">Contato</th>
+                                        <th class="col-sm-2">Telefone 01</th>
+
+                                        <th class="text-center"></th>
+                                        <th class="text-center"></th>
+                                    </tr>
+
+                                </thead>
+                                <tbody id="corpoTabelaGrid">
+                                    @foreach (var item in Model.Grid)
+                                    {
+                                        //var tp_pessoa = item.Id_grltopessoa.ToUpper() == "F" ? "Física" : "Juridica";
+                                        //var nome = item.nome.Length >0 ? item.nome : item.razao_social;
+
+                                        <tr class="@item.Id_grlbasico">
+                                            <td>@item.Id_grltopessoa</td>
+                                            <td>@item.nome</td>
+                                            <td>@item.razao_social</td>
+                                            <td>@item.contato</td>
+                                            <td>@item.ddd_telefone</td>
+
+                                            <td class="text-center col-sm-1">
+                                                <a href="@Url.Action("Edit", new RouteValueDictionary
+                                                     {
+                                                         {"codigo", item.Id_grlbasico}
+                                                     })" />
+                                                <span class="glyphicon glyphicon-pencil" />
+                                            </td>
+                                            <td class="text-center col-sm-1">
+                                                <a href="#" class="glyphicon glyphicon-trash btnGridExcluir" data-toggle="modal" data-target="#modalExclusao" data-id="@item.Id_grlbasico"></a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+
+
+                </div>
+            </div>
+        </fieldset>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-ok"></span> Confirmar</button>
+        &nbsp;&nbsp;
+        <button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancelar</button>
+    </div>
+</form>
+
+
+    <script type="text/javascript">
+
+        $('#formInclusao').on('submit', function (e) {
+            e.preventDefault();
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("pesquisa", "Pessoa")',
+                data: $("#formInclusao").serialize(),
+                success: function (result) {
+                    if (result == true) {
+                        //location.reload();
+                        //$("modalInclusao").modal('hide');
+                    } else {
+                        alert("Ocorreu um erro.");
+                        
+                    }
+                },
+                error: function (xhr, status, error) {
+                    alert(error);
+                }
+            });
+        });
+
+
+
+
+    </script>

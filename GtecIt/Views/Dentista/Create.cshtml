@@ -1,0 +1,254 @@
+﻿@model GtecIt.ViewModels.DentistaCreateViewModel
+<h1></h1>
+@{
+    ViewBag.Title = "Incluir - Professor";
+}
+<script src="@Url.Content("~/Scripts/jquery.validate.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")" type="text/javascript"></script>
+<script src="~/Scripts/methods_pt.js"></script>
+
+@using (Html.BeginForm("Create", "Dentista", FormMethod.Post))
+{
+
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(x => x.dentista_em_cadastro)
+    @Html.HiddenFor(x => x.orcamentoid)
+    @Html.HiddenFor(x => x.origem)
+    <fieldset>
+        <legend>@ViewBag.Title</legend>
+        @if (!string.IsNullOrEmpty(ViewBag.Error))
+        {
+            <div class="danger">
+                @ViewBag.Error.ToString()
+            </div>
+        }
+        <div id="panelgerais" class="panel panel-default ">
+            <div class="panel-heading">
+                Dados Gerais
+            </div>
+
+            <div class="panel-body">
+
+                <div class="row">
+
+
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label>Codigo Básico</label>
+
+                            @Html.TextBoxFor(x => x.Id_grlbasico, new { @class = "form-control ", @name = "CodigoPessoa", @id = "CodigoPessoa", @disabled = "disabled", data_url = @Url.Action("ObterDescricaonome", "Pessoa"), onkeypress = "return SomenteNumero()" })
+
+                        </div>
+                    </div>
+
+
+                    <div class="col-sm-8">
+                        <label>Nome</label>
+                        <div class="form-group row">
+
+                            <div class="col-sm-11">
+                                @Html.DropDownListFor(x => x.Id_grlbasico, Model.Dropdownnome, "Selecione o nome que deseja incluir!.", new { @class = "form-control", @name = "NomeProduto", @id = "NomeProduto" })
+                                @Html.ValidationMessageFor(model => model.Id_grlbasico, "", new { @class = "text-danger" })
+                            </div>
+                            @if (Model.origem.Equals("vendedor"))
+                            {
+
+                                <a id="btndentista" href="@Url.Action("CreateDentista","Dentista", new {origem="vendedor",orcamentoid =Model.orcamentoid })" class=" btn btn-primary">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                </a>
+                            }
+                            else
+                            {
+
+
+                                <a id="btndentista" href="@Url.Action("CreateDentista","Dentista", new {origem="vendedor_orcamento",orcamentoid = Model.orcamentoid})" class=" btn btn-primary">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                </a>
+                            }
+
+                        </div>
+                        
+                    </div>
+                    <div class="col-sm-2">
+                        <label>Ativo</label>
+                        @Html.DropDownListFor(x => x.Ativo, Model.Dropdownativo, new { @class = "form-control", @required = "true" })
+                    </div>
+
+                </div>
+
+
+
+
+
+            </div>
+            <h1></h1>
+        </div>
+
+    </fieldset>
+    <div class="row">
+        <div class="form-group col-sm-1">
+            <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-floppy-saved"></span> Salvar</button>
+        </div>
+
+        <div class="form-group col-sm-1">
+            @if (Model.origem == null)
+            {
+                <a id="btnVoltar" href="@Url.Action("Index")" class=" btn btn-primary">
+                    <span class="glyphicon glyphicon-arrow-left"></span> Voltar
+                </a>
+            }
+            else if (Model.origem.Equals("vendedor"))
+            {
+                <a id="btnVoltar" href="@Url.Action("Index")" class=" btn btn-primary">
+                    <span class="glyphicon glyphicon-arrow-left"></span> Voltar
+                </a>
+            }
+            else if (Model.origem.Equals("vendedor_orcamento"))
+            {
+
+                if (Model.orcamentoid == 0)
+                {
+                    <a id="btnVoltar" href="@Url.Action("Create", "Orcamento")" class=" btn btn-primary">
+                        <span class="glyphicon glyphicon-arrow-left"></span> Voltar
+                    </a>
+                }
+                else
+                {
+                    <a id="btnVoltar" href="@Url.Action("Edit", "Orcamento",new {codigo= Model.orcamentoid})" class=" btn btn-primary">
+                        <span class="glyphicon glyphicon-arrow-left"></span> Voltar
+                    </a>
+                }
+               
+            }
+        </div>
+        <div class="form-group col-sm-1">
+            <a id="btnNovo" href="@Url.Action("Create")" class="btn btn-primary">
+                <span class="glyphicon glyphicon-erase"></span> Limpar
+            </a>
+        </div>
+
+    </div>
+
+}
+
+<div class="modal fade" id="modalPessoa" data-carregadefault="true" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Consulta Cadastro Básico</h4>
+            </div>
+            <form id="formPessoa" data-url="@Url.Action("ObterPessoa", "Pessoa")">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="form-group col-sm-4">
+                            <label>Pesquisar por:</label>
+
+                            <select class="form-control" id="tipoConsultaModalPessoa" name="tipoConsultaModalPessoa">
+                                <option value="codigo" selected>Código</option>
+                                <option value="descricao">Nome</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-sm-8">
+                            <label>Filtro</label>
+                            <input type="text" class="form-control" id="descricaoModalPessoa" name="descricaoModalPessoa" onkeypress="return SomenteNumero()" required="required" />
+
+                        </div>
+                    </div>
+                    <div class="row" id="body">
+                        <table class="table table-condensed table-hover table-responsive">
+                            <thead>
+                                <tr style="background-color:#F8F8F8">
+                                    <th class="col-sm-2 text-center">Código</th>
+                                    <th>Descrição</th>
+                                    <th>&nbsp;</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="tabelaPessoa"></tbody>
+
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span> Pesquisar</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+
+
+            function clearDiv(div) {
+                $(div).
+                    find(':text, :password, textarea').attr('value', '').end().
+                    find(':checkbox, :radio').attr('checked', false).end().
+                    find('select').attr('selectedIndex', 0);
+            }
+
+        });
+
+        $('#NomeProduto').change(function () {
+
+
+        var codigo = $('#NomeProduto').val();
+
+
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("ObterDescricaonome", "Pessoa")',
+            data: { "codigo": codigo },
+            success: function(data) {
+                if (!data) {
+                    $("#Vl_unitario").maskMoney('mask',0);
+                    $(this).focus();
+                } else {
+                    console.log(data);
+                    $('#CodigoPessoa').val(data.id);
+                    $('#contato').val(data.contato);
+                    $('#email').val(data.email);
+                    $('#email2').val(data.email2);
+                    $('#cpf').val(data.cpf);
+                    $('#rg').val(data.rg);
+                    $('#fone01').val(data.fone01);
+                    $('#fone02').val(data.fone02);
+
+                    $('#CodigoPessoa').focus;
+                    $('#NomePessoa').focus;
+                    $('#CodigoPessoa').focus;
+
+                }
+            },
+            error: function(xhr, status, error) {
+                alert(error);
+            }
+        });
+
+
+        //};
+    });
+
+        $('#Limpar').on('reset', function (e) {
+
+
+            find(':text, :password, textarea').attr('value', '').end().
+                find(':checkbox, :radio').attr('checked', false).end().
+                find('select').attr('selectedIndex', 0);
+
+
+        });
+
+    </script>
+    @Scripts.Render("~/Scripts/gtec/modal.tipotelefone.js")
+    @Scripts.Render("~/Scripts/gtec/modal.tpfone2.js")
+    @Scripts.Render("~/Scripts/gtec/modal.sexo.js")
+    @Scripts.Render("~/Scripts/gtec/modal.estado.js")
+    @Scripts.Render("~/Scripts/gtec/modal.profissao.js")
+    @Scripts.Render("~/Scripts/gtec/modal.pessoa.js")
+}

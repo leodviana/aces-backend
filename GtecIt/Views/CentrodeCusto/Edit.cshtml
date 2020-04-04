@@ -1,0 +1,56 @@
+﻿@model GtecIt.ViewModels.CentrodeCustoEditViewModel
+
+@{
+    Layout = null;
+}
+<form id="formEdicao" class="form-horizontal" role="form">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Editar - Centro de Custo</h4>
+    </div>
+    <div class="modal-body">
+        @Html.AntiForgeryToken()
+        <div class="row">
+            @Html.HiddenFor(x => x.Id_grlccust)
+
+           <div class="col-md-8">
+                <label for="Descricao" class="col-md-2 control-label">Descrição</label>
+                @Html.TextBoxFor(x => x.desc_ccusto, new {@class = "form-control", @autofocus = "autofocus", required = "required", maxlength = "50"})
+            </div>
+            <div class="col-md-4">
+                <label for="Ativo" class="col-md-2 control-label">Ativo</label>
+                @Html.DropDownListFor(x => x.Ativo, Model.Dropdownativo, new { @class = "form-control", @required = "true" })
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="submit"  class="btn btn-primary"><span class="glyphicon glyphicon-ok"></span> Confirmar</button>
+        &nbsp;&nbsp;
+        <button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancelar</button>
+    </div>
+</form>
+
+<script type="text/javascript">
+
+    $('#formEdicao').on('submit', function (e) {
+        e.preventDefault();
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("Edit", "CentrodeCusto")',
+            data: $("#formEdicao").serialize(),
+            success: function (result) {
+                if (result == true) {
+                    location.reload();
+                    $("modalEdicao").modal('hide');
+                } else {
+                    alert("Esse registro foi atualizado ou excluído em outro local. Por favor, recarregue a página");
+                }
+            },
+            error: function (xhr, status, error) {
+                alert(error);
+            }
+        });
+    });
+   
+</script>
+

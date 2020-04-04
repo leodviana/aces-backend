@@ -1,0 +1,53 @@
+﻿@model GtecIt.ViewModels.ProfissaoEditViewModel
+
+@{
+    Layout = null;
+}
+<form id="formEdicao" class="form-horizontal" role="form">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Editar - Sexo</h4>
+    </div>
+    <div class="modal-body">
+        @Html.AntiForgeryToken()
+        <div class="row">
+            @Html.HiddenFor(x => x.Id_grlprofi)
+            <div class="form-group">
+                @Html.LabelFor(x => x.descricao, new { @class = "col-md-2 control-label" })
+                <div class="col-md-5">
+                    @Html.TextBoxFor(x => x.descricao, new { @class = "form-control", @autofocus = "autofocus", required = "required", maxlength = "50" })
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="submit"  class="btn btn-primary"><span class="glyphicon glyphicon-ok"></span> Confirmar</button>
+        &nbsp;&nbsp;
+        <button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancelar</button>
+    </div>
+</form>
+
+<script type="text/javascript">
+
+    $('#formEdicao').on('submit', function (e) {
+        e.preventDefault();
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("Edit", "Profissao")',
+            data: $("#formEdicao").serialize(),
+            success: function (result) {
+                if (result == true) {
+                    location.reload();
+                    $("modalEdicao").modal('hide');
+                } else {
+                    alert("Esse registro foi atualizado ou excluído em outro local. Por favor, recarregue a página");
+                }
+            },
+            error: function (xhr, status, error) {
+                alert(error);
+            }
+        });
+    });
+   
+</script>
+

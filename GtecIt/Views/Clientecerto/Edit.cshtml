@@ -1,0 +1,190 @@
+﻿@model GtecIt.ViewModels.ClienteEditViewModel
+
+<h1></h1>
+@{
+    ViewBag.Title = "Edição - Aluno";
+}
+<h1></h1>
+@using (Html.BeginForm("Edit", "Cliente", FormMethod.Post))
+{
+
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(x => x.grlbasic.Id_grlbasico)
+    <fieldset>
+        <legend>@ViewBag.Title</legend>
+        @if (!string.IsNullOrEmpty(ViewBag.Error))
+        {
+            <div class="danger">
+                @ViewBag.Error.ToString()
+            </div>
+        }
+        <div id="panelgerais" class="panel panel-default ">
+            <div class="panel-heading">
+                Dados Gerais
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    @Html.HiddenFor(x => x.id_Grlcliente)
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label>Codigo Básico</label>
+
+                            @Html.TextBoxFor(x => x.Id_grlbasico, new { @class = "form-control ", @name = "CodigoPessoa", @id = "CodigoPessoa", @readonly = "true", data_url = @Url.Action("ObterDescricaonome", "Pessoa"), onkeypress = "return SomenteNumero()" })
+
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <label>Nome</label>
+                        <div class="input-group">
+
+                            @Html.TextBoxFor(x => x.grlbasic.nome, new { @class = "form-control ", @name = "NomePessoa", @id = "NomePessoa", @readonly = "true" })
+                            <div class="input-group-btn" >
+                                <button type="button" id="open-Pessoa" class="btn btn-primary" disabled="true"><span class="glyphicon glyphicon-search"></span></button>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+
+                        <label>Contato</label>
+
+                        @Html.TextBoxFor(x => x.grlbasic.contato, new { @class = "form-control ", @name = "contato", @id = "contato", @readonly = "true" })
+
+                    </div>
+                    <div class="col-sm-3">
+
+                        <label>Email</label>
+
+                        @Html.TextBoxFor(x => x.grlbasic.email, new { @class = "form-control ", @name = "email", @id = "email", @readonly = "true" })
+
+                    </div>
+                </div>
+                <div class="row">
+                    
+                    <div class="col-sm-4">
+                        <label>Email 02</label>
+                        @Html.TextBoxFor(x => x.grlbasic.Email2, new { @class = "form-control ", @name = "email2", @id = "email2", @readonly = "true" })
+                    </div>
+                    <div class="col-sm-3">
+                        <label>Telefone 01</label>
+                        @Html.TextBoxFor(x => x.grlbasic.ddd_telefone, new { @class = "form-control ", @name = "fone01", @id = "fone01", @readonly = "true" })
+                    </div>
+
+                    <div class="col-sm-3">
+                        <label>Telefone02</label>
+                        @Html.TextBoxFor(x => x.grlbasic.ddd_telefone2, new { @class = "form-control ", @name = "fone02", @id = "fone02", @readonly = "true" })
+                     </div>
+
+                   
+                    
+                    <div class="col-sm-2">
+                        <label>Ativo</label>
+                        @Html.DropDownListFor(x => x.Ativo, Model.Dropdownativo, new { @class = "form-control" ,@required = "true"})
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+        <h1></h1>
+
+
+    </fieldset>
+    <div class="row">
+        <div class="form-group col-sm-1">
+            <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-floppy-saved"></span> Salvar</button>
+        </div>
+        <div class="form-group col-sm-1">
+            <a id="btnVoltar" href="@Url.Action("Index")" class=" btn btn-primary">
+                <span class="glyphicon glyphicon-arrow-left"></span> Voltar
+            </a>
+        </div>
+       
+
+    </div>
+
+}
+
+<div class="modal fade" id="modalPessoa" data-carregadefault="true" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Consulta Cadastro Básico</h4>
+            </div>
+            <form id="formPessoa" data-url="@Url.Action("ObterPessoa", "Pessoa")">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="form-group col-sm-4">
+                            <label>Pesquisar por:</label>
+
+                            <select class="form-control" id="tipoConsultaModalPessoa" name="tipoConsultaModalPessoa">
+                                <option value="codigo" selected>Código</option>
+                                <option value="descricao">Nome</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-sm-8">
+                            <label>Filtro</label>
+                            <input type="text" class="form-control" id="descricaoModalPessoa" name="descricaoModalPessoa" onkeypress="return SomenteNumero()" required="required" />
+
+                        </div>
+                    </div>
+                    <div class="row" id="body">
+                        <table class="table table-condensed table-hover table-responsive">
+                            <thead>
+                                <tr style="background-color:#F8F8F8">
+                                    <th class="col-sm-2 text-center">Código</th>
+                                    <th>Descrição</th>
+                                    <th>&nbsp;</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="tabelaPessoa"></tbody>
+
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span> Pesquisar</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+
+
+            function clearDiv(div) {
+                $(div).
+                       find(':text, :password, textarea').attr('value', '').end().
+                       find(':checkbox, :radio').attr('checked', false).end().
+                       find('select').attr('selectedIndex', 0);
+            }
+
+        });
+
+
+
+        $('#Limpar').on('reset', function (e) {
+
+
+            find(':text, :password, textarea').attr('value', '').end().
+            find(':checkbox, :radio').attr('checked', false).end().
+            find('select').attr('selectedIndex', 0);
+
+
+        });
+
+    </script>
+    @Scripts.Render("~/Scripts/gtec/modal.tipotelefone.js")
+    @Scripts.Render("~/Scripts/gtec/modal.tpfone2.js")
+    @Scripts.Render("~/Scripts/gtec/modal.sexo.js")
+    @Scripts.Render("~/Scripts/gtec/modal.estado.js")
+    @Scripts.Render("~/Scripts/gtec/modal.profissao.js")
+    @Scripts.Render("~/Scripts/gtec/modal.pessoa.js")
+}

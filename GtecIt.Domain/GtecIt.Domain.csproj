@@ -1,0 +1,94 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{FAF7B7B0-2A68-47C9-9099-131A53046E28}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>GtecIt.Domain</RootNamespace>
+    <AssemblyName>GtecIt.Domain</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Entities\Aulas.cs" />
+    <Compile Include="Entities\Banco.cs" />
+    <Compile Include="Entities\Cefalometria.cs" />
+    <Compile Include="Entities\CefalometriaItem.cs" />
+    <Compile Include="Entities\CentrodeCusto.cs" />
+    <Compile Include="Entities\Class1.cs" />
+    <Compile Include="Entities\Cliente.cs" />
+    <Compile Include="Entities\Convenio.cs" />
+    <Compile Include="Entities\Dentista.cs" />
+    <Compile Include="Entities\Empresa.cs" />
+    <Compile Include="Entities\Endereco.cs" />
+    <Compile Include="Entities\Entrega.cs" />
+    <Compile Include="Entities\EstadoCivil.cs" />
+    <Compile Include="Entities\Events.cs" />
+    <Compile Include="Entities\Fornecedor.cs" />
+    <Compile Include="Entities\Grupo.cs" />
+    <Compile Include="Entities\HorarioProfessor.cs" />
+    <Compile Include="Entities\NotaEntrada.cs" />
+    <Compile Include="Entities\NotaItemEntrada.cs" />
+    <Compile Include="Entities\Orcamento.cs" />
+    <Compile Include="Entities\OrcamentoItem.cs" />
+    <Compile Include="Entities\Pedido.cs" />
+    <Compile Include="Entities\PedidoItem.cs" />
+    <Compile Include="Entities\Pessoa.cs" />
+    <Compile Include="Entities\Plano.cs" />
+    <Compile Include="Entities\Preco.cs" />
+    <Compile Include="Entities\PrecoPlano.cs" />
+    <Compile Include="Entities\Produto.cs" />
+    <Compile Include="Entities\Profissao.cs" />
+    <Compile Include="Entities\Relatorio.cs" />
+    <Compile Include="Entities\Sexo.cs" />
+    <Compile Include="Entities\Subgrupo.cs" />
+    <Compile Include="Entities\TipoEntrada.cs" />
+    <Compile Include="Entities\TipoAtendimento.cs" />
+    <Compile Include="Entities\TipoNota.cs" />
+    <Compile Include="Entities\TipoPagamento.cs" />
+    <Compile Include="Entities\TipoTelefone.cs" />
+    <Compile Include="Entities\TipoTitulo.cs" />
+    <Compile Include="Entities\Titulo.cs" />
+    <Compile Include="Entities\Tituloapagar.cs" />
+    <Compile Include="Entities\Usuario.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

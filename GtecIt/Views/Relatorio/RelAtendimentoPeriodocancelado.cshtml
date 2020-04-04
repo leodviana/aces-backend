@@ -1,0 +1,37 @@
+﻿@model GtecIt.ViewModels.RelGeralViewlModel
+
+<h1></h1>
+@{
+    ViewBag.Title = "Rel. Contratos Cancelados p/ período";
+}
+
+
+@using (Html.BeginForm("RelAtendimentoPeriodocancelado", "Relatorio", FormMethod.Post, new { @class = "form-inline", @role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(x => x.Nome)
+    <fieldset>
+        <legend>@ViewBag.Title</legend>
+
+        <div class="col-sm-2">
+            <label for="cidade" class="control-label">Convênio</label>
+            @Html.DropDownListFor(x => x.ConvenioId, Model.ConvenioDropDown, "TODOS", new { @class = "form-control", @autofocus = "autofocus", @name = "cidade", @id = "cidade" })
+        </div>
+        <div class="col-sm-2">
+            <label for="Inicio" class="control-label">Início</label>
+            @Html.TextBoxFor(x => x.inicio, "{0:dd/MM/yyyy}", new { @class = "form-control datesimple", @required = "required" })
+        </div>
+        <div class="col-sm-2">
+            <label for="Fim" class="control-label">Fim</label>
+            @Html.TextBoxFor(x => x.fim, "{0:dd/MM/yyyy}", new { @class = "form-control datesimple", @required = "required" })
+        </div>
+        <div class="col-sm-1">
+            <label class="control-label"></label>
+            <button type="submit" class="btn btn-primary" name="tipoacao" value="semfiltro">
+                <span class="glyphicon glyphicon-list-alt"></span> Gerar
+            </button>
+        </div>
+
+
+    </fieldset>
+}

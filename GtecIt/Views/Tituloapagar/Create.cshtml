@@ -1,0 +1,76 @@
+﻿@model GtecIt.ViewModels.TituloapagarCreateViewModel
+<script src="~/Scripts/defaults.js"></script>
+@{
+    Layout = null;
+}
+<form id="formInclusao" class="form-horizontal" role="form">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Incluir - Titulos</h4>
+    </div>
+    <div class="modal-body">
+
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary()
+        @Html.HiddenFor(x => Model.Id_stqnoten)
+        
+        <div class="form-group">
+           
+            <div class="col-md-1">
+                <label for="parc" class="control-label text-left">Parc.</label>
+                @Html.TextBoxFor(model => model.parcelas, new { @class = "form-control", @name = "parcelas", @id = "parcelas" })
+            </div>
+            <div class="col-md-3">
+                <label for="Titulo" class="control-label text-left">Titulo No.</label>
+                @Html.TextBoxFor(model => model.num_titulo, new { @class = "form-control", @name = "num_titulo", @id = "num_titulo" })
+            </div>
+            <div class="col-sm-2">
+                <label for="Emissao" class="control-label text-left">Emissão</label>
+                @Html.TextBoxFor(model => model.dt_emissao,"{0:dd/MM/yyyy}", new { @class = "form-control text-left datesimple", @autofocus = "autofocus", required = "required", @name = "dt_emissao", @id = "dt_emissao" })
+            </div>
+            <div class="col-md-3">
+                <label for="Valor" class="control-label text-right">Valor</label>
+                @Html.TextBoxFor(model => model.valor, new { @class = "form-control text-right dinheiro", @name = "valor", @id = "valor", required = "required" })
+            </div>
+            <div class="col-sm-2">
+                <label for="vencimento" class="control-label text-left">Vencimento</label>
+                @Html.TextBoxFor(model => model.dt_vencimento,"{0:dd/MM/yyyy}", new { @class = "form-control text-left datesimple", @autofocus = "autofocus", required = "required", @name = "dt_vencimento", @id = "dt_vencimento" })
+            </div>
+        </div>
+       
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-ok"></span> Confirmar</button>
+        &nbsp;&nbsp;
+        <button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancelar</button>
+    </div>
+</form>
+
+<script type="text/javascript">
+
+
+    $('#formInclusao').on('submit', function (e) {
+        e.preventDefault();
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("Create", "Tituloapagar")',
+            data: $("#formInclusao").serialize(),
+            success: function (result) {
+                if (result.resultado == true) {
+                    
+                    location.reload();
+                    $("modalInclusao").modal('hide');
+                } else {
+                    
+                    alert(result.Mensagem);
+                }
+            },
+            error: function (xhr, status, error) {
+                alert(error);
+            }
+        });
+    });
+
+  
+    
+</script>

@@ -1,0 +1,72 @@
+﻿@model GtecIt.ViewModels.PrecoCreateViewModel
+<script src="~/Scripts/defaults.js"></script>
+@{
+    Layout = null;
+}
+<form id="formInclusao" class="form-horizontal" role="form">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Incluir - Preço</h4>
+    </div>
+    <div class="modal-body">
+
+        @Html.AntiForgeryToken()
+       
+        @Html.HiddenFor(x => Model.id_stqcdprd)
+        <div class="form-group">
+            <div class="col-sm-6">
+                <label>Convênio</label>
+                @Html.DropDownListFor(x => x.id_grlconvenio, Model.DropdownConvenio, "Selecione...", new { @class = "form-control", @name = "id_grlconvenio", @id = "id_grlconvenio", @autofocus = "autofocus" })
+            </div>
+            
+            <div class="col-md-4">
+                <label>Preço</label>
+                @Html.TextBoxFor(model => model.preco, new { @class = "form-control text-right dinheiro", @name = "preco", @id = "preco", required = "required" })
+            </div>
+            
+            <div class="col-md-2">
+                <label for="Emissao" class="control-label text-left">Emissão</label>
+                @Html.TextBoxFor(model => model.vigencia, "{0:dd/MM/yyyy}", new { @class = "form-control text-left datesimple", @autofocus = "autofocus", required = "required", @name = "vigencia", @id = "vigencia" })
+            </div>
+
+        </div>
+        
+
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-ok"></span> Confirmar</button>
+        &nbsp;&nbsp;
+        <button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancelar</button>
+    </div>
+</form>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+
+
+    });
+
+    $('#formInclusao').on('submit', function (e) {
+        e.preventDefault();
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("Create", "Preco")',
+            data: $("#formInclusao").serialize(),
+            success: function (result) {
+
+                if (result == true) {
+                    location.reload();
+                    $("modalInclusao").modal('hide');
+                } else {
+                    alert(result);
+                }
+            },
+            error: function (xhr, status, error) {
+                alert(error);
+            }
+        });
+    });
+
+</script>

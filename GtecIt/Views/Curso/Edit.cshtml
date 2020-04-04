@@ -1,0 +1,880 @@
+﻿@model GtecIt.ViewModels.OrcamentoEditViewModel
+@using GtecIt.HTMLHelpers
+<h1></h1>
+
+@{
+    ViewBag.Title = "Edição - Contratos";
+}
+<h1></h1>
+<style>
+    .black {
+        color: #000000 !important;
+        cursor: not-allowed !important;
+    }
+</style>
+<meta name ="viewport" content  ="width=device-width"/>
+@using (Html.BeginForm("Edit", "Curso", FormMethod.Post))
+{
+
+    @Html.AntiForgeryToken()
+    <fieldset>
+        <legend>@ViewBag.Title</legend>
+        <div id="panelgerais" class="panel panel-default" disabled="@Model.itemorcamentos.Any()">
+            <div class="panel-heading">
+                Dados Contratos
+            </div>
+            <div class="panel-body">
+                <fieldset id="fspanelgerais">
+                    <div class="row">
+                        @Html.HiddenFor(x => x.id_Stqcporcamento)
+                        @Html.HiddenFor(x => x.status)
+                        @Html.HiddenFor(x => x.Id_grldentista)
+                        @Html.HiddenFor(x => x.id_grlconvenio)
+                        @Html.HiddenFor(x => x.id_Grltpatendimento)
+                        <div class="col-sm-2">
+                            <label>Contrato No.</label>
+                            @Html.TextBoxFor(x => x.id_Stqcporcamento, new { @class = "form-control ", @name = "id_orcamento", @id = "id_orcamento", @readonly = "true" })
+                        </div>
+                        <div class="col-sm-2">
+                            <label>Contrato</label>
+                            @Html.TextBoxFor(x => x.Dt_orcamento, new { @class = "form-control datesimple", @autofocus = "autofocus", required = "required", @name = "Dt_orcamento", @id = "Dt_orcamento" })
+                        </div>
+                        <div class="col-sm-8">
+                            <label>Cliente</label>
+                            <div class="input-group">
+
+                                @Html.AutoCompleteFor(x => x.nomecliente, "id_grlcliente", Model.id_grlcliente, Url.Action("AutoCompleteClientePreFetch", "Cliente"), "a", true, "iniciarListaCliente")
+
+                                <div class="input-group-btn">
+
+                                    <a id="btnVoltar" href="@Url.Action("CreateClienteEdicao", new {orcamento_id = @Model.id_Stqcporcamento})" class="btn btn-primary">
+                                        <span class="glyphicon glyphicon-plus"></span>
+                                    </a>
+
+
+                                </div>
+                            </div>
+
+                        </div>
+                        
+
+                    </div>
+                    <h1></h1>
+                    <div class="row">
+
+                        <div class="col-sm-6">
+                            <label>Centro de Custo</label>
+                            <div class="input-group">
+
+                                @Html.AutoCompleteFor(x => x.grlccust.desc_ccusto, "Id_grlcccust", Model.Id_grlcccust, Url.Action("AutoCompleteCentrodeCustoPreFetch", "CentrodeCusto"), "a", true, "iniciarListaCentrodeCusto")
+
+                                <div class="input-group-btn">
+
+                                    <a id="btnNovocc" href="#" class="btn btn-primary">
+                                        <span class="glyphicon glyphicon-plus"></span>
+                                    </a>
+
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-sm-6">
+                            <label>Observação</label>
+
+                            @Html.TextBoxFor(x => x.Obs, new { @class = "form-control", @name = "obs", })
+                        </div>
+                        
+                    </div>
+                </fieldset>
+                <h1></h1>
+                <fieldset id="fspanelorcamentos">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div id="panelEndereco" class="panel panel-default">
+                                <div class=" panel-heading">
+                                    <a href="#" id="btnNovo" class="btn btn-primary" data-id="@Model.id_Stqcporcamento" data-convenio="@Model.id_grlconvenio">
+                                        <span class="glyphicon glyphicon-plus"></span> Itens
+                                    </a>
+                                </div>
+
+                                <div class="panel-body ">
+
+                                    <div class="row">
+
+                                        @if (Model != null && Model.itemorcamentos != null && Model.itemorcamentos.Any())
+                                        {
+
+                                            decimal soma_total = 0;
+                                            <div id="grid ">
+
+                                                <table id="tabelaGrid" class="table table-bordered table-striped table-hover table-responsive dt-responsive">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="col-sm-1">Codigo</th>
+                                                            <th class="col-sm-3">Descrição</th>
+                                                            <th class="col-sm-1 text-right">Qtd</th>
+                                                            <th class="col-sm-1 text-right">Vl. Unit.</th>
+                                                            <th class="col-sm-1 text-right">Desc.</th>
+                                                            <th class="col-sm-1 text-right">Desc. %</th>
+                                                            <th class="col-sm-1 text-right">Valor Total</th>
+                                                            <th class="text-center"></th>
+                                                            <th class="text-center"></th>
+
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="corpoTabelaGridOrcamentos">
+                                                       @foreach (var item in Model.itemorcamentos)
+                                                       {
+
+                                                           Decimal valor_final;
+                                                           Decimal valor_pago_final;
+                                                           Decimal valor_total = (Convert.ToDecimal((item.qtd) * Convert.ToDecimal(item.Vl_unitario))) - Convert.ToDecimal(item.desconto);
+
+                                                           if (item.descontoperc != 0)
+                                                           {
+                                                               valor_total = valor_total - (valor_total * Convert.ToDecimal(item.descontoperc) / 100);
+                                                               valor_final = valor_total;
+                                                           }
+                                                           else
+                                                           {
+                                                               valor_final = valor_total;
+                                                           }
+                                                           soma_total = soma_total + valor_final;
+
+                                                            <tr class="@item.id_stqitorcamento">
+                                                                <td >@item.produtos.Id_stqcdprd</td>
+                                                                <td>@item.produtos.desc_produto</td>
+                                                                <td class="text-right">@item.qtd</td>
+                                                                <td class="text-right">@item.Vl_unitario</td>
+                                                                <td class="text-right">@item.desconto</td>
+                                                                <td class="text-right">@item.descontoperc</td>
+                                                                <td class="text-right">@valor_total.ToString("C2")</td>
+                                                                @if (@Model.titulos.Count <= 0)
+                                                                {
+                                                                    <td class="text-center col-sm-1">
+                                                                        <a href="#" class="glyphicon glyphicon-pencil btnGridEditar" data-id="@item.id_stqitorcamento"></a>
+                                                                    </td>
+                                                                    <td class="text-center col-sm-1">
+                                                                        <a href="#" class="glyphicon glyphicon-trash btnGridExcluir" data-toggle="modal" data-target="#modalExclusao" data-id="@item.id_stqitorcamento"></a>
+                                                                    </td>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <td class="text-center col-sm-1">
+                                                                        <span class="glyphicon glyphicon-pencil" title="Edição de Procedimentos"></span>
+                                                                    </td>
+                                                                    <td class="text-center col-sm-1">
+                                                                        <span class="glyphicon glyphicon-trash" title="Exclusão de Procedimentos"></span>
+                                                                    </td>
+                                                                }
+                                                            </tr>
+                                                        }
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="panel-footer clearfix">
+                                                <div class="pull-right">
+                                                    <a href="#" class="btn btn-default" name="somaitens" id="somaitens">Valor Total: @soma_total.ToString("N2")</a>
+
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <fieldset id="fspaneltitulos">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div id="panelEndereco2" class="panel panel-default" disabled="@Model.titulos.Any()">
+                                <div class="panel-heading">
+
+                                    <button id="btnNovoTitulo" type="button" style="margin-left: 5px" class="btn btn-primary" data-id="@Model.id_Stqcporcamento">Titulos <span class="glyphicon glyphicon-plus"></span></button>
+
+                                </div>
+                                <div class="panel-body">
+
+                                    <div class="row">
+                                        @if (Model != null && Model.titulos != null && Model.titulos.Any())
+                                        {
+
+                                            decimal valorTitulos = 0;
+                                            decimal valorpago = 0;
+                                            <div id="grid ">
+
+                                                <table id="tabelaGrid" class="table table-bordered table-striped table-hover table-responsive dt-responsive">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Titulo No.</th>
+                                                            <th>Emissão</th>
+                                                            <th class="text-right">Valor</th>
+                                                            <th>Vencimento</th>
+                                                            <th class="text-right">Vl. Pago</th>
+                                                            <th>Pagamento</th>
+                                                            <th class="text-center"></th>
+                                                            <th class="text-center"></th>
+                                                            <th class="text-center"></th>
+                                                            <th class="text-center"></th>
+
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="corpoTabelaGrid">
+                                                        @foreach (var item in Model.titulos.OrderBy(x=>x.dt_vencimento))
+                                                        {
+
+                                                            valorTitulos = valorTitulos + Convert.ToDecimal(item.Valor);
+                                                            valorpago = valorpago + Convert.ToDecimal(item.Valor_pago);
+
+                                                            var data = item.dt_emissao.HasValue ? item.dt_emissao.ToString().Substring(0, 10) : "-";
+                                                            var data_vencimento = item.dt_vencimento.HasValue ? item.dt_vencimento.ToString().Substring(0, 10) : "-";
+                                                            var data_pagamento = item.dt_pagamento.HasValue ? item.dt_pagamento.ToString().Substring(0, 10) : "-";
+                                                            decimal _valor_pago = 0;
+                                                            if (item.Valor_pago == null)
+                                                            {
+                                                                _valor_pago = Convert.ToDecimal(string.Format("{0:0.00}", 0));
+
+                                                            }
+
+                                                            else
+                                                            {
+                                                                _valor_pago = Convert.ToDecimal(item.Valor_pago);
+                                                            }
+                                                            if (data_pagamento == "01/01/1000")
+                                                            {
+                                                                data_pagamento = "-";
+                                                            }
+
+                                                            <tr class="@item.id_fintitrc">
+                                                                <td>@item.num_titulo</td>
+                                                                <td>@data</td>
+                                                                <td class="text-right">@item.Valor</td>
+                                                                <td>@data_vencimento</td>
+                                                                <td class="text-right">@_valor_pago</td>
+                                                                <td>@data_pagamento</td>
+                                                                @if (!item.Valor_pago.HasValue)
+                                                                {
+                                                                    <td class="text-center col-sm-1">
+                                                                        <a href="#" class="glyphicon glyphicon-pencil btnGridEditarTitulo" data-id="@item.id_fintitrc"></a>
+                                                                    </td>
+                                                                    <td class="text-center col-sm-1">
+                                                                        <a href="#" class="glyphicon glyphicon glyphicon-usd btnGridQuitarTitulo" data-id="@item.id_fintitrc" title="Quitação de Titulos"></a>
+                                                                    </td>
+
+
+                                                                    <td class="text-center col-sm-1">
+                                                                        <span class="glyphicon glyphicon-transfer" title="Abertura de Titulos"></span>
+                                                                    </td>
+                                                                    <td class="text-center col-sm-1">
+                                                                        <a href="#" class="glyphicon glyphicon-trash btnGridExcluirtitulo" data-toggle="modal" data-target="#modalExclusao" data-id="@item.id_fintitrc"></a>
+                                                                    </td>
+
+
+                                                                }
+                                                                else
+                                                                {
+                                                                    <td class="text-center col-sm-1">
+                                                                        <span class="glyphicon glyphicon-pencil" title="Edição de Titulos"></span>
+                                                                    </td>
+
+
+                                                                    <td class="text-center col-sm-1">
+                                                                        <span class="glyphicon glyphicon glyphicon-usd" title="Quitação de Titulos"></span>
+                                                                    </td>
+                                                                    <td class="text-center col-sm-1">
+                                                                        <a href="#" class="glyphicon glyphicon-transfer btnGridAbrirtitulo" data-toggle="modal" data-target="#modalAbertura" data-id="@item.id_fintitrc" title="Abertura de Titulos"></a>
+                                                                    </td>
+                                                                    <td class="text-center col-sm-1">
+                                                                        <span class="glyphicon glyphicon-trash" title="Exclusão de Titulos"></span>
+                                                                    </td>
+                                                                }
+
+
+                                                            </tr>
+                                                        }
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="panel-footer clearfix">
+                                                <div class="pull-left">
+                                                    <a href="" class="btn btn-default" name="somatitulos" id="somatitulos">Valor Total dos Titulos: @valorTitulos.ToString("N2")</a>
+
+
+                                                </div>
+                                                <div class="pull-right">
+                                                    <a href="" class="btn btn-default" name="somatitulospagos" id="somatitulospagos">Valor Total Pago dos Titulos : @valorpago.ToString("N2")</a>
+
+
+                                                </div>
+
+                                            </div>
+                                        }
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </fieldset>
+                <div class="row">
+                    <div class="form-group col-sm-1">
+                        <button type="submit" id="btnSalvar" name="btnSalvar" class="btn btn-primary"><span class="glyphicon glyphicon-floppy-saved"></span> Salvar</button>
+                    </div>
+                    <div class="form-group col-sm-1">
+                        <a id="btnVoltar" href="@Url.Action("Index")" class=" btn btn-primary">
+                            <span class="glyphicon glyphicon-arrow-left"></span> Voltar
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+
+}
+
+<div class="modal fade" id="modalCliente" data-carregadefault="true" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Consulta Cliente</h4>
+            </div>
+            <form id="formCliente" data-url="@Url.Action("ObterCliente", "Cliente")">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="form-group col-sm-4">
+                            <label>Pesquisar por:</label>
+
+                            <select class="form-control" id="tipoConsultaModalCliente" name="tipoConsultaModalCliente">
+                                <option value="codigo" selected>Código</option>
+                                <option value="descricao">Nome</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-sm-8">
+                            <label>Filtro</label>
+                            <input type="text" class="form-control" id="descricaoModalCliente" name="descricaoModalCliente" onkeypress="return SomenteNumero()" required="required" />
+
+                        </div>
+                    </div>
+                    <div class="row" id="body">
+                        <table class="table table-condensed table-hover table-responsive">
+                            <thead>
+                                <tr style="background-color:#F8F8F8">
+                                    <th class="col-sm-2 text-center">Código</th>
+                                    <th>Descrição</th>
+                                    <th>&nbsp;</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="tabelaCliente"></tbody>
+
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span> Pesquisar</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalDentista" data-carregadefault="true" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Consulta Dentista</h4>
+            </div>
+            <form id="formDentista" data-url="@Url.Action("ObterDentista", "Dentista")">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="form-group col-sm-4">
+                            <label>Pesquisar por:</label>
+
+                            <select class="form-control" id="tipoConsultaModalDentista" name="tipoConsultaModalDentista">
+                                <option value="codigo" selected>Código</option>
+                                <option value="descricao">Nome</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-sm-8">
+                            <label>Filtro</label>
+                            <input type="text" class="form-control" id="descricaoModalDentista" name="descricaoModalDentista" onkeypress="return SomenteNumero()" required="required" />
+
+                        </div>
+                    </div>
+                    <div class="row" id="body">
+                        <table class="table table-condensed table-hover table-responsive">
+                            <thead>
+                                <tr style="background-color:#F8F8F8">
+                                    <th class="col-sm-2 text-center">Código</th>
+                                    <th>Descrição</th>
+                                    <th>&nbsp;</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="tabelaDentista"></tbody>
+
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span> Pesquisar</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<div id="modalExclusao" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Exclusão de registro</h4>
+            </div>
+            <div class="modal-body">
+                <p class="text-center">Deseja realmente excluir este registro? </p>
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="btn btn-primary " id="btnModalExclusaoConfirmar">
+                    <span class="glyphicon glyphicon-ok"></span> Confirma
+                </a>
+                &nbsp;&nbsp;
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="btnModalExclusaoCancelar">
+                    <span class="glyphicon glyphicon-remove"></span> Cancelar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="modalAbertura" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Abertura de Titulo</h4>
+            </div>
+            <div class="modal-body">
+                <p class="text-center">Deseja realmente Abrir este Titulo? </p>
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="btn btn-primary " id="btnmodalAberturaConfirmar">
+                    <span class="glyphicon glyphicon-ok"></span> Confirma
+                </a>
+                &nbsp;&nbsp;
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="btnmodalAberturaCancelar">
+                    <span class="glyphicon glyphicon-remove"></span> Cancelar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    <script>
+
+
+        $(document).ready(function () {
+
+            //var testa = testa_valor_pago();
+            iniciarListaCliente(); //Iniciando a lista manualmente
+            //iniciarListaDentista();
+            iniciarListaCentrodeCusto();
+            testa_valor_total();
+            if ("@Model.itemorcamentos.Count()" > 0) {
+                $("#grlccust_desc_ccusto").attr("readonly", "true");
+                $("#Dt_orcamento").attr("readonly", "true");
+                $("#Obs").attr("readonly", "true");
+                
+
+                $("#nomecliente").attr("readonly", "true");
+                $('#btnVoltar').attr('disabled', 'disabled');
+                $('#btnVoltar2').attr('disabled', 'disabled');
+
+            } else {
+
+                $("#grlccust_desc_ccusto").removeAttr("readonly");
+                $("#nomecliente").removeAttr("readonly");
+                
+                $('#btnVoltar').removeAttr("readonly");
+                $('#btnVoltar2').removeAttr("readonly");
+                $("#Dt_orcamento").removeAttr("readonly");
+                $("#Obs").removeAttr("readonly");
+            }
+            $('#fspanelgerais').removeAttr('disabled');
+            $('#fspanelorcamentos').removeAttr('disabled');
+
+            $('.btnGridEditar').removeClass("black");
+            $('.btnGridExcluir').removeClass("black");
+
+
+            if ("@Model.titulos.Count()" > 0) {
+
+                $('#fspanelorcamentos').attr('disabled', 'disabled');
+                $('#fspanelgerais').attr('disabled', 'disabled');
+
+                $('.btnGridEditar').addClass("black");
+                $('.btnGridExcluir').addClass("black");
+                $('.btnSalvar').attr('disabled', 'disabled');
+                $('.btnSalvar').addClass("black");
+            }
+            //else {
+            // $('#fspanelgerais').attr('disabled', 'disabled');
+
+            //}
+
+
+        });
+
+
+        $(".btnGridExcluir").click(function (e) {
+            if ("@Model.titulos.Count()" > 0) {
+                alert("Não é possível excluir procedimentos. Títulos já emitidos");
+                return false;
+            } else {
+                e.preventDefault();
+                var id = $(this).data('id');
+
+                var linha = $("." + id);
+                $("#btnModalExclusaoConfirmar").off("click").click(function (e) {
+                    $.ajax({
+                        type: 'POST',
+                        url: '@Url.Action("Delete", "CursoItem")',
+                        data: {
+                            "codigo": id
+                        },
+                        success: function (data) {
+                            if (data == true) {
+                                linha.remove();
+                                $('#modalExclusao').modal('hide');
+                                location.reload();
+                                if ($("#corpoTabelaGridOrcamentos").children("tr").length > 0) {
+                                    return true;
+                                } else {
+                                    location.reload();
+                                }
+                            } else {
+                                alert("Ocorreu um erro ao tentar excluir o registro.");
+                                $("#btnModalExclusaoCancelar").click();
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            alert(error);
+                        }
+                    });
+                });
+            }
+        });
+
+        //editar procedimentos
+        $('.btnGridEditar').click(function (e) {
+            e.preventDefault();
+            if ("@Model.titulos.Count()" > 0) {
+                alert("Não é possível alterar procedimentos. Títulos já emitidos");
+                return false;
+            }
+            else {
+                var url = '@Url.Action("Edit", "CursoItem")' + '?codigo=' + $(this).data('id');
+
+                var modal, modalDialog, modalContent;
+                modal = $('<div id="modalEdicao" class="modal fade" "/>');
+                modalDialog = $('<div class="modal-dialog modal-lg" />');
+                modalContent = $('<div class="modal-content" />');
+
+                modal.modal('hide')
+                               .append(modalDialog)
+                               .on('hidden.bs.modal', function () {
+
+                                   $(this).remove();
+                               })
+                               .appendTo('body');
+
+                modalDialog.append(modalContent);
+
+                $.get(url, function (data) {
+                    modalContent.html(data);
+                    modal.modal('show');
+
+                });
+            }
+        });
+
+        $('#btnNovo').click(function (e) {
+            e.preventDefault();
+
+            var codigo = $(this).data('id');
+            var codigo2 = $(this).data('convenio');
+
+            var url = '@Url.Action("Create", "CursoItem")' + '?codigo=' + codigo + '&codigo2=' + codigo2;
+
+            var modal, modalDialog, modalContent;
+            modal = $('<div id="modalInclusao" class="modal fade" "/>');
+            modalDialog = $('<div class="modal-dialog modal-lg" />');
+            modalContent = $('<div class="modal-content" />');
+
+            modal.modal('hide')
+                .append(modalDialog)
+                .on('hidden.bs.modal', function () {
+                    $(this).remove();
+                })
+                .appendTo('body');
+
+
+            modalDialog.append(modalContent);
+
+            $.get(url, function (data) {
+                modalContent.html(data);
+                modal.on('show.bs.modal', function () { $(this).find('input:first').focus(); });
+                modal.modal('show');
+            });
+
+        });
+
+        $('#btnNovoTitulo').click(function (e) {
+
+            var convenio = '@Model.Convenios.Guia';
+
+            if (convenio == "S") {
+
+                alert("nao e possivel Emitir Titulos para esse Atendimento!. Convenio com guia");
+                return false;
+            }
+            e.preventDefault();
+
+            var url = '@Url.Action("Create", "Titulo")' + '?codigo=' + $(this).data('id') + '&data=' + $("#Dt_orcamento").val();
+
+            var modal, modalDialog, modalContent;
+            modal = $('<div id="modalInclusao" class="modal fade" "/>');
+            modalDialog = $('<div class="modal-dialog modal-lg" />');
+            modalContent = $('<div class="modal-content" />');
+
+            modal.modal('hide')
+                .append(modalDialog)
+                .on('hidden.bs.modal', function () { $(this).remove(); })
+                .appendTo('body');
+
+
+            modalDialog.append(modalContent);
+
+            $.get(url, function (data) {
+                modalContent.html(data);
+                modal.on('show.bs.modal', function () { $(this).find('input:first').focus(); });
+                modal.modal('show');
+            });
+
+        });
+
+        $('.btnGridEditarTitulo').click(function (e) {
+
+            e.preventDefault();
+            var url = '@Url.Action("Edit", "Titulo")' + '?codigo=' + $(this).data('id');
+
+            var modal, modalDialog, modalContent;
+            modal = $('<div id="modalEdicao" class="modal fade" "/>');
+            modalDialog = $('<div class="modal-dialog modal-lg" />');
+            modalContent = $('<div class="modal-content" />');
+
+            modal.modal('hide')
+                .append(modalDialog)
+                .on('hidden.bs.modal', function () { $(this).remove(); })
+                .appendTo('body');
+
+            modalDialog.append(modalContent);
+
+            $.get(url, function (data) {
+                modalContent.html(data);
+                modal.modal('show');
+            });
+
+        });
+
+        $('.btnGridQuitarTitulo').click(function (e) {
+
+
+            e.preventDefault();
+            var url = '@Url.Action("Quitacao", "Titulo")' + '?codigo=' + $(this).data('id');
+
+            var modal, modalDialog, modalContent;
+            modal = $('<div id="modalEdicao" class="modal fade" "/>');
+            modalDialog = $('<div class="modal-dialog modal-lg" />');
+            modalContent = $('<div class="modal-content" />');
+
+            modal.modal('hide')
+                .append(modalDialog)
+                .on('hidden.bs.modal', function () { $(this).remove(); })
+                .appendTo('body');
+
+            modalDialog.append(modalContent);
+
+            $.get(url, function (data) {
+                modalContent.html(data);
+                modal.modal('show');
+            });
+
+        });
+
+        $(".btnGridExcluirtitulo").click(function (e) {
+
+            e.preventDefault();
+            var id = $(this).data('id');
+
+            var linha = $("." + id);
+            $("#btnModalExclusaoConfirmar").off("click").click(function (e) {
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("Delete", "Titulo")',
+                    data: {
+                        "codigo": id
+                    },
+                    success: function (data) {
+                        if (data == true) {
+                            linha.remove();
+                            $('#modalExclusao').modal('hide');
+                            location.reload();
+                        } else {
+                            alert("Ocorreu um erro ao tentar excluir o registro.");
+                            $("#btnModalExclusaoCancelar").click();
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        alert(error);
+                    }
+
+                });
+            });
+
+        });
+
+
+        $(".btnGridAbrirtitulo").click(function (e) {
+            // e.preventDefault();
+            // var url = '@Url.Action("Abrir", "Titulo")' + '?codigo=' + $(this).data('id');
+
+            e.preventDefault();
+            var id = $(this).data('id');
+
+            var linha = $("." + id);
+            $("#btnmodalAberturaConfirmar").off("click").click(function (e) {
+                $.ajax({
+                    type: 'POST',
+                    //url: '@Url.Action("Delete", "Titulo")',
+                    url: '@Url.Action("Abrir", "Titulo")',
+                    data: {
+                        "codigo": id
+                    },
+                    success: function (data) {
+                        if (data == true) {
+                            //linha.remove();
+                            //$('#modalExclusao').modal('hide');
+                            location.reload();
+                        } else {
+                            alert("Ocorreu um erro ao tentar excluir o registro.");
+                            $("#btnModalExclusaoCancelar").click();
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        alert(error);
+                    }
+
+                });
+            });
+
+        });
+
+        $(".btnteste").click(function (e) {
+            
+             alert("somaitens");
+        });
+
+        function testa_valor_total() {
+
+            var soma_total_procedimentos = 0.00;
+            var soma_total_titulos = 0.00;
+            var soma_total_pagos = 0.00;
+            var somatitulos = "";
+            var somaprocedimentos = "";
+            var somatitulospagos = 0.00;
+            var tc = document.getElementById("somaitens");
+
+            if (tc != null) {
+
+                var tamanho = tc.innerText.length;
+
+                somaprocedimentos = tc.innerText.substr(12, tamanho);
+            }
+            var tc2 = document.getElementById("somatitulos");
+            if (tc2 != null) {
+                var tamanho2 = tc2.innerText.length;
+                somatitulos = tc2.innerText.substr(24, tamanho2);
+            }
+            soma_total_procedimentos = somaprocedimentos.replace(",", ".");
+            soma_total_procedimentos = parseFloat(soma_total_procedimentos);
+            soma_total_titulos = somatitulos.replace(",", ".");
+            soma_total_titulos = parseFloat(soma_total_titulos);
+
+            /* var pago = testa_valor_pago();
+
+         if (pago) {
+
+             $('#fspanelorcamentos').attr('disabled', 'disabled');
+             $('#fspanelgerais').attr('disabled', 'disabled');
+             $('#fspaneltitulos').attr('disabled', 'disabled');
+
+
+             $('.btnGridEditar').addClass("black");
+             $('.btnGridExcluir').addClass("black");
+
+
+             $('.btnGridEditarTitulo').addClass("black");
+             $('.btnGridQuitarTitulo').addClass("black");
+             $('.btnGridExcluirtitulo').addClass("black");
+         } else {
+             if (soma_total_procedimentos == soma_total_titulos) {
+                 $('#fspaneltitulos').attr('disabled', 'disabled');
+
+             } else {
+                 $('#fspaneltitulos').removeAttr('disabled');
+             }
+
+         }*/
+
+
+        }
+
+        function testa_valor_pago() {
+
+            var soma_total_pago = 0.00;
+            var somatitulospagos = 0.00;
+            var tc3 = document.getElementById("somatitulospagos");
+            if (tc3 != null) {
+                var tamanho3 = tc3.innerText.length;
+                somatitulospagos = tc3.innerText.substr(30, tamanho3);
+            }
+            soma_total_pago = somatitulospagos.replace(",", ".");
+            soma_total_pago = parseFloat(soma_total_pago);
+
+            if (soma_total_pago > 0) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+    </script>
+    @Scripts.Render("~/Scripts/gtec/modal.Cliente.js")
+    @Scripts.Render("~/Scripts/gtec/modal.Dentista.js")
+}
+
+
+
+
+

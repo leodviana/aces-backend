@@ -1,0 +1,55 @@
+﻿@model GtecIt.ViewModels.CefalometriaItemCreateViewModel
+<script src="~/Scripts/defaults.js"></script>
+@{
+    Layout = null;
+}
+<form id="formInclusao" class="form-horizontal" role="form">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Incluir - Cefalometrias</h4>
+    </div>
+    <div class="modal-body">
+
+        @Html.AntiForgeryToken()
+       
+        @Html.HiddenFor(x => Model.id_grldentista)
+        <div class="form-group">
+            <div class="col-sm-12">
+                <label>Cefalometria</label>
+                @Html.DropDownListFor(x => x.id_GrlCefalometrias, Model.DropdownCefalometricas, "Selecione...", new { @class = "form-control", @name = "NomeProduto", @id = "NomeProduto" })
+            </div>
+
+            
+
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-ok"></span> Confirmar</button>
+        &nbsp;&nbsp;
+        <button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancelar</button>
+    </div>
+</form>
+
+<script type="text/javascript">
+
+    $('#formInclusao').on('submit', function (e) {
+        e.preventDefault();
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("Create", "CefalometriaItem")',
+            data: $("#formInclusao").serialize(),
+            success: function (result) {
+                if (result == true) {
+                    location.reload();
+                    $("modalInclusao").modal('hide');
+                } else {
+                    alert("Ocorreu um erro.");
+                }
+            },
+            error: function (xhr, status, error) {
+                alert(error);
+            }
+        });
+    });
+ 
+
+</script>

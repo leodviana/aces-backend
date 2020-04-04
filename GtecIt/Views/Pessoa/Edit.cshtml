@@ -1,0 +1,867 @@
+﻿@model GtecIt.ViewModels.PessoaEditViewModel
+<script src="@Url.Content("~/Scripts/jquery.validate.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")" type="text/javascript"></script>
+<script src="~/Scripts/methods_pt.js"></script>
+
+<h1></h1>
+@{
+    ViewBag.Title = "Edição - Cadastro Básico";
+}
+
+@using (Html.BeginForm("Edit", "Pessoa", FormMethod.Post))
+{
+
+    @Html.AntiForgeryToken()
+    <fieldset>
+        <legend>@ViewBag.Title</legend>
+        <div id="panelgerais" class="panel panel-default ">
+            <div class="panel-heading">
+                Dados Gerais
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    @Html.HiddenFor(x => x.Id_grlbasico)
+                    <div class="col-sm-2">
+                        <label>Tp. pessoa*</label>
+                        @Html.HiddenFor(x => x.Id_grltopessoa)
+                        @Html.TextBox("fisicaoujuridica", Model.Id_grltopessoa.ToUpper() == "F" ? "Física" : "Jurídica", new { @class = "form-control", @disabled = "disabled" })
+                    </div>
+                    <div class="col-sm-8">
+                        <label>Nome</label>
+                        @Html.EditorFor(model => model.nome, new { htmlAttributes = new { @class = "form-control", @Readonly = true } })
+                        @Html.ValidationMessageFor(model => model.nome, "", new { @class = "text-danger" })
+
+
+                    </div>
+                    <div class="col-sm-2">
+                        <label>Nasc/Fund.</label>
+                        @Html.TextBoxFor(x => x.dt_nascimento, "{0:dd/MM/yyyy}", new { @class = "form-control default-date-picker", @autofocus = "autofocus", @name = "dt_nascimento", @id = "dt_nascimento" })
+                      
+                        @Html.ValidationMessageFor(model => model.dt_nascimento, "", new { @class = "text-danger" })
+
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <label>Telefone 01</label>
+                        @Html.TextBoxFor(x => x.ddd_telefone, new { @class = "form-control fone", @name = "ddd_telefone", @id = "ddd_telefone" })
+                    </div>
+
+                    <div class="col-sm-3">
+                        <label>Ident. Fone 01</label>
+                        @Html.DropDownListFor(x => x.Id_grlidtel, Model.DropdownIdentifica, "Selecione...", new { @class = "form-control" })
+
+                    </div>
+                    <div class="col-sm-3">
+                        <label>Telefone02</label>
+                        @Html.TextBoxFor(x => x.ddd_telefone2, new { @class = "form-control fone" })
+                    </div>
+                    <div class="col-sm-3">
+                        <label>Ident. Fone 02</label>
+                        @Html.DropDownListFor(x => x.Id_grlidtel02, Model.DropdownIdentifica, "Selecione...", new { @class = "form-control" })
+
+                    </div>
+
+
+                </div>
+                <div class="row">
+
+                    <div class="col-sm-4">
+                        <label>Email01</label>
+                        @Html.TextBoxFor(x => x.email, new { @class = "form-control", @type = "email", @name = "email", @id = "email" })
+                    </div>
+
+                    <div class="col-sm-4">
+                        <label>Email02</label>
+                        @Html.TextBoxFor(x => x.Email2, new { @class = "form-control", @type = "email", @name = "email2", @id = "email2" })
+                    </div>
+                    <div class="col-sm-4">
+
+                        <label>Nome/Contato</label>
+                        @Html.TextBoxFor(x => x.contato, new { @class = "form-control", @name = "contato", @id = "contato" })
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <h1></h1>
+
+        @if (Model.Id_grltopessoa.ToUpper() == "J")
+        {
+            <div id="panelDadosPessoaJuridica" class="panel panel-default">
+                <div class="panel-heading">Dados Pessoa Jurídica</div>
+                <div class="panel-body">
+                    <div class="row">
+
+                        <div class="col-sm-6">
+                            <label>Razão Social</label>
+                            @Html.TextBoxFor(x => x.razao_social, new { @class = "form-control", @name = "razao_social", @id = "razao_social" })
+                        </div>
+                        <div class="col-sm-6">
+                            <label>Nome Fantasia</label>
+                            @Html.TextBoxFor(x => x.Nome_fantasia, new { @class = "form-control", @name = "Nome_fantasia", @id = "Nome_fantasia" })
+                        </div>
+
+                    </div>
+                    <div class="row">
+
+                        <div class="col-sm-4">
+                            <label>CNPJ</label>
+                            @Html.TextBoxFor(x => x.cgc, new { @class = "form-control", @name = "cgc", @id = "cgc" })
+                        </div>
+                        <div class="col-sm-4">
+                            <label>Insc. Mun.</label>
+                            @Html.TextBoxFor(x => x.insc_municipal, new { @class = "form-control", @name = "insc_munincipal", @id = "insc_municipal" })
+                        </div>
+                        <div class="col-sm-4">
+                            <label>Insc. Est.</label>
+                            @Html.TextBoxFor(x => x.insc_municipal, new { @class = "form-control", @name = "insc_municipal", @id = "insc_municipal" })
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        }
+        else
+        {
+            <div id="panelDadosPessoaFisica" class="panel panel-default ">
+                <div class="panel-heading">
+                    Dados Pessoa Física
+                </div>
+                <div class="panel-body">
+
+                    <div class="row">
+
+                        <div class="col-sm-3">
+                            <label>Sexo</label>
+                            @Html.DropDownListFor(x => x.sexo, Model.DropdownSexo, "Selecione...", new { @class = "form-control" })
+                        </div>
+
+
+                        <div class="col-sm-3">
+                            <label>Estado Civil</label>
+                            @Html.DropDownListFor(x => x.Id_grlcivil, Model.DropdownEstado, "Selecione...", new { @class = "form-control" })
+                        </div>
+                        <div class="col-sm-1">
+                            <div class="form-group">
+                                <label>Cod.</label>
+                                @Html.TextBoxFor(x => x.Id_grlprofi, new { @class = "form-control", @id = "CodigoProfissao", @name = "Id_grlprofi", data_url = @Url.Action("ObterDescricaoProfissao", "Profissao"), @autofocus = "autofocus", onkeypress = "return SomenteNumero()", @required = "required" })
+
+                            </div>
+                        </div>
+                        <div class="col-sm-5">
+                            <label>Descrição</label>
+                            <div class="input-group">
+
+                                @Html.TextBoxFor(x => x.NomeProfissao, new { @class = "form-control", @name = "NomeProfissao", @id = "NomeProfissao" })
+                                <div class="input-group-btn">
+                                    <button type="button" id="open-Profissao" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span></button>
+                                    <button type="button" style="margin-left: 5px" class="btn btn-primary" data-toggle="modal" data-target="#modalIncluirProfissao"><span class="glyphicon glyphicon-plus"></span></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <label>CPF</label>
+                            @Html.TextBoxFor(x => x.cpf, new { @class = "form-control", @name = "cpf", @id = "cpf" })
+                        </div>
+
+                        <div class="col-sm-6">
+                            <label>RG</label>
+                            @Html.TextBoxFor(x => x.rg, new { @class = "form-control", @name = "rg", @id = "rg" })
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        }
+        <div id="panelEndereco" class="panel panel-default ">
+            <div class="panel-heading">
+                Endereço
+                <button id="btnNovo" type="button" style="margin-left: 5px" class="btn btn-primary" data-id="@Model.Id_grlbasico"><span class="glyphicon glyphicon-plus"></span></button>
+
+            </div>
+            <div class="panel-body">
+
+                <div class="row">
+                    @if (Model != null && Model.Enderecos != null && Model.Enderecos.Any())
+                    {
+                        <div id="grid ">
+
+                            <table id="tabelaGrid" class="table table-bordered table-striped table-hover table-responsive dt-responsive">
+                                <thead>
+                                    <tr>
+                                        <th>Cep</th>
+                                        <th>Logradouro</th>
+                                        <th>Complemento</th>
+                                        <th>Bairro</th>
+
+                                        <th class="text-center"></th>
+                                        <th class="text-center"></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="corpoTabelaGrid">
+                                    @foreach (var item in Model.Enderecos)
+                                    {
+                                        <tr class="@item.Id_Grendbasico">
+                                            <td>@item.Cep</td>
+                                            <td>@item.Logradouro</td>
+                                            <td>@item.Complemento</td>
+                                            <td>@item.Bairro</td>
+
+                                            <td class="text-center col-sm-1">
+                                                <a href="#" class="glyphicon glyphicon-pencil btnGridEditar" data-id="@item.Id_Grendbasico"></a>
+                                            </td>
+                                            <td class="text-center col-sm-1">
+                                                <a href="#" class="glyphicon glyphicon-trash btnGridExcluir" data-toggle="modal" data-target="#modalExclusao" data-id="@item.Id_Grendbasico"></a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                </div>
+
+            </div>
+
+
+        </div>
+    </fieldset>
+    <div class="row">
+        <div class="form-group col-sm-1">
+            <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-floppy-saved"></span> Salvar</button>
+        </div>
+        <div class="form-group col-sm-1">
+            <a id="btnVoltar" href="@Url.Action("Index")" class=" btn btn-primary">
+                <span class="glyphicon glyphicon-arrow-left"></span> Voltar
+            </a>
+        </div>
+
+    </div>
+
+}
+
+<div class="modal fade" id="modalIncluirTipoTelefone" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Incluir - Tipo de Telefone</h4>
+            </div>
+            <form id="formInclusaoTipoTelefone" class="form-horizontal" role="form">
+                <div class="modal-body">
+
+                    @Html.AntiForgeryToken()
+                    <div class="row">
+                        <div class="form-group">
+                            <label for="descricao" class="col-md-2 control-label">Descrição</label>
+                            <div class="col-md-5">
+                                <input id="descricao" name="descricao" type="text"
+                                       class="form-control" maxlength="50" required autofocus>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" id="btnModalIncluirConfirmar" class="btn btn-primary">
+                        <span class="glyphicon glyphicon-floppy-disk"></span> Salvar
+                    </button>
+                    &nbsp;&nbsp;
+                    <button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="modalIncluirEndereco" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Incluir - Endereço</h4>
+            </div>
+            <form id="formInclusaoEndereco" class="form-horizontal" role="form">
+                <div class="modal-body">
+
+                    @Html.AntiForgeryToken()
+                    <div class="row">
+                        <div class="form-group">
+                            <label for="descricao" class="col-md-2 control-label">Descrição</label>
+                            <div class="col-md-5">
+                                <input id="descricao" name="descricao" type="text"
+                                       class="form-control" maxlength="50" required autofocus>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" id="btnModalIncluirConfirmar" class="btn btn-primary">
+                        <span class="glyphicon glyphicon-floppy-disk"></span> Salvar
+                    </button>
+                    &nbsp;&nbsp;
+                    <button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div id="modalExclusao" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Exclusão de registro</h4>
+            </div>
+            <div class="modal-body">
+                <p class="text-center">Deseja realmente excluir este registro? </p>
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="btn btn-primary " id="btnModalExclusaoConfirmar">
+                    <span class="glyphicon glyphicon-ok"></span> Confirma
+                </a>
+                &nbsp;&nbsp;
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="btnModalExclusaoCancelar">
+                    <span class="glyphicon glyphicon-remove"></span> Cancelar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalTipoTelefone" data-carregadefault="true" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Consulta de Tipo Telefone</h4>
+            </div>
+            <form id="formTipoTelefone" data-url="@Url.Action("ObterTipoTelefone", "TipoTelefone")">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="form-group col-sm-4">
+                            <label>Pesquisar por:</label>
+
+                            <select class="form-control" id="tipoConsultaModalTipoTelefone" name="tipoConsultaModalTipoTelefone">
+                                <option value="codigo" selected>Código</option>
+                                <option value="descricao">Descrição</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-sm-8">
+                            <label>Filtro</label>
+                            <input type="text" class="form-control" id="descricaoModalTipoTelefone" name="descricaoModalTelefone" onkeypress="return SomenteNumero()" required="required" />
+
+                        </div>
+                    </div>
+                    <div class="row" id="body">
+                        <table class="table table-condensed table-hover table-responsive">
+                            <thead>
+                                <tr style="background-color:#F8F8F8">
+                                    <th class="col-sm-2 text-center">Código</th>
+                                    <th>Descrição</th>
+                                    <th>&nbsp;</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="tabelaTipoTelefone"></tbody>
+
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span> Pesquisar</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalIncluirTpfone2" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Incluir - Tipo de Telefone 02</h4>
+            </div>
+            <form id="formInclusaoTpfone2" class="form-horizontal" role="form">
+                <div class="modal-body">
+
+                    @Html.AntiForgeryToken()
+                    <div class="row">
+                        <div class="form-group">
+                            <label for="descricao" class="col-md-2 control-label">Descrição</label>
+                            <div class="col-md-5">
+                                <input id="descricao" name="descricao" type="text"
+                                       class="form-control" maxlength="50" required autofocus>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" id="btnModalIncluirConfirmar" class="btn btn-primary">
+                        <span class="glyphicon glyphicon-floppy-disk"></span> Salvar
+                    </button>
+                    &nbsp;&nbsp;
+                    <button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalTpfone2" data-carregadefault="true" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Consulta de Tipo Telefone</h4>
+            </div>
+            <form id="formTpfone2" data-url="@Url.Action("ObterTipoTelefone2", "TipoTelefone")">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="form-group col-sm-4">
+                            <label>Pesquisar por:</label>
+
+                            <select class="form-control" id="tipoConsultaModalTpfone2" name="tipoConsultaModalTpfone2">
+                                <option value="codigo" selected>Código</option>
+                                <option value="descricao">Descrição</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-sm-8">
+                            <label>Filtro</label>
+                            <input type="text" class="form-control" id="descricaoModalTpfone2" name="descricaoModalTpfone2" onkeypress="return SomenteNumero()" required="required" />
+
+                        </div>
+                    </div>
+                    <div class="row" id="body">
+                        <table class="table table-condensed table-hover table-responsive">
+                            <thead>
+                                <tr style="background-color:#F8F8F8">
+                                    <th class="col-sm-2 text-center">Código</th>
+                                    <th>Descrição</th>
+                                    <th>&nbsp;</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="tabelaTpfone2"></tbody>
+
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span> Pesquisar</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="modalIncluirProfissao" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Incluir - Profissão</h4>
+            </div>
+            <form id="formInclusaoProfissao" class="form-horizontal" role="form">
+                <div class="modal-body">
+
+                    @Html.AntiForgeryToken()
+                    <div class="row">
+                        <div class="form-group">
+                            <label for="descricao" class="col-md-2 control-label">Descrição</label>
+                            <div class="col-md-5">
+                                <input id="descricao" name="descricao" type="text"
+                                       class="form-control" maxlength="50" required autofocus>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" id="btnModalIncluirConfirmar" class="btn btn-primary">
+                        <span class="glyphicon glyphicon-floppy-disk"></span> Salvar
+                    </button>
+                    &nbsp;&nbsp;
+                    <button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="modalProfissao" data-carregadefault="true" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Consulta de Profissão</h4>
+            </div>
+            <form id="formProfissao" data-url="@Url.Action("ObterProfissao", "Profissao")">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="form-group col-sm-4">
+                            <label>Pesquisar por:</label>
+
+                            <select class="form-control" id="tipoConsultaModalProfissao" name="tipoConsultaModalProfissao">
+                                <option value="codigo" selected>Código</option>
+                                <option value="descricao">Descrição</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-sm-8">
+                            <label>Filtro</label>
+                            <input type="text" class="form-control" id="descricaoModalProfissao" name="descricaoModalProfissao" onkeypress="return SomenteNumero()" required="required" />
+
+                        </div>
+                    </div>
+                    <div class="row" id="body">
+                        <table class="table table-condensed table-hover table-responsive">
+                            <thead>
+                                <tr style="background-color:#F8F8F8">
+                                    <th class="col-sm-2 text-center">Código</th>
+                                    <th>Descrição</th>
+                                    <th>&nbsp;</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="tabelaProfissao"></tbody>
+
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span> Pesquisar</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalSexo" data-carregadefault="true" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Consulta de Sexo</h4>
+            </div>
+            <form id="formSexo" data-url="@Url.Action("ObterSexo", "Sexo")">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="form-group col-sm-4">
+                            <label>Pesquisar por:</label>
+
+                            <select class="form-control" id="tipoConsultaModalSexo" name="tipoConsultaModalSexo">
+                                <option value="codigo" selected>Código</option>
+                                <option value="descricao">Descrição</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-sm-8">
+                            <label>Filtro</label>
+                            <input type="text" class="form-control" id="descricaoModalSexo" name="descricaoModalSexo" onkeypress="return SomenteNumero()" required="required" />
+
+                        </div>
+                    </div>
+                    <div class="row" id="body">
+                        <table class="table table-condensed table-hover table-responsive">
+                            <thead>
+                                <tr style="background-color:#F8F8F8">
+                                    <th class="col-sm-2 text-center">Código</th>
+                                    <th>Descrição</th>
+                                    <th>&nbsp;</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabelaSexo"></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span> Pesquisar</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalIncluirSexo" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Incluir - Sexo</h4>
+            </div>
+            <form id="formInclusaoSexo" class="form-horizontal" role="form">
+                <div class="modal-body">
+
+                    @Html.AntiForgeryToken()
+                    <div class="row">
+                        <div class="form-group">
+                            <label for="descricao" class="col-md-2 control-label">Descrição</label>
+                            <div class="col-md-5">
+                                <input id="descricao" name="descricao" type="text"
+                                       class="form-control" maxlength="50" required autofocus>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" id="btnModalIncluirConfirmar" class="btn btn-primary">
+                        <span class="glyphicon glyphicon-floppy-disk"></span> Salvar
+                    </button>
+                    &nbsp;&nbsp;
+                    <button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalIncluirEstado" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Incluir - Estado</h4>
+            </div>
+            <form id="formInclusaoEstado" class="form-horizontal" role="form">
+                <div class="modal-body">
+
+                    @Html.AntiForgeryToken()
+                    <div class="row">
+                        <div class="form-group">
+                            <label for="descricao" class="col-md-2 control-label">Descrição</label>
+                            <div class="col-md-5">
+                                <input id="descricao" name="descricao" type="text"
+                                       class="form-control" maxlength="50" required autofocus>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" id="btnModalIncluirConfirmar" class="btn btn-primary">
+                        <span class="glyphicon glyphicon-floppy-disk"></span> Salvar
+                    </button>
+                    &nbsp;&nbsp;
+                    <button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalEstado" data-carregadefault="true" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Consulta de Estado Civil</h4>
+            </div>
+            <form id="formEstado" data-url="@Url.Action("ObterEstado", "EstadoCivil")">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="form-group col-sm-4">
+                            <label>Pesquisar por:</label>
+
+                            <select class="form-control" id="tipoConsultaModalEstado" name="tipoConsultaModalEstado">
+                                <option value="codigo" selected>Código</option>
+                                <option value="descricao">Descrição</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-sm-8">
+                            <label>Filtro</label>
+                            <input type="text" class="form-control" id="descricaoModalEstado" name="descricaoModalEstado" onkeypress="return SomenteNumero()" required="required" />
+
+                        </div>
+                    </div>
+                    <div class="row" id="body">
+                        <table class="table table-condensed table-hover table-responsive">
+                            <thead>
+                                <tr style="background-color:#F8F8F8">
+                                    <th class="col-sm-2 text-center">Código</th>
+                                    <th>Descrição</th>
+                                    <th>&nbsp;</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="tabelaEstado"></tbody>
+
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span> Pesquisar</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>
+    $(document).ready(function () {
+        //  document.getElementById('CodigoProfissao').focus();
+        ////  document.getElementById('nome').focus();
+
+        $('#ddlTipoPessoa').change(function () {
+
+            var tipoPesspa = $(this).val();
+
+            if (tipoPesspa == "J") {
+                clearDiv($("#panelDadosPessoaFisica"));
+                $("#panelDadosPessoaFisica").hide();
+                $("#panelDadosPessoaJuridica").show();
+            }
+            else {
+                clearDiv($("#panelDadosPessoaJuridica"));
+                $("#panelDadosPessoaJuridica").hide();
+                $("#panelDadosPessoaFisica").show();
+                $('#Id_grlprofi').focus();
+            }
+
+            $('#desc').focus();
+        });
+
+        function clearDiv(div) {
+            $(div).
+                   find(':text, :password, textarea').attr('value', '').end().
+                   find(':checkbox, :radio').attr('checked', false).end().
+                   find('select').attr('selectedIndex', 0);
+        }
+
+
+    });
+
+    $(".btnGridExcluir").click(function (e) {
+        e.preventDefault();
+        var id = $(this).data('id');
+
+        var linha = $("." + id);
+        $("#btnModalExclusaoConfirmar").off("click").click(function (e) {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("Delete", "Endereco")',
+                data: {
+                    "codigo": id
+                },
+                success: function (data) {
+                    if (data == true) {
+                        linha.remove();
+                        $('#modalExclusao').modal('hide');
+                        if ($("#corpoTabelaGrid").children("tr").length > 0) {
+                            return true;
+                        }
+                        else {
+                            $("#grid").remove();
+                            return true;
+                        }
+                    } else {
+                        alert("Ocorreu um erro ao tentar excluir o registro.");
+                        $("#btnModalExclusaoCancelar").click();
+                    }
+                },
+                error: function (xhr, status, error) {
+                    alert(error);
+                }
+            });
+        });
+    });
+
+    $('.btnGridEditar').click(function (e) {
+        e.preventDefault();
+        var url = '@Url.Action("Edit", "Endereco")' + '?codigo=' + $(this).data('id');
+
+            var modal, modalDialog, modalContent;
+            modal = $('<div id="modalEdicao" class="modal fade" "/>');
+            modalDialog = $('<div class="modal-dialog modal-lg" />');
+            modalContent = $('<div class="modal-content" />');
+
+            modal.modal('hide')
+             .append(modalDialog)
+             .on('hidden.bs.modal', function () { $(this).remove(); })
+             .appendTo('body');
+
+            modalDialog.append(modalContent);
+
+            $.get(url, function (data) {
+                modalContent.html(data);
+                modal.modal('show');
+            });
+        });
+
+        $('#btnNovo').click(function (e) {
+            e.preventDefault();
+
+            var url = '@Url.Action("Create", "Endereco")' + '?codigo=' + $(this).data('id');
+
+            var modal, modalDialog, modalContent;
+            modal = $('<div id="modalInclusao" class="modal fade" "/>');
+            modalDialog = $('<div class="modal-dialog modal-lg" />');
+            modalContent = $('<div class="modal-content" />');
+
+            modal.modal('hide')
+                .append(modalDialog)
+                .on('hidden.bs.modal', function () { $(this).remove(); })
+                .appendTo('body');
+
+
+            modalDialog.append(modalContent);
+
+            $.get(url, function (data) {
+                modalContent.html(data);
+                modal.on('show.bs.modal', function () { $(this).find('input:first').focus(); });
+                modal.modal('show');
+            });
+        });
+
+
+    $('#formInclusaoProfissao').on('submit', function (e) {
+        e.preventDefault();
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("CreateModal", "Profissao")',
+            data: $("#formInclusaoProfissao").serialize(),
+            success: function (result) {
+                if (result == true) {
+                    $("#modalIncluirProfissao").modal('hide');
+                    $("#modalIncluirProfissao").find('#descricao').val("");
+                    $('#NomeProfissao').val(result.descricao);
+                    $('#CodigoProfissao').val(result.Id_grlprofi);
+                } else {
+                    alert("Ocorreu um erro.");
+                }
+            },
+            error: function (xhr, status, error) {
+                alert(error);
+            }
+        });
+    });
+
+
+    </script>
+    @Scripts.Render("~/Scripts/gtec/modal.tipotelefone.js")
+    @Scripts.Render("~/Scripts/gtec/modal.tpfone2.js")
+    @Scripts.Render("~/Scripts/gtec/modal.sexo.js")
+    @Scripts.Render("~/Scripts/gtec/modal.estado.js")
+    @Scripts.Render("~/Scripts/gtec/modal.profissao.js")
+}
+
+
+
+
+

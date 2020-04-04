@@ -1,0 +1,105 @@
+﻿@model GtecIt.ViewModels.TituloapagarEditViewModel
+<script src="~/Scripts/defaults.js"></script>
+@{
+    Layout = null;
+}
+<form id="formEdicao" class="form-horizontal" role="form">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Quitação - Titulos</h4>
+    </div>
+    <div class="modal-body">
+
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(x => Model.id_fintitpg)
+        @Html.HiddenFor(x => Model.Id_stqnoten)
+        <div class="form-group">
+            <div class="col-md-3">
+                <label>Titulo No.</label>
+                @Html.TextBoxFor(model => model.num_titulo, new { @class = "form-control", @name = "num_titulo", @id = "num_titulo", @autofocus="autofocus",@readonly=true })
+            </div>
+            <div class="col-md-3">
+                <label>Emissão</label>
+                @Html.TextBoxFor(model => model.dt_emissao, new { @class = "form-control text-left datesimple", @readonly = true, @autofocus = "autofocus", required = "required", @name = "dt_emissao", @id = "dt_emissao" })
+            </div>
+
+            <div class="col-md-3">
+                <label>Valor</label>
+
+                @Html.TextBoxFor(model => model.valor, new { @class = "form-control text-right dinheiro", @readonly = true, @name = "valor", @id = "valor", required = "required" })
+            </div>
+            <div class="col-md-3">
+                <label>Vencimento</label>
+                @Html.TextBoxFor(model => model.dt_vencimento, new { @class = "form-control datesimple", @readonly = true, required = "required", @name = "dt_vencimento", @id = "dt_vencimento" })
+            </div>
+        </div>
+        <div class="form-group">
+            
+            <div class="col-md-3">
+                <label>Valor Pago</label>
+
+                @Html.TextBoxFor(model => model.Valor_pago, new { @class = "form-control text-right dinheiro", @name = "valorpago", @id = "valorpago", required = "required", @autofocus="autofocus"})
+            </div>
+            <div class="col-md-3">
+                <label>Pagamento</label>
+                @Html.TextBoxFor(model => model.dt_pagamento, new { @class = "form-control datesimple", required = "required", @name = "dt_pagamento", @id = "dt_pagamento" })
+            </div>
+            <div class="col-sm-3">
+                <label>Tipo Pagamento</label>
+                @Html.DropDownListFor(x => x.id_fintipopagamento, Model.Dropdowntpagamento, "Selecione...", new { @class = "form-control", @name = "NomeProduto", @id = "NomeProduto" })
+            </div>
+            <div class="col-md-3">
+                <label>Documento No.</label>
+                @Html.TextBoxFor(model => model.doc_pagamento, new { @class = "form-control", @name = "doc_pagamento", @id = "doc_pagamento" })
+            </div>
+        </div>
+        <div class="form-group">
+
+            <div class="col-md-3">
+                <label>Agência</label>
+
+                @Html.TextBoxFor(model => model.agencia, new { @class = "form-control ", @name = "agencia", @id = "agencia" })
+            </div>
+            <div class="col-md-3">
+                <label>Conta</label>
+                @Html.TextBoxFor(model => model.num_conta, new { @class = "form-control ", @name = "num_conta", @id = "num_conta" })
+            </div>
+            <div class="col-sm-4">
+                <label>Banco</label>
+                @Html.DropDownListFor(x => x.cd_banco, Model.Dropdownbanco, "Selecione...", new { @class = "form-control", @name = "banco", @id = "banco" })
+            </div>
+            
+        </div>
+       
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-ok"></span> Confirmar</button>
+        &nbsp;&nbsp;
+        <button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancelar</button>
+    </div>
+</form>
+
+<script type="text/javascript">
+
+    
+    $('#formEdicao').on('submit', function (e) {
+        e.preventDefault();
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("Quitacao", "Tituloapagar")',
+            data: $("#formEdicao").serialize(),
+            success: function (result) {
+                if (result == true) {
+                    location.reload();
+                    $("#modalEdicao").modal('hide');
+                } else {
+                    alert("Esse registro foi atualizado ou excluído em outro local. Por favor, recarregue a página");
+                }
+            },
+            error: function (xhr, status, error) {
+                alert(error);
+            }
+        });
+    });
+    
+</script>

@@ -1,0 +1,537 @@
+﻿@model GtecIt.ViewModels.ProdutoEditViewModel
+@using GtecIt.HTMLHelpers
+
+<h1></h1>
+@{
+    ViewBag.Title = "Editar - Serviços";
+}
+<h1></h1>
+@using (Html.BeginForm("Edit", "Produto", FormMethod.Post))
+{
+
+    @Html.AntiForgeryToken()
+    <fieldset>
+        <legend>@ViewBag.Title</legend>
+        @if (!string.IsNullOrEmpty(ViewBag.Error))
+        {
+            <div class="danger">
+                @ViewBag.Error.ToString()
+            </div>
+        }
+        <div id="panelgerais" class="panel panel-default ">
+            <div class="panel-heading">
+                Dados Gerais
+            </div>
+            <div class="panel-body">
+                <div class="row">
+
+                    <div class="col-sm-2">
+                        <label>Id</label>
+                        @Html.TextBoxFor(x => x.Id_stqcdprd, new { @class = "form-control", @id = "Id_stqcdprd", @name = "Id_stqcdprd", required = "required", @readonly = true })
+
+                    </div>
+                    <div class="col-sm-2">
+                        <label>Codigo</label>
+                        @if (Model != null && Model.precosplano != null && Model.precosplano.Any())
+                        {
+                            @Html.TextBoxFor(x => x.cd_produto, new { @class = "form-control", @id = "cd_produto", @name = "cd_produto", required = "required", @readonly = true })
+                        }
+                        else
+                        {
+                            @Html.TextBoxFor(x => x.cd_produto, new { @class = "form-control", @id = "cd_produto", @name = "cd_produto", required = "required" })
+                        }
+                    </div>
+                    <div class="col-sm-8">
+                        <label>Descrição</label>
+                        @if (Model != null && Model.precosplano != null && Model.precosplano.Any())
+                        {
+                            @Html.TextBoxFor(x => x.desc_produto, new { @class = "form-control", @id = "desc_produto", @name = "desc_produto", required = "required", @readonly = true })
+                        }
+                        else
+                        {
+                            @Html.TextBoxFor(x => x.desc_produto, new { @class = "form-control", @id = "desc_produto", @name = "desc_produto", required = "required" })
+                        }
+                    </div>
+
+                </div>
+                <h1></h1>
+                
+                <div class="row">
+                    <div class="col-sm-6">
+                        <label>Grupo </label>
+                        <div class="input-group">
+
+                            @Html.AutoCompleteFor(x => x.nome_grupo, "Id_stqcdgrp", Model.Id_stqcdgrp, Url.Action("AutoCompleteGrupoPreFetch", "Grupo"), "a", true, "iniciarListaGrupo")
+                            <div class="input-group-btn">
+
+                                <button type="button" style="margin-left: 5px" class="btn btn-primary" data-toggle="modal" data-target="#modalIncluirGrupo"><span class="glyphicon glyphicon-plus"></span></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <label>SubGrupo </label>
+                        <div class="input-group">
+
+                            @Html.AutoCompleteFor(x => x.nome_subgrupo, "Id_stqsbgrp", Model.Id_stqsbgrp, Url.Action("AutoCompleteSubGrupoPreFetch", "SubGrupo"), "a", true, "iniciarListaSubGrupo")
+                            <div class="input-group-btn">
+
+                                <button type="button" style="margin-left: 5px" class="btn btn-primary" data-toggle="modal" data-target="#modalIncluirSubGrupo"><span class="glyphicon glyphicon-plus"></span></button>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </div>
+        </div>
+        <h1></h1>
+
+        <fieldset id="fspanelorcamentos">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div id="panelEndereco" class="panel panel-default">
+                        <div class=" panel-heading">
+                            <button id="btnNovo" type="button" style="margin-left: 5px" class="btn btn-primary" data-id="@Model.Id_stqcdprd">Preços <span class="glyphicon glyphicon-plus"></span></button>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                @if (Model != null && Model.precosplano != null && Model.precosplano.Any())
+                                {
+
+                                    <div id="grid ">
+
+                                        <table id="tabelaGrid" class="table table-bordered table-striped table-hover table-responsive dt-responsive">
+                                            <thead>
+                                                <tr>
+                                                    <th class="col-sm-1">Plano No.</th>
+                                                    <th class="col-sm-2 text-left">Plano</th>
+                                                    <th class="col-sm-1 text-right">Valor</th>
+                                                    <th class="col-sm-1 text-center">Vigencia</th>
+                                                    <th class="col-sm-1 text-center">No. de aulas</th>
+                                                    <th class="col-sm-1 text-center">No. de dias</th>
+                                                    <th class="text-center"></th>
+                                                    <th class="text-center"></th>
+
+                                                </tr>
+                                            </thead>
+                                            <tbody id="corpoTabelaGridOrcamentos">
+                                                @foreach (var item in Model.precosplano.OrderBy(x => x.vigencia).ThenBy(x => x.idGrlplanos))
+                                                {
+
+                                                    var data = item.vigencia.HasValue ? item.vigencia.ToString().Substring(0, 10) : "-";
+                                                    decimal _valor_pago = 0;
+                                                    if (item.preco == null)
+                                                    {
+                                                        _valor_pago = Convert.ToDecimal(string.Format("{0:0.00}", 0));
+
+                                                    }
+
+                                                    else
+                                                    {
+                                                        _valor_pago = Convert.ToDecimal(item.preco);
+                                                    }
+                                                <tr class="@item.idgrlplanosprecos">
+                                                    <td>@item.idGrlplanos</td>
+                                                    <td>@item.planos.desc_plano</td>
+                                                    <td class="text-right">@_valor_pago</td>
+
+                                                    <td class="text-center">@data</td>
+
+                                                    <td class="text-center">@item.qtd_aulas</td>
+                                                    <td class="text-center">@item.qtd_dias_plano</td>
+                                                    <td class="text-center col-sm-1">
+                                                        <a href="#" class="glyphicon glyphicon-pencil btnGridEditar" data-id="@item.idgrlplanosprecos"></a>
+                                                    </td>
+                                                    <td class="text-center col-sm-1">
+                                                        <a href="#" class="glyphicon glyphicon-trash btnGridExcluir" data-toggle="modal" data-target="#modalExclusao" data-id="@item.idgrlplanosprecos"></a>
+                                                    </td>
+
+                                                </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="panel-footer clearfix">
+                                        <div class="pull-right">
+
+
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+
+    </fieldset>
+    <div class="row">
+        <div class="form-group col-sm-1">
+            <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-floppy-saved"></span> Salvar</button>
+        </div>
+        <div class="form-group col-sm-1">
+            <a id="btnVoltar" href="@Url.Action("Index")" class=" btn btn-primary">
+                <span class="glyphicon glyphicon-arrow-left"></span> Voltar
+            </a>
+        </div>
+
+
+    </div>
+
+}
+<div class="modal fade" id="modalGrupo" data-carregadefault="true" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Consulta de Grupos</h4>
+            </div>
+            <form id="formGrupo" data-url="@Url.Action("ObterGrupo", "Grupo")">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="form-group col-sm-4">
+                            <label>Pesquisar por:</label>
+
+                            <select class="form-control" id="tipoConsultaModalGrupo" name="tipoConsultaModalGrupo">
+                                <option value="codigo" selected>Código</option>
+                                <option value="descricao">Descrição</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-sm-8">
+                            <label>Filtro</label>
+                            <input type="text" class="form-control" id="descricaoModalGrupo" name="descricaoModalGrupo" onkeypress="return SomenteNumero()" required="required" />
+
+                        </div>
+                    </div>
+                    <div class="row" id="body">
+                        <table class="table table-condensed table-hover table-responsive">
+                            <thead>
+                                <tr style="background-color:#F8F8F8">
+                                    <th class="col-sm-2 text-center">Código</th>
+                                    <th>Descrição</th>
+                                    <th>&nbsp;</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="tabelaGrupo"></tbody>
+
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span> Pesquisar</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalSubGrupo" data-carregadefault="true" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Consulta de Subgrupos</h4>
+            </div>
+            <form id="formSubGrupo" data-url="@Url.Action("ObterSubGrupo", "SubGrupo")">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="form-group col-sm-4">
+                            <label>Pesquisar por:</label>
+
+                            <select class="form-control" id="tipoConsultaModalSubGrupo" name="tipoConsultaModalSubGrupo">
+                                <option value="codigo" selected>Código</option>
+                                <option value="descricao">Descrição</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-sm-8">
+                            <label>Filtro</label>
+                            <input type="text" class="form-control" id="descricaoModalSubGrupo" name="descricaoModalSubGrupo" onkeypress="return SomenteNumero()" required="required" />
+
+                        </div>
+                    </div>
+                    <div class="row" id="body">
+                        <table class="table table-condensed table-hover table-responsive">
+                            <thead>
+                                <tr style="background-color:#F8F8F8">
+                                    <th class="col-sm-2 text-center">Código</th>
+                                    <th>Descrição</th>
+                                    <th>&nbsp;</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="tabelaSubGrupo"></tbody>
+
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span> Pesquisar</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalIncluirGrupo" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Incluir - Grupo</h4>
+            </div>
+
+            <form id="formInclusaoGrupo" class="form-horizontal" role="form">
+                <div class="modal-body">
+
+                    @Html.AntiForgeryToken()
+                    <div class="row">
+                        <div class="form-group">
+                            <label for="descricao" class="col-md-2 control-label">Descrição</label>
+                            <div class="col-md-5">
+                                <input id="desc_grupo" name="desc_grupo" type="text"
+                                       class="form-control" maxlength="50" required autofocus>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" id="btnModalIncluirConfirmar" class="btn btn-primary">
+                        <span class="glyphicon glyphicon-floppy-disk"></span> Salvar
+                    </button>
+                    &nbsp;&nbsp;
+                    <button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalIncluirSubGrupo" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Incluir - Subgrupo</h4>
+            </div>
+
+            <form id="formInclusaoSubGrupo" class="form-horizontal" role="form">
+                <div class="modal-body">
+
+                    @Html.AntiForgeryToken()
+                    <div class="row">
+                        <div class="form-group">
+                            <label for="descricao" class="col-md-2 control-label">Descrição</label>
+                            <div class="col-md-5">
+                                <input id="desc_subgrupo" name="desc_subgrupo" type="text"
+                                       class="form-control" maxlength="50" required autofocus>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" id="btnModalIncluirConfirmar" class="btn btn-primary">
+                        <span class="glyphicon glyphicon-floppy-disk"></span> Salvar
+                    </button>
+                    &nbsp;&nbsp;
+                    <button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+<div id="modalExclusao" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Exclusão de registro</h4>
+            </div>
+            <div class="modal-body">
+                <p class="text-center">Deseja realmente excluir este registro? </p>
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="btn btn-primary " id="btnModalExclusaoConfirmar">
+                    <span class="glyphicon glyphicon-ok"></span> Confirma
+                </a>
+                &nbsp;&nbsp;
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="btnModalExclusaoCancelar">
+                    <span class="glyphicon glyphicon-remove"></span> Cancelar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            iniciarListaGrupo(); //Iniciando a lista manualmente
+            iniciarListaSubGrupo(); //Iniciando a lista manualmente
+            function clearDiv(div) {
+                $(div).
+                       find(':text, :password, textarea').attr('value', '').end().
+                       find(':checkbox, :radio').attr('checked', false).end().
+                       find('select').attr('selectedIndex', 0);
+            }
+
+        });
+
+        $('#Limpar').on('reset', function (e) {
+
+
+            find(':text, :password, textarea').attr('value', '').end().
+            find(':checkbox, :radio').attr('checked', false).end().
+            find('select').attr('selectedIndex', 0);
+
+
+        });
+
+        $('#formInclusaoGrupo').on('submit', function (e) {
+            e.preventDefault();
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("CreateModal", "Grupo")',
+                data: $("#formInclusaoGrupo").serialize(),
+                success: function (result) {
+                    if (result == true) {
+                        $("#modalIncluirGrupo").modal('hide');
+                        $("#modalIncluirGrupo").find('#desc_grupo').val("");
+                        $('#NomeGrupo').val(result.desc_grupo);
+                        $('#CodigoGrupo').val(result.Id_stqcdgrp);
+                    } else {
+                        alert("Ocorreu um erro.");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    alert(error);
+                }
+            });
+        });
+
+        $('#formInclusaoSubGrupo').on('submit', function (e) {
+            e.preventDefault();
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("CreateModal", "SubGrupo")',
+                data: $("#formInclusaoSubGrupo").serialize(),
+                success: function (result) {
+                    if (result == true) {
+                        $("#modalIncluirSubGrupo").modal('hide');
+                        $("#modalIncluirSubGrupo").find('#desc_subgrupo').val("");
+                        $('#NomeSubGrupo').val(result.desc_subgrupo);
+                        $('#CodigoSubGrupo').val(result.Id_stqsbgrp);
+                    } else {
+                        alert("Ocorreu um erro.");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    alert(error);
+                }
+            });
+        });
+
+
+        $('#btnNovo').click(function (e) {
+            e.preventDefault();
+
+            var url = '@Url.Action("Create", "PrecoPlano")' + '?codigo=' + $(this).data('id');
+
+            //Url.Action("CreatePerson", "Person", new RouteValueDictionary(new { id = id }));
+            var modal, modalDialog, modalContent;
+            modal = $('<div id="modalInclusao" class="modal fade" "/>');
+            modalDialog = $('<div class="modal-dialog modal-lg" />');
+            modalContent = $('<div class="modal-content" />');
+
+            modal.modal('hide')
+                .append(modalDialog)
+                .on('hidden.bs.modal', function () { $(this).remove(); })
+                .appendTo('body');
+
+
+            modalDialog.append(modalContent);
+
+            $.get(url, function (data) {
+                modalContent.html(data);
+                modal.on('show.bs.modal', function () { $(this).find('input:first').focus(); });
+                modal.modal('show');
+            });
+        });
+
+        $('.btnGridEditar').click(function (e) {
+            e.preventDefault();
+
+            var url = '@Url.Action("Edit", "PrecoPlano")' + '?codigo=' + $(this).data('id');
+
+            //Url.Action("CreatePerson", "Person", new RouteValueDictionary(new { id = id }));
+            var modal, modalDialog, modalContent;
+            modal = $('<div id="modalInclusao" class="modal fade" "/>');
+            modalDialog = $('<div class="modal-dialog modal-lg" />');
+            modalContent = $('<div class="modal-content" />');
+
+            modal.modal('hide')
+                .append(modalDialog)
+                .on('hidden.bs.modal', function () { $(this).remove(); })
+                .appendTo('body');
+
+
+            modalDialog.append(modalContent);
+
+            $.get(url, function (data) {
+                modalContent.html(data);
+                modal.on('show.bs.modal', function () { $(this).find('input:first').focus(); });
+                modal.modal('show');
+            });
+        });
+
+        $(".btnGridExcluir").click(function (e) {
+
+            e.preventDefault();
+            var id = $(this).data('id');
+
+            var linha = $("." + id);
+            $("#btnModalExclusaoConfirmar").off("click").click(function (e) {
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("Delete", "PrecoPlano")',
+                    data: {
+                        "codigo": id
+                    },
+                    success: function (data) {
+                        if (data == true) {
+
+                            linha.remove();
+                            $('#modalExclusao').modal('hide');
+
+                            location.reload();
+                            //if ($("#corpoTabelaGridOrcamentos").children("tr").length > 0) {
+                            //    return true;
+                            //} else {
+                            //    location.reload();
+                            //}
+                        } else {
+                            alert("Ocorreu um erro ao tentar excluir o registro.");
+                            $("#btnModalExclusaoCancelar").click();
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        alert(error);
+                    }
+                });
+            });
+
+        });
+    </script>
+    @Scripts.Render("~/Scripts/gtec/modal.Grupo.js")
+    @Scripts.Render("~/Scripts/gtec/modal.SubGrupo.js")
+}

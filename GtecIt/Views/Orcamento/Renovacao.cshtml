@@ -1,0 +1,220 @@
+﻿@model GtecIt.ViewModels.OrcamentoIndexViewModel
+@using GtecIt.ViewModels
+<h1></h1>
+@{
+    /**/
+
+    ViewBag.Title = "Renovação de Contrato";
+}
+<h1></h1>
+
+@using (Html.BeginForm("Renovacao", "Orcamento", FormMethod.Post, new { @class = "form-inline", @role = "form" }))
+{
+
+    <fieldset>
+
+        <legend>@ViewBag.Title</legend>
+        @if (TempData["Mensagens"] != null)
+        {
+            var messagemViewModel = (MensagemAuxiliarViewModel)TempData["Mensagens"];
+
+            <div class="alert alert-dismissible alert-@messagemViewModel.Tipo">
+                <button type="button" class="close" data-dismiss="alert">×</button>
+                <strong>@Html.Raw(string.Join("<br/>", messagemViewModel.Mensagens))</strong>
+            </div>
+        }
+        <div class="row">
+
+
+            <div class="col-sm-2">
+                <label>Início</label>
+                @Html.TextBoxFor(x => x.Dt_inicio, "{0:dd/MM/yyyy}", new { @class = "form-control datesimple", @required = "required" })
+            </div>
+            <div class="col-sm-2">
+                <label>Fim</label>
+
+                @Html.TextBoxFor(x => x.Dt_fim, "{0:dd/MM/yyyy}", new { @class = "form-control datesimple", @required = "required" })
+            </div>
+
+
+            <div class="col-sm-1">
+                <label class="control-label"></label>
+
+                <button type="submit" class="btn btn-primary" name="tipoacao" value="semfiltro">
+                    <span class="glyphicon glyphicon-list-alt"></span> Gerar
+                </button>
+
+            </div>
+        </div>
+
+    </fieldset>
+}
+@if (Model != null && Model.Grid.Any())
+{
+    <div id="grid ">
+        <hr />
+        <table id="tabelaGrid" class="table table-bordered table-striped table-hover table-responsive dt-responsive">
+            <thead>
+                <tr>
+                    <th class="col-sm-1 col-xs-1 text-right">Contr. No.</th>
+                    <th class="col-sm-2 col-xs-2 text-center">Emissão</th>
+                    <th class="col-sm-4 col-xs-4">Aluno</th>
+                    <th class="col-sm-4 col-xs-4">Professor</th>
+                    <th class="col-sm-4 col-xs-4">Renovação</th>
+                    <th class="text-center"></th>
+                   
+                   
+
+                </tr>
+
+            </thead>
+            <tbody id="corpoTabelaGrid">
+                @foreach (var item in Model.Grid)
+                {
+
+                    var data = item.Dt_orcamento.HasValue ? item.Dt_orcamento.ToString().Substring(0, 10) : "-";
+                    var data_renova = item.dt_renovacao.HasValue ? item.dt_renovacao.ToString().Substring(0, 10) : "-";
+
+                <tr class="@item.id_Stqcporcamento">
+
+                    <td class="text-right">@item.id_Stqcporcamento</td>
+                    <td class="text-center">@data</td>
+                    <td>@item.grlcliente.grlbasic.nome</td>
+                    <td>@item.grldentista.Idgrlbasic.nome</td>
+
+                    <td>@data_renova</td>
+                    <td class="text-center col-sm-1">
+                        <a href="#" class="glyphicon glyphicon glyphicon-list-alt btnRenovacao" data-id="@item.id_Stqcporcamento"></a>
+                    </td>
+                    
+                   
+
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+<div id="modalExclusao" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Exclusão de registro</h4>
+            </div>
+            <div class="modal-body">
+                <p class="text-center">Deseja realmente excluir este registro? </p>
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="btn btn-primary " id="btnModalExclusaoConfirmar">
+                    <span class="glyphicon glyphicon-ok"></span> Confirma
+                </a>
+                &nbsp;&nbsp;
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="btnModalExclusaoCancelar">
+                    <span class="glyphicon glyphicon-remove"></span> Cancelar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+@section scripts{
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $('#tabelaGrid').DataTable();
+        });
+
+
+        $(".btnGridExcluir").click(function (e) {
+            e.preventDefault();
+            var id = $(this).data('id');
+            var linha = $("." + id);
+            $("#btnModalExclusaoConfirmar").off("click").click(function (e) {
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("Delete", "Orcamento")',
+                    data: {
+                        "codigo": id
+                    },
+                    success: function (data) {
+                        if (data == true) {
+                            linha.remove();
+                            location.reload();
+                            $('#modalExclusao').modal('hide');
+                            if ($("#corpoTabelaGrid").children("tr").length > 0) {
+                                return true;
+                            }
+                            else {
+                                $("#grid").remove();
+                                return true;
+                            }
+
+                        } else {
+                            alert("Ocorreu um erro ao tentar excluir o registro.");
+                            $("#btnModalExclusaoCancelar").click();
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        alert(error);
+                    }
+                });
+            });
+        });
+
+        $('.btnRelatorio').click(function (e) {
+
+            e.preventDefault();
+
+            var url = '@Url.Action("gerarelatorio", "Orcamento")' + '?codigo=' + $(this).data('id');
+
+            var modal, modalDialog, modalContent;
+            modal = $('<div id="modalEdicao" class="modal fade" "/>');
+            modalDialog = $('<div class="modal-dialog modal-lg" />');
+            modalContent = $('<div class="modal-content" />');
+
+            modal.modal('hide')
+                .append(modalDialog)
+                .on('hidden.bs.modal', function () { $(this).remove(); })
+                .appendTo('body');
+
+            modalDialog.append(modalContent);
+
+            $.get(url, function (data) {
+                modalContent.html(data);
+                modal.modal('show');
+            });
+
+        });
+        $(".btnRenovacao").click(function (e) {
+
+            e.preventDefault();
+           
+            var url = '@Url.Action("Renova", "Orcamento")' + '?codigo=' + $(this).data('id');
+
+            var modal, modalDialog, modalContent;
+            modal = $('<div id="modalEdicao" class="modal fade" "/>');
+            modalDialog = $('<div class="modal-dialog modal-lg" />');
+            modalContent = $('<div class="modal-content" />');
+
+            modal.modal('hide')
+                .append(modalDialog)
+                .on('hidden.bs.modal', function () { $(this).remove(); })
+                .appendTo('body');
+
+            modalDialog.append(modalContent);
+
+             $.get(url, function (data) {
+                
+                modalContent.html(data);
+                modal.modal('show');
+            });
+
+        });
+    </script>
+}

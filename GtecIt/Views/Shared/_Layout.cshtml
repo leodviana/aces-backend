@@ -1,0 +1,141 @@
+﻿@using GtecIt.Util
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>@ViewBag.Title</title>
+        @Styles.Render("~/Content/css")
+        @Scripts.Render("~/bundles/modernizr")
+        @Scripts.Render("~/bundles/jquery")
+    </head>
+<body>
+    <div class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("Gtec", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Cadastro Básico
+                            <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("Pessoas", "Index", "Pessoa")</li>
+                            <li>@Html.ActionLink("Alunos", "Index", "Cliente")</li>
+                            <li>@Html.ActionLink("Professor", "Index", "Dentista")</li>
+
+                            <li>@Html.ActionLink("Usuario", "Index2", "Login")</li>
+                            <li class="divider"></li>
+                            <li>@Html.ActionLink("Sexo", "Index", "Sexo")</li>
+                            <li>@Html.ActionLink("Profissão", "Index", "Profissao")</li>
+                            <li>@Html.ActionLink("Estado Civil", "Index", "EstadoCivil")</li>
+                            <li>@Html.ActionLink("Tipo de Telefone", "Index", "TipoTelefone")</li>
+                            <li>@Html.ActionLink("Centro de Custo", "Index", "CentrodeCusto")</li>
+                            <li class="divider"></li>
+                            <li>@Html.ActionLink("Tipos de Pagamento", "Index", "TipoPagamento")</li>
+                            <li>@Html.ActionLink("Tipos de Titulos", "Index", "TipoTitulo")</li>
+                            <li>@Html.ActionLink("Bancos", "Index", "Banco")</li>
+                            <li class="divider"></li>
+                            <li>@Html.ActionLink("Planos", "Index", "Plano")</li>
+                            <li>@Html.ActionLink("Grupos de Serviços", "Index", "Grupo")</li>
+                            <li>@Html.ActionLink("Subgrupos de Serviços", "Index", "SubGrupo")</li>
+                            <li>@Html.ActionLink("Serviços", "Index", "Produto")</li>
+                            <li>@Html.ActionLink("teste", "inicializa", "HorarioProfessor")</li>
+
+
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Contratos
+                            <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            
+                            
+                            <li>@Html.ActionLink("Contrato - Aulas", "Index", "Orcamento")</li>
+                            <li>@Html.ActionLink("Renovação de Contrato - Aulas", "Renovacao", "Orcamento")</li>
+                            <li>@Html.ActionLink("Notas de Entrada", "Index", "NotaEntrada")</li>
+
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Financeiro
+                            <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            
+                            <li>@Html.ActionLink("Quitação de Titulos a Receber", "Index", "NotaEntrada")</li>
+                            <li>@Html.ActionLink("Quitação de Titulos a Pagar", "Index", "Pedido")</li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Relatorios
+                            <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+
+                            <li>@Html.ActionLink("Contratos por periodo", "RelAtendimentoPeriodo", "Relatorio")</li>
+                            <li>@Html.ActionLink("Contratos por periodo Sintético", "RelAtendimentoPeriodoporconnvenio", "Relatorio")</li>
+                            <li>@Html.ActionLink("Contratos cancelados por periodo ", "RelAtendimentoPeriodocancelado", "Relatorio")</li>
+                            <li>@Html.ActionLink("Contratos sem titulos a receber por periodo ", "RelAtendimentoPeriodosemtitulos", "Relatorio")</li>
+                            <li>@Html.ActionLink("Contratos por Professor", "Relatendimentopordentista", "Relatorio")</li>
+                            <li>@Html.ActionLink("Contratos por Professor - Sintético", "Relatendimentopordentistasintetico", "Relatorio")</li>
+                            <li>@Html.ActionLink("Serviços por Professor", "RelExamespordentista", "Relatorio")</li>
+                            <li class="divider"></li>
+                            <li>@Html.ActionLink("Titulos a receber", "RelTitulosareceber", "Relatorio")</li>
+                        </ul>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a>v1.5</a></li>
+                    <li class="dropdown">
+                        @{
+                            var usuario = GerenciaSession.UsarioLogado != null ? GerenciaSession.UsarioLogado.Login : "";
+                        }
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp; @usuario <span class="caret"></span></a>
+                        <ul class="dropdown-menu" role="menu">
+                           
+                            <li>@Html.ActionLink("Sair", "Logout", "Login")</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - GTec</p>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/typeahead")
+    @Scripts.Render("~/bundles/jqueryajax")
+    @*@Scripts.Render("~/bundles/jqueryval")*@
+    @Scripts.Render("~/bundles/datatables")
+    @Scripts.Render("~/bundles/datetimepicker")
+    @Scripts.Render("~/bundles/mask")
+    @Scripts.Render("~/bundles/default")
+
+
+    @RenderSection("scripts", required: false)
+
+
+</body>
+</html>
+
