@@ -659,6 +659,14 @@
                     <span class="glyphicon glyphicon-arrow-left"></span> Voltar
                 </a>
             }
+            else if (Model.pagina_origem.Equals("Orcamento_horario"))
+            {
+                <a id="btnVoltar" href="@Url.Action("Edit", "Orcamento",new {codigo= Model.orcamentoid})" class=" btn btn-primary">
+                    <span class="glyphicon glyphicon-arrow-left"></span> Voltar
+                </a>
+
+                
+            }
             else
             {
                 <a id="btnVoltar" href="@Url.Action("Index")" class=" btn btn-primary">

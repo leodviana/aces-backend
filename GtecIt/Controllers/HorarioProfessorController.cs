@@ -335,15 +335,7 @@ namespace GtecIt.Controllers
                .OrderBy(x => x.Desc_entrega)
                .Select(x => new SelectListItem { Text = x.Desc_entrega, Value = x.idEntrega.ToString() })
                .ToList();
-            //model.id_stqporcamento = Convert.ToInt16(codigo);
-
-            /* model.DropdownProduto = _uoW.Produtos.ObterTodos()
-                  .OrderBy(x => x.desc_produto)
-                  .Select(x => new SelectListItem { Text = x.desc_produto, Value = x.Id_stqcdprd.ToString() })
-                  .ToList();
-             if (model == null)
-                 return HttpNotFound();
-                 */
+           
             return View(model);
 
         }

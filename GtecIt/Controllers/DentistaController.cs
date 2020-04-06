@@ -193,7 +193,7 @@ namespace GtecIt.Controllers
                     .OrderBy(x => x.descricao)
                     .Select(x => new SelectListItem { Text = x.descricao, Value = x.Id_gercdsexo.ToString() })
                     .ToList();
-            // model.orcamentoid = orcamentoid;
+             model.orcamentoid = orcamentoid;
            
             if (model == null)
                 return HttpNotFound();

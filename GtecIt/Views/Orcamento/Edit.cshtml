@@ -200,9 +200,24 @@
                         <div class="col-sm-12">
                             <div id="panelEndereco" class="panel panel-default">
                                 <div class=" panel-heading">
-                                    <a href="#" id="btnNovohorario" class="btn btn-primary" data-id="@Model.id_Stqcporcamento" data-convenio="@Model.id_grlconvenio">
-                                        Aulas <span class="glyphicon glyphicon-plus"></span>
-                                    </a>
+                                    @if (Model.aulas != null && Model.aulas.Any())
+                                    {
+                                        <a href="#" id="btnNovohorario" class="btn btn-primary" data-id="@Model.id_Stqcporcamento" data-convenio="@Model.id_grlconvenio">
+                                            Aulas <span class="glyphicon glyphicon-plus"></span>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        //int codigo, string pagina_origem, long orcamentoid = 0
+                                        <a href="@Url.Action("Edit","Dentista", new 
+                                            { codigo = Model.Id_grldentista,
+                                              pagina_origem ="Orcamento_horario",
+                                              orcamentoid = Model.id_Stqcporcamento
+                                        })" id="btnhorario" class="btn btn-primary" data-id="@Model.id_Stqcporcamento" data-convenio="@Model.id_grlconvenio">
+                                            Horario prof. <span class="glyphicon glyphicon-plus"></span>
+                                        </a>
+                                        
+                                                        }
                                 </div>
 
                                 <div class="panel-body ">
