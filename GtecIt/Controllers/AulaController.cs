@@ -118,11 +118,7 @@ namespace GtecIt.Controllers
                                            .Distinct()
                                            .ToList();
 
-                /*var validationErrors = string.Join(",",
-                    ModelState.Values.Where(E => E.Errors.Count > 0)
-                    .SelectMany(E => E.Errors)
-                    .Select(E => E.ErrorMessage)
-                    .ToArray());*/
+
 
                 var resposta = new
                 {
@@ -132,41 +128,27 @@ namespace GtecIt.Controllers
                 };
 
                 return Json(resposta);
-                // return Json(new { sucesso = false, msg = validationErrors });
-                //return Json(false, validationErrors);
+
             }
-            /* var hora_final = Convert.ToDateTime(model.fim) - Convert.ToDateTime(model.inicio);
-             var tempo_total = (hora_final.Hours * 60) + hora_final.Minutes;
-             //
-             if ((Convert.ToDateTime(model.inicio)>= Convert.ToDateTime(model.fim)))
-             {
-                 var mensagem = new List<String>();
 
-                 mensagem.Add("O Horario final tem que ser maior que o inicial");
-                 var resposta = new
-                 {
+            var qtd_aulascontrato = _uoW.Aulas.ObterTodos().Where(x => x.id_Stqcporcamento == model.id_Stqcporcamento && x.status != "2").ToList();
+            if (qtd_aulascontrato.Count() >= model.qtd_aulas)
+            {
+                var mensagem = new List<String>();
 
-                     Sucesso = false,
-                     msg = mensagem
-                 };
+                mensagem.Add("Quantidade excedida de aulas!");
+                var resposta = new
+                {
 
-                 return Json(resposta);
-             }
-             if (tempo_total<30)
-             {
-                 var mensagem = new List<String>();
+                    Sucesso = false,
+                    msg = mensagem
+                };
 
-                 mensagem.Add("A duração da aula é menor que 30 minutos");
-                 var resposta = new
-                 {
+                return Json(resposta);
+            }
 
-                     Sucesso = false,
-                     msg = mensagem
-                 };
 
-                 return Json(resposta);
-             }
-             */
+
 
             var lista_horarios = _uoW.horarioprofessor.ObterTodos().Where(x => x.id_Stqcporcamento == model.id_Stqcporcamento).ToList();
             List<string> dias_selecionados = new List<string>();
@@ -179,20 +161,26 @@ namespace GtecIt.Controllers
             DateTime data_corrente;
 
             data_corrente = inicio_contrato.AddDays(i);
+            int cont_aulas = 1;
             while (data_corrente <= fim_contrato)
             {
-                //converter o dia da semana para portugeus 
-                var dia = convertePortugues(data_corrente.DayOfWeek.ToString());
-                foreach (var item in lista_horarios)
+                if (cont_aulas <= model.qtd_aulas)
                 {
-                    if (dia == item.Dia)
+                    //converter o dia da semana para portugeus 
+                    var dia = convertePortugues(data_corrente.DayOfWeek.ToString());
+                    foreach (var item in lista_horarios)
                     {
-                        grava_horario(model,data_corrente.ToString() ,item.horario,item.Dia );
+                        if (dia == item.Dia)
+                        {
+                            grava_horario(model, data_corrente.ToString(), item.horario, item.Dia);
+                            cont_aulas = cont_aulas + 1;
+                        }
+
                     }
-                    
                 }
                 i++;
                 data_corrente = inicio_contrato.AddDays(i);
+
 
             }
 
@@ -208,13 +196,13 @@ namespace GtecIt.Controllers
         }
 
 
-        private bool grava_horario(AulaCreateViewModel model , string data_corrente,string horario,string dia)
+        private bool grava_horario(AulaCreateViewModel model, string data_corrente, string horario, string dia)
         {
             try
             {
                 //string dia_aux = dia.Remove(10, 8);
-                string aula_corrente_inicio =data_corrente.Substring(0,10) + " " + horario;
-               // string aula_corrente_fim = dia.Remove(10, 9) + " " + model.fim.Remove(5, 3);
+                string aula_corrente_inicio = data_corrente.Substring(0, 10) + " " + horario;
+                // string aula_corrente_fim = dia.Remove(10, 9) + " " + model.fim.Remove(5, 3);
                 var aula_nova = new Aulas();
                 aula_nova.inicio = Convert.ToDateTime(aula_corrente_inicio);
                 aula_nova.final = aula_nova.inicio.Value.AddMinutes(30);
@@ -224,7 +212,7 @@ namespace GtecIt.Controllers
                 _uoW.Aulas.Salvar(Mapper.Map<Aulas>(aula_nova));
                 _uoW.Complete();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return false;
             }
