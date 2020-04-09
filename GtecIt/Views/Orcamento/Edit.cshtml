@@ -194,94 +194,6 @@
                     </div>
                 </fieldset>
 
-
-                <fieldset id="fspanelhorarios">
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <div id="panelEndereco" class="panel panel-default">
-                                <div class=" panel-heading">
-                                    @if (Model.aulas != null && Model.aulas.Any())
-                                    {
-                                       
-                                        <a href="#" id="btnNovohorario" class="btn btn-primary" data-id="@Model.id_Stqcporcamento" data-convenio="@Model.id_grlconvenio">
-                                            Aulas <span class="glyphicon glyphicon-plus"></span>
-                                        </a>
-                                    }
-                                    else
-                                    {
-                                        //int codigo, string pagina_origem, long orcamentoid = 0
-                                        <a href="@Url.Action("Edit","Dentista", new 
-                                            { codigo = Model.Id_grldentista,
-                                              pagina_origem ="Orcamento_horario",
-                                              orcamentoid = Model.id_Stqcporcamento
-                                        })" id="btnhorario" class="btn btn-primary" data-id="@Model.id_Stqcporcamento" data-convenio="@Model.id_grlconvenio">
-                                            Horario prof. <span class="glyphicon glyphicon-plus"></span>
-                                        </a>
-                                      
-                                    }
-                                </div>
-
-                                <div class="panel-body ">
-
-                                    <div class="row">
-
-                                        @if (Model != null && Model.horarios != null && Model.horarios.Any())
-                                        {
-
-
-                                            <div id="grid ">
-
-                                                <table id="tabelaGrid" class="table table-bordered table-striped table-hover table-responsive dt-responsive">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>Data</th>
-                                                            <th>Dia</th>
-                                                            <th>Horário</th>
-                                                            <th>Status</th>
-                                                            <th class="text-center"></th>
-                                                            <th class="text-center"></th>
-
-
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody id="corpoTabelaGridOrcamentos">
-                                                        @foreach (var item in Model.horarios)
-                                                        {
-
-                                                            <tr class="@item.idGercdaulas">
-
-                                                                <td>@item.inicio.Substring(0, 10)</td>
-                                                                <td>@item.dia_semana</td>
-                                                                <td>@item.inicio.Substring(10, 6)  - @item.final.ToString().Substring(10, 6)</td>
-                                                                <td>@item.status</td>
-
-                                                                <td class="text-center col-sm-1">
-                                                                    <span class="glyphicon glyphicon-pencil" title="Edição de Procedimentos"></span>
-                                                                </td>
-                                                                <td class="text-center col-sm-1">
-                                                                    <span class="glyphicon glyphicon-trash" title="Exclusão de Procedimentos"></span>
-                                                                </td>
-
-                                                            </tr>
-
-                                                        }
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                            <div class="panel-footer clearfix">
-                                                <div class="pull-right">
-
-
-                                                </div>
-                                            </div>
-                                        }
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </fieldset>
-
                 <fieldset id="fspaneltitulos">
                     <div class="row">
                         <div class="col-sm-12">
@@ -416,7 +328,115 @@
                     </div>
                 </fieldset>
 
+                <fieldset id="fspanelhorarios">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div id="panelEndereco" class="panel panel-default">
+                                <div class=" panel-heading">
+                                    @if (Model.aulas != null && Model.aulas.Any())
+                                    {
+                                        if (Model.itemorcamentos != null && Model.itemorcamentos.Any())
+                                        {
+                                            <a href="#" id="btnNovohorario" class="btn btn-primary" data-id="@Model.id_Stqcporcamento" data-convenio="@Model.id_grlconvenio">
+                                                Aulas <span class="glyphicon glyphicon-plus" disabled='disabled'></span>
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <a href="#" id="btnNovohorario" disabled='disabled' class="btn btn-primary" data-id="@Model.id_Stqcporcamento" data-convenio="@Model.id_grlconvenio">
+                                                Aulas <span class="glyphicon glyphicon-plus" disabled='disabled'></span>
+                                            </a>
 
+                                        }
+
+                                    }
+                                    else
+                                    {
+                                        if (Model.itemorcamentos != null && Model.itemorcamentos.Any())
+                                        {
+                                            //int codigo, string pagina_origem, long orcamentoid = 0
+                                            <a href="@Url.Action("Edit","Dentista", new
+                                            { codigo = Model.Id_grldentista,
+                                              pagina_origem ="Orcamento_horario",
+                                              orcamentoid = Model.id_Stqcporcamento
+                                        })" id="btnhorario" class="btn btn-primary" data-id="@Model.id_Stqcporcamento" data-convenio="@Model.id_grlconvenio">
+                                                Horario prof. <span class="glyphicon glyphicon-plus"></span>
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <a href="@Url.Action("Edit","Dentista", new
+                                            { codigo = Model.Id_grldentista,
+                                              pagina_origem ="Orcamento_horario",
+                                              orcamentoid = Model.id_Stqcporcamento
+                                        })" id="btnhorario" disabled='disabled' class="btn btn-primary" data-id="@Model.id_Stqcporcamento" data-convenio="@Model.id_grlconvenio">
+                                                Horario prof. <span class="glyphicon glyphicon-plus"></span>
+                                            </a>
+
+                                        }
+                                    }
+                                </div>
+
+                                <div class="panel-body ">
+
+                                    <div class="row">
+
+                                        @if (Model != null && Model.horarios != null && Model.horarios.Any())
+                                        {
+
+
+                                            <div id="grid ">
+
+                                                <table id="tabelaGrid" class="table table-bordered table-striped table-hover table-responsive dt-responsive">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Data</th>
+                                                            <th>Dia</th>
+                                                            <th>Horário</th>
+                                                            <th>Status</th>
+                                                            <th class="text-center"></th>
+                                                            <th class="text-center"></th>
+
+
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="corpoTabelaGridOrcamentos">
+                                                        @foreach (var item in Model.horarios)
+                                                        {
+
+                                                            <tr class="@item.idGercdaulas">
+
+                                                                <td>@item.inicio.Substring(0, 10)</td>
+                                                                <td>@item.dia_semana</td>
+                                                                <td>@item.inicio.Substring(10, 6)  - @item.final.ToString().Substring(10, 6)</td>
+                                                                <td>@item.status</td>
+
+                                                                <td class="text-center col-sm-1">
+                                                                    <span class="glyphicon glyphicon-pencil" title="Edição de Procedimentos"></span>
+                                                                </td>
+                                                                <td class="text-center col-sm-1">
+                                                                    <span class="glyphicon glyphicon-trash" title="Exclusão de Procedimentos"></span>
+                                                                </td>
+
+                                                            </tr>
+
+                                                        }
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="panel-footer clearfix">
+                                                <div class="pull-right">
+
+
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
 
                 <div class="row">
                     <div class="form-group col-sm-1">
@@ -696,7 +716,7 @@
 
                 $("#NomeDentista").removeAttr("readonly");
                 $("#NomeCliente").removeAttr("readonly");
-
+                $('#fspanelhorarios').attr('disabled', 'disabled');
 
                 $("#Dt_orcamento").removeAttr("readonly");
                 $("#Obs").removeAttr("readonly");

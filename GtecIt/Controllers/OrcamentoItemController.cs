@@ -93,7 +93,23 @@ namespace GtecIt.Controllers
 
                 return View(model);
             }
-            
+
+            var qdt_produtos = _uoW.OrcamentoItens.ObterTodos().Where(x=>x.id_stqporcamento== model.id_stqporcamento).ToList();
+
+            if (qdt_produtos.Count>0)
+            {
+                var mensagem = new List<String>();
+
+                mensagem.Add("Nâo é possível incluir mais serviços!.Quantidade Excedida!");
+                var resposta = new
+                {
+
+                    Sucesso = false,
+                    msg = mensagem
+                };
+
+                return Json(resposta);
+            }
             model.status = "0";
             _uoW.OrcamentoItens.Salvar(Mapper.Map<OrcamentoItem>(model));
             //atualizar a renovacao 

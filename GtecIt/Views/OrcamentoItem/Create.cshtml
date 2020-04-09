@@ -10,10 +10,12 @@
         <h4 class="modal-title">Incluir - Itens Contrato</h4>
     </div>
     <div class="modal-body">
-
+               
         @Html.AntiForgeryToken()
         @Html.HiddenFor(x => Model.id_stqporcamento)
         @Html.HiddenFor(x => x.id_stqporcamento)
+        <div id="divErros">
+        </div>
         <div class="form-group">
             <div class="col-sm-6">
                 <label>Serviço</label>
@@ -26,15 +28,15 @@
             </div>
             <div class="col-md-4">
                 <label>Vl. Unit.</label>
-                @Html.TextBoxFor(model => model.Vl_unitario, new { @class = "form-control dinheiro" ,@readonly= true })
+                @Html.TextBoxFor(model => model.Vl_unitario, new { @class = "form-control dinheiro", @readonly = true })
             </div>
 
         </div>
         <div class="form-group">
             <div class="col-sm-4">
                 <label>Desconto</label>
-                
-                @Html.TextBoxFor(model => model.desconto, new { @class = "form-control dinheiro"})
+
+                @Html.TextBoxFor(model => model.desconto, new { @class = "form-control dinheiro" })
             </div>
             <div class="col-sm-4">
                 <label>Desconto %</label>
@@ -120,7 +122,23 @@
                     location.reload();
                     $("modalInclusao").modal('hide');
                 } else {
-                    alert("Ocorreu um erro.");
+
+
+
+                    $("#divErros").empty();
+
+                    var i = 0;
+                    $(result.msg).each(function () {
+
+
+                        $("#divErros").append("<p style=color:red>" + "* " + result.msg[i] + "</p>");
+
+                        i = i + 1;
+
+                        //crie uma divErros em sua modal.
+                    });
+
+
                 }
             },
             error: function (xhr, status, error) {
