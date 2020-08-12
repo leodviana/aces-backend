@@ -230,6 +230,7 @@
     <Compile Include="Binders\DecimalModelBinder.cs" />
     <Compile Include="Controllers\Api\BancoapiController.cs" />
     <Compile Include="Controllers\Api\testeController.cs" />
+    <Compile Include="Controllers\EventsController.cs" />
     <Compile Include="Controllers\HorarioProfessorController.cs" />
     <Compile Include="Controllers\ClienteController.cs" />
     <Compile Include="Controllers\DentistaController.cs" />
@@ -423,6 +424,10 @@
     <Compile Include="ViewModels\Estado Civil\EstadoCivilEditViewModel.cs" />
     <Compile Include="ViewModels\Estado Civil\EstadoCivilGridViewModel.cs" />
     <Compile Include="ViewModels\Estado Civil\EstadoCivilIndexViewModel.cs" />
+    <Compile Include="ViewModels\Events\EventCreateViewModel.cs" />
+    <Compile Include="ViewModels\Events\EventEditViewModel.cs" />
+    <Compile Include="ViewModels\Events\EventGridViewModel.cs" />
+    <Compile Include="ViewModels\Events\EventIndexViewModel.cs" />
     <Compile Include="ViewModels\Fornecedor\FornecedorCreateViewModel.cs" />
     <Compile Include="ViewModels\Fornecedor\FornecedorEditViewModel.cs" />
     <Compile Include="ViewModels\Fornecedor\FornecedorGridViewModel.cs" />
@@ -570,6 +575,7 @@
     <Content Include="Scripts\dataTables.bootstrap.js" />
     <Content Include="Scripts\dataTables.responsive.js" />
     <Content Include="Scripts\defaults.js" />
+    <Content Include="Scripts\gtec\aulas.js" />
     <Content Include="Scripts\gtec\agenda.js" />
     <Content Include="Scripts\gtec\modal.cliente.js" />
     <Content Include="Scripts\gtec\modal.dentista.js" />
@@ -599,6 +605,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\methods_pt.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\pt-br.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\typeahead.bundle.js" />
@@ -747,6 +754,9 @@
     <Content Include="Views\Orcamento\Renovacao.cshtml" />
     <Content Include="Views\Orcamento\Renova.cshtml" />
     <Content Include="Views\HorarioProfessor\Edit.cshtml" />
+    <Content Include="Views\Events\Index.cshtml" />
+    <Content Include="Views\Events\Create.cshtml" />
+    <Content Include="Views\Orcamento\Ativacao.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

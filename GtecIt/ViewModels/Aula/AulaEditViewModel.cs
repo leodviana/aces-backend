@@ -28,5 +28,14 @@ namespace GtecIt.ViewModels
         public bool quinta { get; set; }
         public bool sexta { get; set; }
         public bool sabado { get; set; }
+        public string Subject { get; set; }
+        public string Description { get; set; }
+
+        public string Theme_color { get; set; }
+        public string IsFullDay { get; set; }
+        public int id_grldentista { get; set; }
+        public string nome_dentista { get; set; }
+        public virtual OrcamentoEditViewModel orcamentos { get; set; }
+       // public List<HorarioProfessorEditViewModel> horarios { get; set; }
     }
 }

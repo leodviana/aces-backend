@@ -25,9 +25,6 @@ namespace GtecIt.ViewModels
         public virtual ClienteEditViewModel grlcliente { get; set; }
         public virtual DentistaEditViewModel grldentista { get; set; }
 
-     //   public virtual ICollection<Titulo> Titulos { get; set; }
-      //  public virtual ConvenioEditViewModel Convenios { get; set; }
-        //public virtual CentrodeCustoIndexViewModel grlccust { get; set; }
-
+        
     }
 }

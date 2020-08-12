@@ -39,13 +39,10 @@ namespace GtecIt.ViewModels
         public int? Id_grlcccust { get; set; }
         public int? id_Grltpatendimento { get; set; }
         public DateTime? dt_renovacao { get; set; }
-        /* public virtual ConvenioEditViewModel Convenios { get; set; }
-         public virtual TituloEditViewModel titulos { get; set; }
-         public virtual CentrodeCustoIndexViewModel grlccust { get; set; }
-         */
+       
         public List<SelectListItem> Dropdownconvenio { get; set; }
 
         public decimal valor { get; set; }
-        //public virtual TipoAtendimento tipoatendimentos { get; set; }
+        
     }
 }

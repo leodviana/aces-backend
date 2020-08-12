@@ -51,6 +51,9 @@ namespace GtecIt.Controllers
             model.ConsultaTodos = false;
 
             model.Grid = Mapper.Map<List<AulaGridViewModel>>(_uoW.Aulas.ObterTodos().Where(x => x.idGercdaulas.Equals(model.idGercdaulas)).ToList().OrderBy(x => x.idGercdaulas));
+
+            //migrar aulas 
+           
             return View(model);
 
         }
@@ -62,6 +65,7 @@ namespace GtecIt.Controllers
 
             model.Inicio_contrato = Convert.ToDateTime(orcamento.Dt_orcamento);
             model.id_Stqcporcamento = orcamento.id_Stqcporcamento;
+            model.nome_cliente = orcamento.grlcliente.grlbasic.nome;
             int? codigo_prd = 0;
             foreach (var item in orcamento.itemorcamentos)
             {
@@ -102,7 +106,18 @@ namespace GtecIt.Controllers
                 novo.horario = item.horario;
                 model.horarios.Add(novo);
             }
-
+           /* var aulas = _uoW.Aulas.ObterTodos().Where(x=>x.id_Stqcporcamento== model.id_Stqcporcamento).ToList();
+            foreach (var item in aulas)
+            {
+                var aula_nova = new Events();
+                aula_nova.EventID = item.idGercdaulas;
+                aula_nova.Subject = "Contrato" + item.id_Stqcporcamento;
+                
+                aula_nova.Start = item.inicio.Value;
+                aula_nova.End = item.final.Value;
+                _uoW.Events.Salvar(aula_nova);
+            }
+            _uoW.Complete();*/
             return View(model);
         }
 
@@ -204,9 +219,12 @@ namespace GtecIt.Controllers
                 string aula_corrente_inicio = data_corrente.Substring(0, 10) + " " + horario;
                 // string aula_corrente_fim = dia.Remove(10, 9) + " " + model.fim.Remove(5, 3);
                 var aula_nova = new Aulas();
+
+                aula_nova.Subject = model.nome_cliente + " Contrato "+ model.id_Stqcporcamento;
                 aula_nova.inicio = Convert.ToDateTime(aula_corrente_inicio);
                 aula_nova.final = aula_nova.inicio.Value.AddMinutes(30);
                 aula_nova.id_Stqcporcamento = model.id_Stqcporcamento;
+                aula_nova.id_grldentista = model.id_grldentista;
                 aula_nova.dia_semana = dia;
                 aula_nova.status = "1";
                 _uoW.Aulas.Salvar(Mapper.Map<Aulas>(aula_nova));

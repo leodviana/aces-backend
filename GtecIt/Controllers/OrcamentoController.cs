@@ -128,7 +128,52 @@ namespace GtecIt.Controllers
 
         }
 
+        public ActionResult Ativacao(OrcamentoIndexViewModel model, string tipoacao)
+        {
+            if (tipoacao != null)
+                model.ConsultaTodos = true;
 
+            if (VerificarFiltroVazio(model))
+            {
+                if (!model.ConsultaTodos)
+                    return View(model);
+                try
+                {
+                    model.Grid =
+                        Mapper.Map<List<OrcamentoGridViewModel>>(
+                            _uoW.Orcamentos.ObterTodos()
+                                .Where(x => x.status.Equals("2") && x.id_Grltpatendimento == 3)
+                                .ToList()
+                                .OrderBy(x => x.id_Stqcporcamento));
+                    model.ConsultaTodos = true;
+                }
+                catch (Exception e)
+                {
+
+                }
+
+
+                return View(model);
+            }
+
+            model.ConsultaTodos = false;
+            try
+            {
+                model.Grid =
+                    Mapper.Map<List<OrcamentoGridViewModel>>(
+                       _uoW.Orcamentos.ObterTodos()
+                            .Where(x => x.id_Stqcporcamento.Equals(model.id_Stqcporcamento) && (x.status.Equals("2") && (x.id_Grltpatendimento == 3)))
+                            .ToList()
+                            .OrderBy(x => x.id_Stqcporcamento));
+            }
+            catch (Exception e)
+            {
+
+            }
+
+            return View(model);
+
+        }
         public ActionResult CreateCliente()
         {
             return RedirectToAction("Create", "Cliente", new ClienteCreateViewModel { cliente_em_cadastro = true });
@@ -370,7 +415,7 @@ namespace GtecIt.Controllers
 
             model.status = "2";
             //itens
-            _uoW.Orcamentos.Salvar(model);
+            _uoW.Orcamentos.Atualizar(model);
 
             var model_itens =
                 _uoW.OrcamentoItens.ObterTodos()
@@ -395,11 +440,75 @@ namespace GtecIt.Controllers
                 itens.status = "2";
                 _uoW.Titulos.Atualizar(itens);
             }
+            //apaga os horarios
+            var horario = _uoW.horarioprofessor.ObterTodos().Where(x => x.id_Stqcporcamento == codigo).ToList();
+            foreach (var item in horario)
+            {
+                _uoW.horarioprofessor.Remover(item);
+             
+            }
+            //apaga as aulas 
+            var aulas = _uoW.Aulas.ObterTodos().Where(x => x.id_Stqcporcamento == codigo).ToList();
+            foreach (var item in aulas)
+            {
+                _uoW.Aulas.Remover(item);
+
+            }
             _uoW.Complete();
 
             return Json(true);
         }
 
+
+
+        [HttpPost]
+        public ActionResult Ativa(int codigo)
+        {
+            var model = _uoW.Orcamentos.ObterPorId(codigo);
+            ModelState.Clear();
+            if (!TryValidateModel(model))
+            {
+                var validationErrors = string.Join(",",
+                    ModelState.Values.Where(E => E.Errors.Count > 0)
+                    .SelectMany(E => E.Errors)
+                    .Select(E => E.ErrorMessage)
+                    .ToArray());
+
+                return View(model);
+            }
+
+            model.status = "0";
+            //itens
+            _uoW.Orcamentos.Atualizar(model);
+
+            var model_itens =
+                _uoW.OrcamentoItens.ObterTodos()
+                    .Where(x => x.id_stqporcamento == codigo)
+                    .ToList()
+                    .OrderBy(x => x.id_stqporcamento).ToList();
+
+            // var model_itens  = Mapper.Map<List<OrcamentoItemEditViewModel>>(_orcamentoitemApp.GetById(codigo)).ToList();
+            foreach (var itens in model_itens)
+            {
+                itens.status = "0";
+                _uoW.OrcamentoItens.Atualizar(itens);
+            }
+            //titulos
+            var model_titulos = _uoW.Titulos.ObterTodos()
+               .Where(x => x.id_stqcporcamento == codigo)
+               .ToList()
+               .OrderBy(x => x.id_stqcporcamento).ToList();
+
+            foreach (var itens in model_titulos)
+            {
+                itens.status = "0";
+                _uoW.Titulos.Atualizar(itens);
+            }
+            _uoW.Complete();
+
+
+            return Json(true);
+        }
         public bool VerificarFiltroVazio2(OrcamentoIndexViewModel model)
         {
             model = model ?? new OrcamentoIndexViewModel();
@@ -505,7 +614,7 @@ namespace GtecIt.Controllers
 
                 return Json(resposta);
             }
-            if (model2.dt_renovacao <= model.dt_renovacao)
+           /* if (model2.dt_renovacao <= model.dt_renovacao)
             {
                 var mensagem = new List<String>();
 
@@ -518,7 +627,7 @@ namespace GtecIt.Controllers
                 };
 
                 return Json(resposta);
-            }
+            }*/
             TimeSpan dias = model.dt_renovacao.Value - model.Dt_orcamento.Value;
             var novo = new Orcamento
             {
@@ -547,15 +656,36 @@ namespace GtecIt.Controllers
                     novo_item.qtd = item.qtd;
                     novo_item.Vl_unitario = item.Vl_unitario;
                     novo_item.status = "0";
-
+                    novo_item.desconto = item.desconto;
+                    novo_item.descontoperc = item.descontoperc;
 
                     item.status = "1";
 
 
                 }
             }
-
             _uoW.OrcamentoItens.Salvar(novo_item);
+
+            _uoW.Complete();
+            //procura o contrato anterior para modificar o dia agendado com o professor 
+            var horario = _uoW.horarioprofessor.ObterTodos().Where(x => x.id_Stqcporcamento == model2.id_Stqcporcamento).ToList();
+            foreach (var item in horario)
+            {
+                item.id_Stqcporcamento = novo.id_Stqcporcamento;
+                _uoW.horarioprofessor.Atualizar(item);
+               
+            }
+
+
+            
+            var horario_dupa = _uoW.horarioprofessor.ObterTodos().Where(x => x.id_Stqcporcamento_dupla == model2.id_Stqcporcamento).ToList();
+            foreach (var item in horario_dupa)
+            {
+                item.id_Stqcporcamento_dupla = novo.id_Stqcporcamento;
+                _uoW.horarioprofessor.Atualizar(item);
+
+            }
+
 
             _uoW.Complete();
             var response = new

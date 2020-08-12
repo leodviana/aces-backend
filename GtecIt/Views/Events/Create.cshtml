@@ -1,0 +1,77 @@
+﻿
+
+@{
+    Layout = null;
+}
+<form id="formEdicao" class="form-horizontal" role="form">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Editar - Itens Contrato</h4>
+    </div>
+    <div class="modal-body">
+
+        @Html.AntiForgeryToken()
+        <div id="divErros">
+        </div>
+        <div class="form-group">
+            <input type="hidden" id="hdEventID" value="0" />
+            <div class="form-group">
+                <label>Contrato</label>
+                <input type="text" id="txtSubject" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label>Incio</label>
+                <div class="input-group date" id="dtp1">
+                    <input type="text" id="txtStart" class="form-control" />
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="checkbox">
+                    <label><input type="checkbox" id="chkIsFullDay" checked="checked" />  Is Full Day event</label>
+                </div>
+            </div>
+            <div class="form-group" id="divEndDate" style="display:none">
+                <label>Termino</label>
+                <div class="input-group date" id="dtp2">
+                    <input type="text" id="txtEnd" class="form-control" />
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Observação</label>
+                <textarea id="txtDescription" rows="3" class="form-control"></textarea>
+            </div>
+            <div class="form-group">
+                <label>Cor do envento</label>
+                <select id="ddThemeColor" class="form-control">
+                    <option value="">Default</option>
+                    <option value="red">Red</option>
+                    <option value="blue">Blue</option>
+                    <option value="black">Black</option>
+                    <option value="green">Green</option>
+                </select>
+            </div>
+            
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button type="button" id="btnSave" class="btn btn-success">Salvar</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+    </div>
+</form>
+
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+       
+    });
+    
+</script>

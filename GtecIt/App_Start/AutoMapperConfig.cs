@@ -194,6 +194,12 @@ namespace GtecIt
             Mapper.CreateMap<Entrega, EntregaEditViewModel>().ReverseMap();
             Mapper.CreateMap<Entrega, EntregaCreateViewModel>().ReverseMap();
 
+
+            Mapper.CreateMap<Events, EventIndexViewModel>().ReverseMap();
+            Mapper.CreateMap<Events, EventGridViewModel>().ReverseMap();
+            Mapper.CreateMap<Events, EventEditViewModel>().ReverseMap();
+            Mapper.CreateMap<Events, EventCreateViewModel>().ReverseMap();
+
             /* Mapper.CreateMap<Relatorio, RelatorioIndexViewModel>().ReverseMap();
              Mapper.CreateMap<Relatorio, RelatorioGridViewModel>().ReverseMap();
              Mapper.CreateMap<Relatorio, RelatorioEditViewModel>().ReverseMap();

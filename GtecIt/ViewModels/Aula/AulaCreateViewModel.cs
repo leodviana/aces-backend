@@ -38,6 +38,14 @@ namespace GtecIt.ViewModels
 
         public int id_grldentista { get; set; }
         public string  nome_dentista { get; set; }
+
+        public string nome_cliente { get; set; }
+
+        public string Subject { get; set; }
+        public string Description { get; set; }
+
+        public string Theme_color { get; set; }
+        public string IsFullDay { get; set; }
         public List<SelectListItem> DropdownProduto { get; set; }
 
         public List<HorarioProfessorEditViewModel> horarios { get; set; }

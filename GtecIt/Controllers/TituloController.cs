@@ -312,12 +312,15 @@ namespace GtecIt.Controllers
             decimal valorTotalOrcamento = 0;
             decimal valor_final = 0;
 
-            _uoW.OrcamentoItens.ObterTodos().Where(x => x.id_stqporcamento == model.id_stqcporcamento).ForEach(x =>
+            var itens = _uoW.OrcamentoItens.ObterTodos().Where(x => x.id_stqporcamento == model.id_stqcporcamento && x.status.Equals("0"));
+            foreach (var item in itens)
             {
-                valorTotalOrcamento = Convert.ToDecimal((x.Vl_unitario * x.qtd) - x.desconto);
-                valorTotalOrcamento = valorTotalOrcamento - Convert.ToDecimal(valorTotalOrcamento * (x.descontoperc / 100));
+               
+                valorTotalOrcamento = Convert.ToDecimal((item.Vl_unitario * item.qtd) - item.desconto);
+                valorTotalOrcamento = valorTotalOrcamento - Convert.ToDecimal(valorTotalOrcamento * (item.descontoperc / 100));
                 valor_final = valor_final + valorTotalOrcamento;
-            });
+            }
+           
 
             var titulos =_uoW.Titulos.ObterTodos().Where(x => x.id_stqcporcamento == model.id_stqcporcamento && x.id_fintitrc != model.id_fintitrc).ToList();
             decimal valorTotalTitulos = 0;

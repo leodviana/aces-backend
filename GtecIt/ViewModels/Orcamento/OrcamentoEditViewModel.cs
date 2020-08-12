@@ -54,7 +54,7 @@ namespace GtecIt.ViewModels
         public virtual List<HorarioProfessorEditViewModel> aulas { get; set; }
 
         public virtual List<AulaEditViewModel> horarios { get; set; }
-        // public virtual List<AulaEditViewModel> Aulas { get; set; }
+        
         public bool guia { get; set; }
     }
 }

@@ -20,6 +20,7 @@ namespace GtecIt.ViewModels
         public virtual DentistaEditViewModel dentistas { get; set; }
         public int? id_Stqcporcamento { get; set; }
         public int? id_Stqcporcamento_dupla { get; set; }
+        
         public virtual OrcamentoEditViewModel orcamentos { get; set; }
        
     }

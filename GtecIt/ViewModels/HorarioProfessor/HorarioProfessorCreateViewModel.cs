@@ -27,7 +27,9 @@ namespace GtecIt.ViewModels
         public int? id_Stqcporcamento_dupla { get; set; }
         public string professor { get; set; }
 
-      //  public virtual DentistaEditViewModel dentistas { get; set; }
+
+       
+        //  public virtual DentistaEditViewModel dentistas { get; set; }
         //public virtual ICollection<OrcamentoEditViewModel> orcamentos { get; set; }
 
         public List<SelectListItem> DropdownAlunos { get; set; }

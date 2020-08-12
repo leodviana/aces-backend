@@ -206,6 +206,7 @@ namespace GtecIt.Controllers
                 if (novo_horario!=null)
                 {
                     novo_horario.id_Stqcporcamento = model.id_Stqcporcamento;
+                    novo_horario.id_Stqcporcamento_dupla = model.id_Stqcporcamento_dupla;
                     novo_horario.status = "4";
                     _uoW.horarioprofessor.Atualizar(novo_horario);
                 }
@@ -218,6 +219,7 @@ namespace GtecIt.Controllers
                 if (novo_horario != null)
                 {
                     novo_horario.id_Stqcporcamento = model.id_Stqcporcamento;
+                    novo_horario.id_Stqcporcamento_dupla = model.id_Stqcporcamento_dupla;
                     novo_horario.status = "4";
                     _uoW.horarioprofessor.Atualizar(novo_horario);
                 }
@@ -231,6 +233,7 @@ namespace GtecIt.Controllers
                 {
                     novo_horario.id_Stqcporcamento = model.id_Stqcporcamento;
                     novo_horario.status = "4";
+                    novo_horario.id_Stqcporcamento_dupla = model.id_Stqcporcamento_dupla;
                     _uoW.horarioprofessor.Atualizar(novo_horario);
                 }
 
@@ -243,6 +246,7 @@ namespace GtecIt.Controllers
                 {
                     novo_horario.id_Stqcporcamento = model.id_Stqcporcamento;
                     novo_horario.status = "4";
+                    novo_horario.id_Stqcporcamento_dupla = model.id_Stqcporcamento_dupla;
                     _uoW.horarioprofessor.Atualizar(novo_horario);
                 }
 
@@ -255,6 +259,7 @@ namespace GtecIt.Controllers
                 {
                     novo_horario.id_Stqcporcamento = model.id_Stqcporcamento;
                     novo_horario.status = "4";
+                    novo_horario.id_Stqcporcamento_dupla = model.id_Stqcporcamento_dupla;
                     _uoW.horarioprofessor.Atualizar(novo_horario);
                 }
 
@@ -267,6 +272,7 @@ namespace GtecIt.Controllers
                 {
                     novo_horario.id_Stqcporcamento = model.id_Stqcporcamento;
                     novo_horario.status = "4";
+                    novo_horario.id_Stqcporcamento_dupla = model.id_Stqcporcamento_dupla;
                     _uoW.horarioprofessor.Atualizar(novo_horario);
                 }
 
