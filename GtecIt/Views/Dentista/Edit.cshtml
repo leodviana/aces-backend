@@ -248,7 +248,7 @@
 
         <div id="panelHorarios" class="panel panel-default ">
             <div class="panel-heading">
-                <button id="btnNovoEndereco" type="button" style="margin-left: 5px" class="btn btn-primary" data-id="@Model.Id_grlbasico">Horários <span class="glyphicon glyphicon-plus"></span></button>
+                <button id="btnNovoEndereco" type="button" style="margin-left: 5px" class="btn btn-primary" data-id="@Model.id_grldentista">Horários <span class="glyphicon glyphicon-plus"></span></button>
             </div>
             <div class="panel-body">
 
@@ -778,28 +778,7 @@
 
         });
          $('#btnNovoEndereco').click(function (e) {
-            e.preventDefault();
-
-            var url = '@Url.Action("Create", "Endereco")' + '?codigo=' + $(this).data('id');
-
-            var modal, modalDialog, modalContent;
-            modal = $('<div id="modalInclusao" class="modal fade" "/>');
-            modalDialog = $('<div class="modal-dialog modal-lg" />');
-            modalContent = $('<div class="modal-content" />');
-
-            modal.modal('hide')
-                .append(modalDialog)
-                .on('hidden.bs.modal', function () { $(this).remove(); })
-                .appendTo('body');
-
-
-            modalDialog.append(modalContent);
-
-            $.get(url, function (data) {
-                modalContent.html(data);
-                modal.on('show.bs.modal', function () { $(this).find('input:first').focus(); });
-                modal.modal('show');
-            });
+           
         });
 
         $(".btnGridExcluirEndereco").click(function (e) {

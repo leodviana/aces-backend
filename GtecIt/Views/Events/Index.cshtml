@@ -1,10 +1,39 @@
 ﻿@{
     ViewBag.Title = "Agenda de Aulas";
 }
+
+@model GtecIt.ViewModels.EventCreateViewModel
+
 <link href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.css" rel="stylesheet" />
 <link href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.print.css" rel="stylesheet" media="print" />
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
 <h2>Calendario de Aulas</h2>
+
+<fieldset>
+    <legend></legend>
+
+    <div class="col-sm-5">
+
+        <label for="Professor" class="control-label">Professor</label>
+        @Html.DropDownListFor(x => x.id_grldentista, Model.DropdownProfessor, "TODOS", new { @class = "form-control", @autofocus = "autofocus", @name = "professor", @id = "professor" })
+
+    </div>
+    <div class="col-sm-5">
+        <label for="Professor" class="control-label">Contrato</label>
+        @Html.DropDownListFor(x => x.id_contrato, Model.DropdownAluno, "TODOS", new { @class = "form-control", @autofocus = "autofocus", @name = "contrato", @id = "contrato" })
+
+    </div>
+    <a id="btnpesquisa" class=" btn btn-primary" style="margin-top: 25px; " >
+        <span class="glyphicon glyphicon-search"></span>
+    </a>
+    <button type="button" class="btn btn-primary" id="btnlimpar" style="margin-top: 25px; ">
+        <span class="glyphicon glyphicon-erase"></span>
+    </button>
+
+</fieldset>
+
+
+<br />
 <br />
 <div id="calender"></div>
 
@@ -99,7 +128,7 @@
                         </div>
 
                     </div>
-                                       
+
                     <div class="form-group">
                         <label>Observação</label>
                         <textarea id="txtDescription" rows="3" class="form-control"></textarea>
@@ -127,17 +156,24 @@
     <script>
         $(document).ready(function () {
             var events = [];
+
             console.log(events);
             var selectedEvent = null;
             console.log(selectedEvent);
             FetchEventAndRenderCalendar();
             function FetchEventAndRenderCalendar() {
+                var codigo = $('#professor option:selected').val();
+                var codigo2 = $('#contrato option:selected').val();
                 events = [];
                 $.ajax({
                     type: "GET",
-                      url: '@Url.Action("GetEvents", "Events")',
+                    url: '@Url.Action("GetEvents", "Events")',
+                    data: {
+                        id_professor: codigo,
+                        id_contrato: codigo2
+                    },
                     success: function (data) {
-                        
+
                         $.each(data, function (i, v) {
                             events.push({
                                 eventID: v.EventID,
@@ -156,7 +192,7 @@
                     },
                     error: function (error) {
                         alert("failed");
-                       
+
                     }
                 })
             }
@@ -239,8 +275,8 @@
                 if (selectedEvent != null && confirm('Deseja Excluir a aula?')) {
                     $.ajax({
                         type: "POST",
-                          url: '@Url.Action("DeleteEvent", "Events")',
-                       
+                        url: '@Url.Action("DeleteEvent", "Events")',
+
                         data: { 'eventID': selectedEvent.eventID },
                         success: function (data) {
                             if (data.status) {
@@ -264,15 +300,15 @@
             $('#departmentsDropdown').change(function () {
                 var contrato = $('#departmentsDropdown option').filter(':selected').val()
                 var texto = $('#departmentsDropdown :selected').text();
-                    
+
                 $('#txtSubject').val = ("");
 
-                $('#txtSubject').val("Contrato " + contrato  + " - " + texto );
+                $('#txtSubject').val("Contrato " + contrato + " - " + texto);
 
 
             });
 
-           
+
 
             $('#chkIsFullDay').change(function () {
                 if ($(this).is(':checked')) {
@@ -296,11 +332,11 @@
                     $('#ddThemeColor').val(selectedEvent.color);
                     $("#departmentsDropdown option").filter(':selected').val(selectedEvent.contrato)
                     $("#professorDropdown option").filter(':selected').val(selectedEvent.profId)
-                    
+
                     $.ajax({
                         type: "GET",
-                         url: '@Url.Action("getContratos", "Events")',
-                       
+                        url: '@Url.Action("getContratos", "Events")',
+
                         data: "{}",
                         success: function (data) {
                             var s = '<option value="-1">Selecione o aluno</option>';
@@ -320,20 +356,18 @@
                     });
                     $.ajax({
                         type: "GET",
-                         url: '@Url.Action("getProfessores", "Events")',
-                       
+                        url: '@Url.Action("getProfessores", "Events")',
+
                         data: "{}",
                         success: function (data) {
                             var s = '<option value="-1">Selecione o professor</option>';
                             for (var i = 0; i < data.length; i++) {
 
-                                if (data[i].ProfessorID == selectedEvent.professor)
-                                {
+                                if (data[i].ProfessorID == selectedEvent.professor) {
 
                                     s += '<option value="' + data[i].ProfessorID + '"selected>' + data[i].ProfessorName + '</option>';
                                 }
-                                else
-                                {
+                                else {
                                     s += '<option value="' + data[i].ProfessorID + '">' + data[i].ProfessorName + '</option>';
                                 }
 
@@ -393,8 +427,8 @@
             function SaveEvent(data) {
                 $.ajax({
                     type: "POST",
-                     url: '@Url.Action("SaveEvent", "Events")',
-                   
+                    url: '@Url.Action("SaveEvent", "Events")',
+
                     data: data,
                     success: function (data) {
                         if (data.Sucesso == true) {
@@ -424,7 +458,18 @@
                     }
                 })
             }
-        })
+
+            $('#btnpesquisa').click(function () {
+                FetchEventAndRenderCalendar();
+            });
+
+            $('#btnlimpar').click(function () {
+                window.location.href = '@Url.Action("Index", "Events")';
+            });
+
+
+        });
+
 
     </script>
 }

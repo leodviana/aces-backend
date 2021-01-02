@@ -67,11 +67,12 @@ namespace GtecIt.Controllers
             model.id_Stqcporcamento = orcamento.id_Stqcporcamento;
             model.nome_cliente = orcamento.grlcliente.grlbasic.nome;
             int? codigo_prd = 0;
+            int _plano = Convert.ToInt32(codigo2);
             foreach (var item in orcamento.itemorcamentos)
             {
                 codigo_prd = item.id_stqcdprd;
             }
-            var plano = _uoW.PrecosPlano.ObterTodos().Where(x => x.id_stqcdprd == codigo_prd).FirstOrDefault();
+            var plano = _uoW.PrecosPlano.ObterTodos().Where(x => x.id_stqcdprd == codigo_prd && x.idGrlplanos==_plano).FirstOrDefault();
             if (plano != null)
             {
                 model.qtd_aulas = plano.qtd_aulas;
@@ -353,7 +354,7 @@ namespace GtecIt.Controllers
         [HttpPost]
         public JsonResult Delete(int codigo)
         {
-            var model = _uoW.OrcamentoItens.ObterPorId(codigo);
+            var model = _uoW.Aulas.ObterTodos().Where(x=>x.id_Stqcporcamento == codigo).ToList();
 
             if (model == null)
             {
@@ -363,9 +364,12 @@ namespace GtecIt.Controllers
             try
             {
 
-                //_orcamentoItemApp.Remove(model);
-                _uoW.OrcamentoItens.RemoverPorId(codigo);
-                _uoW.Complete();
+                foreach (var item in model)
+                {
+                    _uoW.Aulas.RemoverPorId(item.idGercdaulas);
+                }
+                
+               // _uoW.Complete();
             }
             catch (Exception)
             {

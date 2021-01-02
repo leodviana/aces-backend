@@ -7,7 +7,7 @@ namespace GtecIt.ViewModels
     {
 
         public int ClienteId { get; set; }
-
+        public string mensagem { get; set; }
 
         public int ConvenioId { get; set; }
 

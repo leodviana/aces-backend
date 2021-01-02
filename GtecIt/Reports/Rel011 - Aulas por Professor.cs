@@ -16,14 +16,14 @@ namespace GtecIt.Reports {
     using CrystalDecisions.CrystalReports.Engine;
     
     
-    public class Rel008___Atendimentos_por_Dentista_sintetico : ReportClass {
+    public class Rel011___Aulas_por_Professor : ReportClass {
         
-        public Rel008___Atendimentos_por_Dentista_sintetico() {
+        public Rel011___Aulas_por_Professor() {
         }
         
         public override string ResourceName {
             get {
-                return "Rel008 - Atendimentos por Dentista sintetico.rpt";
+                return "Rel011 - Aulas por Professor.rpt";
             }
             set {
                 // Do nothing
@@ -41,7 +41,7 @@ namespace GtecIt.Reports {
         
         public override string FullResourceName {
             get {
-                return "GtecIt.Reports.Rel008 - Atendimentos por Dentista sintetico.rpt";
+                return "GtecIt.Reports.Rel011 - Aulas por Professor.rpt";
             }
             set {
                 // Do nothing
@@ -66,7 +66,7 @@ namespace GtecIt.Reports {
         
         [Browsable(false)]
         [DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
-        public CrystalDecisions.CrystalReports.Engine.Section GroupHeaderSection2 {
+        public CrystalDecisions.CrystalReports.Engine.Section GroupHeaderSection1 {
             get {
                 return this.ReportDefinition.Sections[2];
             }
@@ -74,7 +74,7 @@ namespace GtecIt.Reports {
         
         [Browsable(false)]
         [DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
-        public CrystalDecisions.CrystalReports.Engine.Section GroupHeaderSection1 {
+        public CrystalDecisions.CrystalReports.Engine.Section GroupHeaderSection2 {
             get {
                 return this.ReportDefinition.Sections[3];
             }
@@ -90,7 +90,7 @@ namespace GtecIt.Reports {
         
         [Browsable(false)]
         [DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
-        public CrystalDecisions.CrystalReports.Engine.Section GroupFooterSection1 {
+        public CrystalDecisions.CrystalReports.Engine.Section GroupFooterSection2 {
             get {
                 return this.ReportDefinition.Sections[5];
             }
@@ -98,7 +98,7 @@ namespace GtecIt.Reports {
         
         [Browsable(false)]
         [DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
-        public CrystalDecisions.CrystalReports.Engine.Section GroupFooterSection2 {
+        public CrystalDecisions.CrystalReports.Engine.Section GroupFooterSection1 {
             get {
                 return this.ReportDefinition.Sections[6];
             }
@@ -122,9 +122,9 @@ namespace GtecIt.Reports {
     }
     
     [System.Drawing.ToolboxBitmapAttribute(typeof(CrystalDecisions.Shared.ExportOptions), "report.bmp")]
-    public class CachedRel008___Atendimentos_por_Dentista_sintetico : Component, ICachedReport {
+    public class CachedRel011___Aulas_por_Professor : Component, ICachedReport {
         
-        public CachedRel008___Atendimentos_por_Dentista_sintetico() {
+        public CachedRel011___Aulas_por_Professor() {
         }
         
         [Browsable(false)]
@@ -161,7 +161,7 @@ namespace GtecIt.Reports {
         }
         
         public virtual CrystalDecisions.CrystalReports.Engine.ReportDocument CreateReport() {
-            Rel008___Atendimentos_por_Dentista_sintetico rpt = new Rel008___Atendimentos_por_Dentista_sintetico();
+            Rel011___Aulas_por_Professor rpt = new Rel011___Aulas_por_Professor();
             rpt.Site = this.Site;
             return rpt;
         }

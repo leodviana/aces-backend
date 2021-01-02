@@ -24,13 +24,13 @@ namespace GtecIt.Domain.Entities
         public DateTime? dt_renovacao { get; set; }
 
         public virtual Convenio Convenios { get; set; }
-        
+
         public virtual ICollection<OrcamentoItem> itemorcamentos { get; set; }
         public virtual ICollection<Titulo> Titulos { get; set; }
-       // public virtual ICollection<Aulas> Aulas { get; set; }
+        // public virtual ICollection<Aulas> Aulas { get; set; }
         //public virtual HorarioProfessor Aulas { get; set; }
         public virtual CentrodeCusto grlccust { get; set; }
-       
+
         public virtual TipoAtendimento tipoatendimentos { get; set; }
         public virtual ICollection<HorarioProfessor> aulas { get; set; }
         public virtual ICollection<Aulas> horarios { get; set; }

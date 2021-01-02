@@ -1,0 +1,25 @@
+﻿@model GtecIt.ViewModels.RelGeralViewlModel
+<br />
+@{
+    ViewBag.Title = "Banco";
+}
+
+
+@using (Html.BeginForm("Index", "Mensagem", FormMethod.Get, new { @class = "form-inline", @role = "form" }))
+{
+
+    <fieldset>
+        <legend>@ViewBag.Title</legend>
+        <div class="form-group">
+           
+            @Html.TextBoxFor(x => x.mensagem, new { @class = "form-control", @placeholder = "Banco", @autofocus = "autofocus" })
+        </div>
+        <button name="tipoacao" type="submit" value="consultatodos" class="btn btn-primary">
+            <i class="glyphicon glyphicon-search"></i> Consultar
+        </button>
+
+        <a id="btnNovo" href="#" class="btn btn-primary">
+            <span class="glyphicon glyphicon-plus"></span> Novo
+        </a>
+    </fieldset>
+}

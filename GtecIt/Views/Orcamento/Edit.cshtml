@@ -340,6 +340,8 @@
                                             <a href="#" id="btnNovohorario" class="btn btn-primary" data-id="@Model.id_Stqcporcamento" data-convenio="@Model.id_grlconvenio">
                                                 Aulas <span class="glyphicon glyphicon-plus" disabled='disabled'></span>
                                             </a>
+                                           
+                                            <a href="#" class="glyphicon glyphicon-trash btnGridExcluiraulas" data-toggle="modal" data-target="#modalExclusao2" data-id="@Model.id_Stqcporcamento" data-convenio="@Model.id_grlconvenio"></a>
                                         }
                                         else
                                         {
@@ -387,7 +389,7 @@
 
                                             <div id="grid ">
 
-                                                <table id="tabelaGrid" class="table table-bordered table-striped table-hover table-responsive dt-responsive">
+                                                <table id="tabelaGridaulas" class="table table-bordered table-striped table-hover table-responsive dt-responsive">
                                                     <thead>
                                                         <tr>
                                                             <th>Data</th>
@@ -580,6 +582,30 @@
     </div>
 </div>
 
+
+<div id="modalExclusao2" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Exclusão de registro</h4>
+            </div>
+            <div class="modal-body">
+                <p class="text-center">Deseja realmente excluir todas as aulas ? </p>
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="btn btn-primary " id="btnModalExclusaoConfirmar2">
+                    <span class="glyphicon glyphicon-ok"></span> Confirma
+                </a>
+                &nbsp;&nbsp;
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="btnModalExclusaoCancelar">
+                    <span class="glyphicon glyphicon-remove"></span> Cancelar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div id="modalAbertura" class="modal fade" role="dialog">
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
@@ -695,11 +721,12 @@
 
 
         $(document).ready(function () {
+          
             $('#tabelaGridaulas').DataTable();
             //var testa = testa_valor_pago();
             iniciarListaCliente(); //Iniciando a lista manualmente
             iniciarListaDentista();
-           
+
             testa_valor_total();
             $('#panelEndereco').attr('disabled', 'disabled');
 
@@ -788,6 +815,37 @@
             }
         });
 
+           $(".btnGridExcluiraulas").click(function (e) {
+
+                e.preventDefault();
+               var id = $(this).data('id');
+             
+
+                $("#btnModalExclusaoConfirmar2").off("click").click(function (e) {
+                    $.ajax({
+                        type: 'POST',
+                        url: '@Url.Action("Delete", "Aula")',
+                        data: {
+                            "codigo": id
+                        },
+                        success: function (data) {
+                            if (data == true) {
+
+                                $('#modalExclusao').modal('hide');
+                                location.reload();
+
+                            } else {
+                                alert("Ocorreu um erro ao tentar excluir o registro.");
+                                $("#btnModalExclusaoCancelar").click();
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            alert(error);
+                        }
+                    });
+                });
+
+        });
         //editar procedimentos
         $('.btnGridEditar').click(function (e) {
             e.preventDefault();
@@ -1115,7 +1173,7 @@
     </script>
     @Scripts.Render("~/Scripts/gtec/modal.Cliente.js")
     @Scripts.Render("~/Scripts/gtec/modal.Dentista.js")
-   
+
 }
 
 

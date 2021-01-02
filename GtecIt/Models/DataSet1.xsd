@@ -68,6 +68,22 @@
             </xs:sequence>
           </xs:complexType>
         </xs:element>
+        <xs:element name="DataTable5" msprop:Generator_TableClassName="DataTable5DataTable" msprop:Generator_TableVarName="tableDataTable5" msprop:Generator_RowChangedName="DataTable5RowChanged" msprop:Generator_TablePropName="DataTable5" msprop:Generator_RowDeletingName="DataTable5RowDeleting" msprop:Generator_RowChangingName="DataTable5RowChanging" msprop:Generator_RowEvHandlerName="DataTable5RowChangeEventHandler" msprop:Generator_RowDeletedName="DataTable5RowDeleted" msprop:Generator_RowClassName="DataTable5Row" msprop:Generator_UserTableName="DataTable5" msprop:Generator_RowEvArgName="DataTable5RowChangeEvent">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="id_orcamento" msprop:Generator_ColumnVarNameInTable="columnid_orcamento" msprop:Generator_ColumnPropNameInRow="id_orcamento" msprop:Generator_ColumnPropNameInTable="id_orcamentoColumn" msprop:Generator_UserColumnName="id_orcamento" type="xs:string" minOccurs="0" />
+              <xs:element name="Inicio" msprop:Generator_ColumnVarNameInTable="columnInicio" msprop:Generator_ColumnPropNameInRow="Inicio" msprop:Generator_ColumnPropNameInTable="InicioColumn" msprop:Generator_UserColumnName="Inicio" type="xs:string" minOccurs="0" />
+              <xs:element name="Fim" msprop:Generator_ColumnVarNameInTable="columnFim" msprop:Generator_ColumnPropNameInRow="Fim" msprop:Generator_ColumnPropNameInTable="FimColumn" msprop:Generator_UserColumnName="Fim" type="xs:string" minOccurs="0" />
+              <xs:element name="id_professor" msprop:Generator_ColumnVarNameInTable="columnid_professor" msprop:Generator_ColumnPropNameInRow="id_professor" msprop:Generator_ColumnPropNameInTable="id_professorColumn" msprop:Generator_UserColumnName="id_professor" type="xs:string" minOccurs="0" />
+              <xs:element name="aula" msprop:Generator_ColumnVarNameInTable="columnaula" msprop:Generator_ColumnPropNameInRow="aula" msprop:Generator_ColumnPropNameInTable="aulaColumn" msprop:Generator_UserColumnName="aula" type="xs:string" minOccurs="0" />
+              <xs:element name="aluno" msprop:Generator_ColumnVarNameInTable="columnaluno" msprop:Generator_ColumnPropNameInRow="aluno" msprop:Generator_ColumnPropNameInTable="alunoColumn" msprop:Generator_UserColumnName="aluno" type="xs:string" minOccurs="0" />
+              <xs:element name="professor" msprop:Generator_ColumnVarNameInTable="columnprofessor" msprop:Generator_ColumnPropNameInRow="professor" msprop:Generator_ColumnPropNameInTable="professorColumn" msprop:Generator_UserColumnName="professor" type="xs:string" minOccurs="0" />
+              <xs:element name="data_aula" msprop:Generator_ColumnVarNameInTable="columndata_aula" msprop:Generator_ColumnPropNameInRow="data_aula" msprop:Generator_ColumnPropNameInTable="data_aulaColumn" msprop:Generator_UserColumnName="data_aula" type="xs:string" minOccurs="0" />
+              <xs:element name="servico" msprop:Generator_ColumnVarNameInTable="columnservico" msprop:Generator_ColumnPropNameInRow="servico" msprop:Generator_ColumnPropNameInTable="servicoColumn" msprop:Generator_UserColumnName="servico" type="xs:string" minOccurs="0" />
+              <xs:element name="plano" msprop:Generator_ColumnVarNameInTable="columnplano" msprop:Generator_ColumnPropNameInRow="plano" msprop:Generator_ColumnPropNameInTable="planoColumn" msprop:Generator_UserColumnName="plano" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
       </xs:choice>
     </xs:complexType>
   </xs:element>

@@ -444,16 +444,25 @@ namespace GtecIt.Controllers
             var horario = _uoW.horarioprofessor.ObterTodos().Where(x => x.id_Stqcporcamento == codigo).ToList();
             foreach (var item in horario)
             {
-                _uoW.horarioprofessor.Remover(item);
+                item.id_Stqcporcamento = null;
+                _uoW.horarioprofessor.Atualizar(item);
              
             }
-            //apaga as aulas 
-            var aulas = _uoW.Aulas.ObterTodos().Where(x => x.id_Stqcporcamento == codigo).ToList();
-            foreach (var item in aulas)
+            // apaga horario da dupla 
+            horario = _uoW.horarioprofessor.ObterTodos().Where(x => x.id_Stqcporcamento_dupla == codigo).ToList();
+            foreach (var item in horario)
             {
-                _uoW.Aulas.Remover(item);
+                item.id_Stqcporcamento_dupla = null;
+                _uoW.horarioprofessor.Atualizar(item);
 
             }
+            //apaga as aulas 
+           var aulas = _uoW.Aulas.ObterTodos().Where(x => x.id_Stqcporcamento == codigo).ToList();
+            foreach (var item in aulas)
+            {
+                _uoW.Aulas.RemoverPorId(item.idGercdaulas);
+            }
+           
             _uoW.Complete();
 
             return Json(true);

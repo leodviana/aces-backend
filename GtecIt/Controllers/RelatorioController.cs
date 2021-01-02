@@ -223,17 +223,17 @@ namespace GtecIt.Controllers
 
                 //pesquisa plano 
                 var plano = _uoW.Planos.ObterPorId(Convert.ToInt32(item.id_grlconvenio));
-                
+
                 row2["endereco_pac"] = plano.desc_plano;
                 row2["endereco_sol"] = item.Obs;
-               /* if (item.Convenios.Guia.Equals("S"))
-                {
-                    row2["guia"] = "S";
-                }
-                else
-                {
-                    row2["guia"] = "N";
-                }*/
+                /* if (item.Convenios.Guia.Equals("S"))
+                 {
+                     row2["guia"] = "S";
+                 }
+                 else
+                 {
+                     row2["guia"] = "N";
+                 }*/
                 decimal soma_itens = 0;
                 foreach (var itens in item.itemorcamentos)
                 {
@@ -286,47 +286,64 @@ namespace GtecIt.Controllers
 
             //var relatorio = _relatorioApp.GetById(2);
             ReportDocument rd = new ReportDocument();
-            // rd.Load(Path.Combine(Server.MapPath("~/Reports"), relatorio.relatorio));
-
-            string empresa = "Gtec - " + GerenciaSession.EmpresaLogado.descricao;
-            rd.Load(Path.Combine(Server.MapPath("~/Reports"), "Rel002 - Titulos a Receber por periodo.rpt"));
-            rd.DataDefinition.FormulaFields["data_inicial"].Text = "'" + model.inicio.ToString().Substring(0, 10) + "'";
-            rd.DataDefinition.FormulaFields["data_final"].Text = "'" + model.fim.ToString().Substring(0, 10) + "'";  //.Formulas(0) = "data_inicial  = '" & dtinicio & "'"
-            rd.DataDefinition.FormulaFields["empresa"].Text = "'" + empresa + "'";
-            if (model.ConvenioId == 0)
+            try
             {
-                //viewer.SetParameters(new ReportParameter("cliente", "TODOS OS CLIENTES"));
-                rd.DataDefinition.FormulaFields["Ordem"].Text = "'TODOS OS PLANOS'";
+
+                // rd.Load(Path.Combine(Server.MapPath("~/Reports"), relatorio.relatorio));
+
+                string empresa = "Gtec - " + GerenciaSession.EmpresaLogado.descricao;
+
+
+                rd.Load(Path.Combine(Server.MapPath("~/Reports"), "Rel002 - Titulos a Receber por periodo.rpt"));
+                rd.DataDefinition.FormulaFields["data_inicial"].Text = "'" + model.inicio.ToString().Substring(0, 10) + "'";
+                rd.DataDefinition.FormulaFields["data_final"].Text = "'" + model.fim.ToString().Substring(0, 10) + "'";  //.Formulas(0) = "data_inicial  = '" & dtinicio & "'"
+                rd.DataDefinition.FormulaFields["empresa"].Text = "'" + empresa + "'";
+                if (model.ConvenioId == 0)
+                {
+                    //viewer.SetParameters(new ReportParameter("cliente", "TODOS OS CLIENTES"));
+                    rd.DataDefinition.FormulaFields["Ordem"].Text = "'TODOS OS PLANOS'";
+                }
+                else
+                {
+                    var convenio = _uoW.Planos.ObterPorId(model.ConvenioId);
+
+                    rd.DataDefinition.FormulaFields["Ordem"].Text = "'" + convenio.desc_plano + "'";
+                }
+                rd.SetDataSource(ds);
+                //rd.SetDataSource(ds.Tables[1]);
+
+
+                string filePath = Server.MapPath("~/temp/Rel002 - Contratos por periodo.pdf");
+                // string filePath = @"C:\Aplicacoes\Aces\temp\Rel002 - Contratos por periodo.pdf";*/
+                try
+                {
+
+                    rd.ExportToDisk(ExportFormatType.PortableDocFormat, filePath);
+
+                    Stream stream = rd.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
+
+                    stream.Seek(0, SeekOrigin.Begin);
+                    stream = rd.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
+                    var fileBytes = System.IO.File.ReadAllBytes(filePath);
+                    string nome_arquivo = tratanomedoarquivo(filePath);
+                    return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, nome_arquivo);
+
+                }
+                catch (Exception ex)
+                {
+                    return null;
+                }
+
+
+
             }
-            else
+            catch(Exception ex)
             {
-                var convenio = _uoW.Planos.ObterPorId(model.ConvenioId);
-
-                rd.DataDefinition.FormulaFields["Ordem"].Text = "'" + convenio.desc_plano + "'";
+                return null;
             }
-            rd.SetDataSource(ds);
-            //rd.SetDataSource(ds.Tables[1]);
-
-            Response.Buffer = false;
-            Response.ClearContent();
-            Response.ClearHeaders();
-
-            string filePath = Server.MapPath("~/temp/Rel002 - Contratos por periodo.pdf");
-
-            rd.ExportToDisk(ExportFormatType.PortableDocFormat, filePath);
-
-            Stream stream = rd.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
-
-            stream.Seek(0, SeekOrigin.Begin);
-            stream = rd.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
-            var fileBytes = System.IO.File.ReadAllBytes(filePath);
-            string nome_arquivo = tratanomedoarquivo(filePath);
-            return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, nome_arquivo);
-
-
-        }
+         }
         //*****
-
+    
         public ActionResult RelAtendimentoPeriodosemtitulos(RelGeralViewlModel model, string acao)
         {
             model.inicio = DateTime.Now;
@@ -348,7 +365,7 @@ namespace GtecIt.Controllers
 
             byte[] _contentBytes;
 
-            var query =_uoW.Orcamentos.ObterTodos().Where(x => x.Dt_orcamento >= model.inicio && x.Dt_orcamento <= model.fim && x.status.Equals("0")).AsQueryable();
+            var query = _uoW.Orcamentos.ObterTodos().Where(x => x.Dt_orcamento >= model.inicio && x.Dt_orcamento <= model.fim && x.status.Equals("0")).AsQueryable();
             if (model.ConvenioId != 0)
                 query = query.Where(x => x.id_grlconvenio == model.ConvenioId);
             var allCustomer = Mapper.Map<List<OrcamentoEditViewModel>>(query.ToList()).OrderBy(x => x.Dt_orcamento).ThenBy(x => x.id_Stqcporcamento);
@@ -370,7 +387,7 @@ namespace GtecIt.Controllers
 
                         row2["endereco_pac"] = plano.desc_plano;
                         row2["endereco_sol"] = item.Obs;
-                        
+
                         decimal soma_itens = 0;
                         foreach (var itens in item.itemorcamentos)
                         {
@@ -414,7 +431,7 @@ namespace GtecIt.Controllers
             }
             else
             {
-                var convenio =_uoW.Planos.ObterPorId(model.ConvenioId);
+                var convenio = _uoW.Planos.ObterPorId(model.ConvenioId);
 
                 rd.DataDefinition.FormulaFields["Ordem"].Text = "'" + convenio.desc_plano + "'";
             }
@@ -495,7 +512,7 @@ namespace GtecIt.Controllers
 
                 row2["endereco_pac"] = plano.desc_plano;
                 row2["endereco_sol"] = item.Obs;
-               
+
                 decimal soma_itens = 0;
                 foreach (var itens in item.itemorcamentos)
                 {
@@ -692,7 +709,7 @@ namespace GtecIt.Controllers
             }
             else
             {
-                var convenio =_uoW.Dentistas.ObterPorId(model.ConvenioId);
+                var convenio = _uoW.Dentistas.ObterPorId(model.ConvenioId);
 
                 rd.DataDefinition.FormulaFields["Ordem"].Text = "'" + convenio.Idgrlbasic.nome + "'";
             }
@@ -719,6 +736,140 @@ namespace GtecIt.Controllers
         }
         //***********************
 
+
+        //*******
+        public ActionResult RelAulasporprofessor(RelGeralViewlModel model, string acao)
+        {
+
+            model.inicio = DateTime.Now;
+            model.fim = DateTime.Now;
+
+            model.ConvenioDropDown =
+                _uoW.Dentistas.ObterTodos().Where(x => x.Ativo.Equals("S"))
+                    .OrderBy(x => x.Idgrlbasic.nome)
+                    .Select(x => new SelectListItem { Text = x.Idgrlbasic.nome, Value = x.id_grldentista.ToString() })
+                    .ToList();
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult RelAulasporprofessor(RelGeralViewlModel model)
+        {
+
+            string aux_data = model.fim.ToString().Substring(0, 10);
+            aux_data = aux_data + " 23:59:59";
+            model.fim = Convert.ToDateTime(aux_data);
+            aux_data = model.inicio.ToString().Substring(0, 10);
+            aux_data = aux_data + " 00:00:00";
+            model.inicio = Convert.ToDateTime(aux_data);
+
+            byte[] _contentBytes;
+
+            /*var query = _context.Vendas.Where(x => x.Cliente.Pessoa.EmpresaId == (GerenciaSession.UsarioLogado.Pessoa.EmpresaId)).AsQueryable();
+
+            if (DataInicial.HasValue && DataFinal.HasValue)
+                query = query.Where(a => a.DataVenda >= DataInicial && a.DataVenda <= DataFinal);
+
+            if (!cidade.IsNullOrWhiteSpace())
+                query = query.Where(a => a.Cliente.Pessoa.Cidade == cidade);
+             */
+            var query = _uoW.Aulas.ObterTodos().Where(x => x.inicio >= model.inicio && x.inicio <= model.fim && x.status.Equals("1")).AsQueryable();
+            if (model.ConvenioId != 0)
+                query = query.Where(x => x.id_grldentista == model.ConvenioId);
+
+
+            var ds = new Models.DataSet1();
+            foreach (var item in query.ToList())
+            {
+                var contrato = _uoW.Orcamentos.ObterPorId(Convert.ToInt32(item.id_Stqcporcamento));
+
+
+                DataRow row2 = ds.Tables[0].NewRow();
+                row2["Id_orcamento"] = contrato.id_Stqcporcamento;
+                row2["dt_orcamento"] = contrato.Dt_orcamento;
+                row2["Paciente"] = contrato.grlcliente.grlbasic.nome.ToUpper();
+                row2["dentista"] = contrato.grldentista.Idgrlbasic.nome.ToUpper();
+
+                var plano = _uoW.Planos.ObterPorId(Convert.ToInt32(contrato.id_grlconvenio));
+
+                row2["endereco_pac"] = plano.desc_plano;
+                row2["endereco_sol"] = contrato.Obs;
+
+                string aula = item.inicio.ToString();
+                aula = aula.Substring(0, 10) + " " + aula.Substring(11, 5) + "-" + item.final.ToString().Substring(11, 5);
+
+                var itens = _uoW.OrcamentoItens.ObterTodos().Where(x => x.id_stqporcamento == item.id_Stqcporcamento && x.status == "0").ToList();
+                var descricao = "";
+                ; foreach (var itemorcamento in itens)
+                {
+                    descricao = itemorcamento.produtos.desc_produto;
+
+                }
+
+
+                DataRow row = ds.Tables["DataTable5"].NewRow();
+                row["Id_orcamento"] = item.id_Stqcporcamento;
+                row["id_professor"] = item.id_grldentista;
+                row["inicio"] = item.inicio;
+                row["Fim"] = item.final;
+                row["plano"] = plano.desc_plano;
+                row["aula"] = aula;
+                row["aluno"] = contrato.grlcliente.grlbasic.nome.ToUpper();
+                row["professor"] = contrato.grldentista.Idgrlbasic.nome.ToUpper();
+                row["data_aula"] = item.inicio.ToString().Substring(0, 10);
+                row["servico"] = descricao;
+                ds.Tables["DataTable5"].Rows.Add(row);
+
+                ds.Tables[0].Rows.Add(row2);
+
+            }
+            //pega o nome do relatorio
+
+            //var relatorio = _relatorioApp.GetById(2);
+            ReportDocument rd = new ReportDocument();
+            // rd.Load(Path.Combine(Server.MapPath("~/Reports"), relatorio.relatorio));
+
+            string empresa = "Gtec - " + GerenciaSession.EmpresaLogado.descricao;
+            rd.Load(Path.Combine(Server.MapPath("~/Reports"), "Rel011 - Aulas por Professor.rpt"));
+            rd.DataDefinition.FormulaFields["data_inicial"].Text = "'" + model.inicio.ToString().Substring(0, 10) + "'";
+            rd.DataDefinition.FormulaFields["data_final"].Text = "'" + model.fim.ToString().Substring(0, 10) + "'";  //.Formulas(0) = "data_inicial  = '" & dtinicio & "'"
+            rd.DataDefinition.FormulaFields["empresa"].Text = "'" + empresa + "'";
+
+            if (model.ConvenioId == 0)
+            {
+                //viewer.SetParameters(new ReportParameter("cliente", "TODOS OS CLIENTES"));
+                rd.DataDefinition.FormulaFields["Ordem"].Text = "'TODOS OS PROFESSORES'";
+            }
+            else
+            {
+                var convenio = _uoW.Dentistas.ObterPorId(model.ConvenioId);
+
+                rd.DataDefinition.FormulaFields["Ordem"].Text = "'" + convenio.Idgrlbasic.nome + "'";
+            }
+            rd.SetDataSource(ds);
+            //rd.SetDataSource(ds.Tables[1]);
+
+            Response.Buffer = false;
+            Response.ClearContent();
+            Response.ClearHeaders();
+
+            string filePath = Server.MapPath("~/temp/Rel011 - Aulas por Professor.pdf");
+
+            rd.ExportToDisk(ExportFormatType.PortableDocFormat, filePath);
+
+            Stream stream = rd.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
+
+            stream.Seek(0, SeekOrigin.Begin);
+            stream = rd.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
+            var fileBytes = System.IO.File.ReadAllBytes(filePath);
+            string nome_arquivo = tratanomedoarquivo(filePath);
+            return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, nome_arquivo);
+
+
+        }
+        //***********************
         public ActionResult Relatendimentopordentistasintetico(RelGeralViewlModel model, string acao)
         {
 
@@ -774,7 +925,7 @@ namespace GtecIt.Controllers
 
                 row2["endereco_pac"] = plano.desc_plano;
                 row2["endereco_sol"] = item.Obs;
-               
+
                 decimal soma_itens = 0;
                 foreach (var itens in item.itemorcamentos)
                 {
@@ -898,7 +1049,7 @@ namespace GtecIt.Controllers
 
                 row2["endereco_pac"] = plano.desc_plano;
                 row2["endereco_sol"] = item.Obs;
-               
+
                 decimal soma_itens = 0;
                 foreach (var itens in item.itemorcamentos)
                 {
@@ -989,7 +1140,7 @@ namespace GtecIt.Controllers
 
             byte[] _contentBytes;
 
-            
+
             var query = _uoW.Orcamentos.ObterTodos().Where(x => x.Dt_orcamento >= model.inicio && x.Dt_orcamento <= model.fim && x.status.Equals("0")).AsQueryable();
             if (model.ConvenioId != 0)
                 query = query.Where(x => x.id_grlconvenio == model.ConvenioId);
@@ -1034,7 +1185,7 @@ namespace GtecIt.Controllers
                     }
                 }
                 var teste = soma_itens;
-                
+
                 ds.Tables[0].Rows.Add(row2);
 
             }
@@ -1137,7 +1288,7 @@ namespace GtecIt.Controllers
 
                 row2["endereco_pac"] = plano.desc_plano;
                 row2["endereco_sol"] = item.Obs;
-                
+
                 decimal soma_itens = 0;
                 foreach (var itens in item.itemorcamentos)
                 {

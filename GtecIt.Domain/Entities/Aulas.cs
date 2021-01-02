@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace GtecIt.Domain.Entities
 {
+    
     public class Aulas
     {
         public int idGercdaulas { get; set; }
@@ -14,6 +15,13 @@ namespace GtecIt.Domain.Entities
         public DateTime? final { get; set; }
         public string dia_semana { get; set; }
         public string status { get; set; }
+
+        public string Subject { get; set; }
+        public string Description { get; set; }
+
+        public string Theme_color { get; set; }
+        public string IsFullDay { get; set; }
+        public int? id_grldentista { get; set; }
         public virtual Orcamento orcamentos { get; set; }
     }
 }

@@ -20,9 +20,11 @@ namespace GtecIt.Infra.Data.Persistencia.Mapeamento
             this.Property(t => t.inicio).HasColumnName("inicio");
             this.Property(t => t.final).HasColumnName("final");
             this.Property(t => t.dia_semana).HasColumnName("dia_semana");
+            this.Property(t => t.id_grldentista).HasColumnName("id_grldentista");
             this.Property(t => t.status).HasColumnName("status");
-
            
+           
+
         }
       }
     }

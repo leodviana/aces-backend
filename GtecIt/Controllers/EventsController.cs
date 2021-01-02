@@ -31,19 +31,44 @@ namespace GtecIt.Controllers
             _uoW = uoW;
 
         }
-        public ActionResult Index()
+        public ActionResult Index(EventCreateViewModel model)
         {
-            return View();
+            model.DropdownProfessor =
+               _uoW.Dentistas.ObterTodos().Where(x => x.Ativo.Equals("S"))
+                   .OrderBy(x => x.Idgrlbasic.nome)
+                   .Select(x => new SelectListItem { Text = x.Idgrlbasic.nome, Value = x.id_grldentista.ToString() })
+                   .ToList();
+            model.DropdownAluno =
+              _uoW.Orcamentos.ObterTodos().Where(x => x.status.Equals("0"))
+                  .OrderBy(x => x.grlcliente.grlbasic.nome)
+                  .Select(x => new SelectListItem { Text = x.grlcliente.grlbasic.nome, Value = x.id_Stqcporcamento.ToString() })
+                  .ToList();
+            return View(model);
         }
 
-        public JsonResult GetEvents()
+        public JsonResult GetEvents(int? id_professor, int? id_contrato)
         {
             var events = new List<Events>();
 
+            if ( id_professor == null)
+            {
+                id_professor = 0;
+            }
+            if( id_contrato == null)
+            {
+                id_contrato = 0;
+            }
+            var aulas = _uoW.Aulas.ObterTodos().AsQueryable();
+            if(id_professor!=0 )
+            {
+                aulas = aulas.Where(x => x.id_grldentista==id_professor);
+            }
+            if (id_contrato != 0 )
+            {
+                aulas = aulas.Where(x => x.id_Stqcporcamento == id_contrato);
+            }
+            foreach (var item in aulas.ToList())
 
-               var aulas = _uoW.Aulas.ObterTodos();
-
-               foreach (var item in aulas)
                {
                    var evento = new Events();
                    evento.EventID = item.idGercdaulas;

@@ -137,6 +137,91 @@ namespace GtecIt.Controllers
             return View();
         }
 
+
+
+        public ActionResult inicializahorario(int id)
+        {
+            List<string> semana = new List<string>();
+
+            semana.Add("Segunda");
+            semana.Add("Terça");
+            semana.Add("Quarta");
+            semana.Add("Quinta");
+            semana.Add("Sexta");
+            semana.Add("Sábado");
+
+            try
+            {
+                var dentistas = _uoW.Dentistas.ObterTodos().Where(x=>x.id_grldentista==id).ToList();
+                List<string> horas = new List<string>();
+                DateTime inicio = new DateTime(2019, 10, 10, 05, 30, 00);
+                foreach (var dent in dentistas)
+                {
+                    DateTime aux_hora = inicio;
+                    for (int i = 0; i < 34; i++)
+                    {
+
+                        foreach (var dia in semana)
+                        {
+                            var novo_horario = new HorarioProfessor();
+                            if (dia.Equals("Segunda"))
+                            {
+
+                                novo_horario.Dia = "Segunda";
+
+                            }
+                            else if (dia.Equals("Terça"))
+                            {
+
+
+                                novo_horario.Dia = "Terça";
+                            }
+                            else if (dia.Equals("Quarta"))
+                            {
+
+                                novo_horario.Dia = "Quarta";
+
+                            }
+                            else if (dia.Equals("Quinta"))
+                            {
+                                novo_horario.Dia = "Quinta";
+                            }
+                            else if (dia.Equals("Sexta"))
+                            {
+
+                                novo_horario.Dia = "Sexta";
+
+                            }
+                            else if (dia.Equals("Sábado"))
+                            {
+
+                                novo_horario.Dia = "Sábado";
+                            }
+                            novo_horario.id_grldentista = dent.id_grldentista;
+                            novo_horario.horario = aux_hora.ToShortTimeString();
+                            novo_horario.status = "1";
+                            _uoW.horarioprofessor.Salvar(novo_horario);
+                            _uoW.Complete();
+
+
+                        }
+                        aux_hora = aux_hora.AddMinutes(30);
+
+                    }
+
+
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+
+
+
+            return View();
+        }
         public ActionResult Create(string codigo, string codigo2)
         {
             var model = new AulaCreateViewModel();

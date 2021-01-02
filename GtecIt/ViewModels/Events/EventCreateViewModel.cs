@@ -9,7 +9,8 @@ namespace GtecIt.ViewModels
     {
         public EventCreateViewModel()
         {
-           // DropdownProduto = new List<SelectListItem>();
+            DropdownProfessor = new List<SelectListItem>();
+            DropdownAluno = new List<SelectListItem>();
             //horarios = new List<HorarioProfessorEditViewModel>();
         }
 
@@ -20,9 +21,10 @@ namespace GtecIt.ViewModels
         public DateTime End { get; set; }
         public string ThemeColor { get; set; }
         public string IsFullDay { get; set; }
-
-        /* public List<SelectListItem> DropdownProduto { get; set; }
-
-         public List<HorarioProfessorEditViewModel> horarios { get; set; }*/
+        public int id_grldentista { get; set; }
+        public int id_contrato { get; set; }
+        public List<SelectListItem> DropdownProfessor { get; set; }
+        public List<SelectListItem> DropdownAluno { get; set; }
+        // public List<HorarioProfessorEditViewModel> horarios { get; set; }*/
     }
 }
