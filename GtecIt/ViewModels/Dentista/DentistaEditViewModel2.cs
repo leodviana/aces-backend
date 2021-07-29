@@ -2,9 +2,9 @@
 using System.Web.Mvc;
 namespace GtecIt.ViewModels
 {
-    public class DentistaEditViewModel 
+    public class DentistaEditViewModel2 
     {
-        public DentistaEditViewModel()
+        public DentistaEditViewModel2()
         {
            // this.Orcamentos = new List<OrcamentoEditViewModel>();
             this.cefalometriaItem = new List<CefalometriaItemEditViewModel>();
@@ -30,7 +30,7 @@ namespace GtecIt.ViewModels
 
       //  public virtual ICollection<OrcamentoEditViewModel> Orcamentos { get; set; }
 
-        public virtual ICollection<HorarioProfessorEditViewModel> HorarioProfessor { get; set; }
+        public virtual ICollection<HorarioProfessorEditViewModel2> HorarioProfessor { get; set; }
 
         public virtual ICollection<CefalometriaItemEditViewModel> cefalometriaItem { get; set; }
         public string pagina_origem { get; set; }

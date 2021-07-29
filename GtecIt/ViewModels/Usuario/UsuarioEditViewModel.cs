@@ -18,6 +18,8 @@ namespace GtecIt.ViewModels
         public string Senha { get; set; }
         public string Administrador { get; set; }
         public string Ativo { get; set; }
+        public string senha_sem { get; set; }
+        public int Tipo_usuario { get; set; }
         public IEnumerable<SelectListItem> Dropdownativo
         {
             get

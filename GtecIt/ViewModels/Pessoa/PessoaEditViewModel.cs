@@ -21,9 +21,11 @@ namespace GtecIt.ViewModels
         }
         public int Id_grlbasico { get; set; }
 
+       
+
         [Required(ErrorMessage = "Informe o Campo Nome")]
         public string nome { get; set; }
-
+      
         public string razao_social { get; set; }
         public string Nome_fantasia { get; set; }
         public string cgc { get; set; }

@@ -7,7 +7,7 @@ namespace GtecIt.ViewModels
 
         public DentistaGridViewModel()
         {
-            this.Orcamentos = new List<OrcamentoEditViewModel>();
+          //  this.Orcamentos = new List<OrcamentoEditViewModel>();
         }
 
         public int id_grldentista { get; set; }
@@ -15,7 +15,7 @@ namespace GtecIt.ViewModels
 
         public string Ativo { get; set; }
         public virtual PessoaViewModel Idgrlbasic { get; set; }
-        public List<OrcamentoEditViewModel> Orcamentos { get; set; }
+        //public List<OrcamentoEditViewModel> Orcamentos { get; set; }
         
     }
 }

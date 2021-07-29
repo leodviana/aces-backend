@@ -90,7 +90,7 @@ namespace GtecIt.Controllers
         public ActionResult getContratos()
         {
 
-            return Json(_uoW.Orcamentos.ObterTodos().Where(x => x.status == "0").Select(x => new
+            return Json(_uoW.Orcamentos.ObterTodos().Where(x => x.status == "0").OrderBy(x=>x.grlcliente.grlbasic.nome).Select(x => new
             {
                 DepartmentID = x.id_Stqcporcamento,
                 DepartmentName = x.grlcliente.grlbasic.nome
@@ -100,7 +100,7 @@ namespace GtecIt.Controllers
         public ActionResult getProfessores()
         {
 
-            return Json(_uoW.Dentistas.ObterTodos().Where(x => x.Ativo == "S").Select(x => new
+            return Json(_uoW.Dentistas.ObterTodos().Where(x => x.Ativo == "S").OrderBy(x=>x.Idgrlbasic.nome).Select(x => new
             {
                 ProfessorID = x.id_grldentista,
                 ProfessorName = x.Idgrlbasic.nome
@@ -205,6 +205,21 @@ namespace GtecIt.Controllers
             }
             else
             {
+                var teste_horario  = _uoW.Aulas.ObterTodos().Where(a => a.id_grldentista==e.professor && a.id_Stqcporcamento==e.contrato && a.inicio==e.Start && a.final==e.End).FirstOrDefault();
+                if (teste_horario!=null)
+                {
+                    var mensagem = new List<String>();
+
+                    mensagem.Add("Horario já está ocupado!");
+                    var resposta = new
+                    {
+
+                        Sucesso = false,
+                        msg = mensagem
+                    };
+
+                    return Json(resposta);
+                }
                 var novo = new Aulas();
                 novo.Subject = e.Subject;
                 novo.inicio = e.Start;

@@ -202,7 +202,7 @@ namespace GtecIt.Controllers
             var query = _uoW.Orcamentos.ObterTodos().Where(x => x.Dt_orcamento >= model.inicio && x.Dt_orcamento <= model.fim && x.status.Equals("0")).AsQueryable();
             if (model.ConvenioId != 0)
                 query = query.Where(x => x.id_grlconvenio == model.ConvenioId);
-            var allCustomer = Mapper.Map<List<OrcamentoEditViewModel>>(query.ToList()).OrderBy(x => x.Dt_orcamento).ThenBy(x => x.id_Stqcporcamento);
+            var allCustomer = Mapper.Map<List<OrcamentoRelatorioViewModel>>(query.ToList()).OrderBy(x => x.Dt_orcamento).ThenBy(x => x.id_Stqcporcamento);
 
             /*var allCustomer =
                 Mapper.Map<List<OrcamentoEditViewModel>>(
@@ -368,7 +368,7 @@ namespace GtecIt.Controllers
             var query = _uoW.Orcamentos.ObterTodos().Where(x => x.Dt_orcamento >= model.inicio && x.Dt_orcamento <= model.fim && x.status.Equals("0")).AsQueryable();
             if (model.ConvenioId != 0)
                 query = query.Where(x => x.id_grlconvenio == model.ConvenioId);
-            var allCustomer = Mapper.Map<List<OrcamentoEditViewModel>>(query.ToList()).OrderBy(x => x.Dt_orcamento).ThenBy(x => x.id_Stqcporcamento);
+            var allCustomer = Mapper.Map<List<OrcamentoRelatorioViewModel>>(query.ToList()).OrderBy(x => x.Dt_orcamento).ThenBy(x => x.id_Stqcporcamento);
 
             var ds = new DataSet1();
             foreach (var item in allCustomer)
@@ -490,7 +490,7 @@ namespace GtecIt.Controllers
             var query = _uoW.Orcamentos.ObterTodos().Where(x => x.Dt_orcamento >= model.inicio && x.Dt_orcamento <= model.fim && x.status.Equals("2")).AsQueryable();
             if (model.ConvenioId != 0)
                 query = query.Where(x => x.id_grlconvenio == model.ConvenioId);
-            var allCustomer = Mapper.Map<List<OrcamentoEditViewModel>>(query.ToList()).OrderBy(x => x.Dt_orcamento).ThenBy(x => x.id_Stqcporcamento);
+            var allCustomer = Mapper.Map<List<OrcamentoRelatorioViewModel>>(query.ToList()).OrderBy(x => x.Dt_orcamento).ThenBy(x => x.id_Stqcporcamento);
 
             /*var allCustomer =
                 Mapper.Map<List<OrcamentoEditViewModel>>(
@@ -639,7 +639,7 @@ namespace GtecIt.Controllers
             var query = _uoW.Orcamentos.ObterTodos().Where(x => x.Dt_orcamento >= model.inicio && x.Dt_orcamento <= model.fim && x.status.Equals("0")).AsQueryable();
             if (model.ConvenioId != 0)
                 query = query.Where(x => x.Id_grldentista == model.ConvenioId);
-            var allCustomer = Mapper.Map<List<OrcamentoEditViewModel>>(query.ToList()).OrderBy(x => x.Dt_orcamento).ThenBy(x => x.id_Stqcporcamento);
+            var allCustomer = Mapper.Map<List<OrcamentoRelatorioViewModel>>(query.ToList()).OrderBy(x => x.Dt_orcamento).ThenBy(x => x.id_Stqcporcamento);
 
             /*var allCustomer =
                 Mapper.Map<List<OrcamentoEditViewModel>>(
@@ -783,15 +783,23 @@ namespace GtecIt.Controllers
             var ds = new Models.DataSet1();
             foreach (var item in query.ToList())
             {
+                
                 var contrato = _uoW.Orcamentos.ObterPorId(Convert.ToInt32(item.id_Stqcporcamento));
-
+                string dentista_nome = "";
 
                 DataRow row2 = ds.Tables[0].NewRow();
                 row2["Id_orcamento"] = contrato.id_Stqcporcamento;
                 row2["dt_orcamento"] = contrato.Dt_orcamento;
                 row2["Paciente"] = contrato.grlcliente.grlbasic.nome.ToUpper();
-                row2["dentista"] = contrato.grldentista.Idgrlbasic.nome.ToUpper();
-
+                //row2["dentista"] = contrato.grldentista.Idgrlbasic.nome.ToUpper();
+                //var dentista = item.id_grldentista;
+                var dentista = _uoW.Dentistas.ObterPorId(Convert.ToInt16(item.id_grldentista));
+                if (dentista!=null)
+                {
+                    var pessoa = _uoW.Pessoas.ObterPorId(Convert.ToInt16(dentista.Id_grlbasico));
+                    row2["dentista"] = pessoa.nome;
+                    dentista_nome  = pessoa.nome;
+                }
                 var plano = _uoW.Planos.ObterPorId(Convert.ToInt32(contrato.id_grlconvenio));
 
                 row2["endereco_pac"] = plano.desc_plano;
@@ -817,7 +825,7 @@ namespace GtecIt.Controllers
                 row["plano"] = plano.desc_plano;
                 row["aula"] = aula;
                 row["aluno"] = contrato.grlcliente.grlbasic.nome.ToUpper();
-                row["professor"] = contrato.grldentista.Idgrlbasic.nome.ToUpper();
+                row["professor"] = dentista_nome; //contrato.grldentista.Idgrlbasic.nome.ToUpper();
                 row["data_aula"] = item.inicio.ToString().Substring(0, 10);
                 row["servico"] = descricao;
                 ds.Tables["DataTable5"].Rows.Add(row);
@@ -903,7 +911,7 @@ namespace GtecIt.Controllers
             var query = _uoW.Orcamentos.ObterTodos().Where(x => x.Dt_orcamento >= model.inicio && x.Dt_orcamento <= model.fim && x.status.Equals("0")).AsQueryable();
             if (model.ConvenioId != 0)
                 query = query.Where(x => x.Id_grldentista == model.ConvenioId);
-            var allCustomer = Mapper.Map<List<OrcamentoEditViewModel>>(query.ToList()).OrderBy(x => x.Dt_orcamento).ThenBy(x => x.id_Stqcporcamento);
+            var allCustomer = Mapper.Map<List<OrcamentoRelatorioViewModel>>(query.ToList()).OrderBy(x => x.Dt_orcamento).ThenBy(x => x.id_Stqcporcamento);
 
             /*var allCustomer =
                 Mapper.Map<List<OrcamentoEditViewModel>>(
@@ -1027,7 +1035,7 @@ namespace GtecIt.Controllers
             var query = _uoW.Orcamentos.ObterTodos().Where(x => x.Dt_orcamento >= model.inicio && x.Dt_orcamento <= model.fim && x.status.Equals("0")).AsQueryable();
             if (model.ConvenioId != 0)
                 query = query.Where(x => x.Id_grldentista == model.ConvenioId);
-            var allCustomer = Mapper.Map<List<OrcamentoEditViewModel>>(query.ToList()).OrderBy(x => x.Dt_orcamento).ThenBy(x => x.id_Stqcporcamento);
+            var allCustomer = Mapper.Map<List<OrcamentoRelatorioViewModel>>(query.ToList()).OrderBy(x => x.Dt_orcamento).ThenBy(x => x.id_Stqcporcamento);
 
             /*var allCustomer =
                 Mapper.Map<List<OrcamentoEditViewModel>>(
@@ -1144,7 +1152,7 @@ namespace GtecIt.Controllers
             var query = _uoW.Orcamentos.ObterTodos().Where(x => x.Dt_orcamento >= model.inicio && x.Dt_orcamento <= model.fim && x.status.Equals("0")).AsQueryable();
             if (model.ConvenioId != 0)
                 query = query.Where(x => x.id_grlconvenio == model.ConvenioId);
-            var allCustomer = Mapper.Map<List<OrcamentoEditViewModel>>(query.ToList()).OrderBy(x => x.Dt_orcamento).ThenBy(x => x.id_Stqcporcamento);
+            var allCustomer = Mapper.Map<List<OrcamentoRelatorioViewModel>>(query.ToList()).OrderBy(x => x.Dt_orcamento).ThenBy(x => x.id_Stqcporcamento);
 
             var ds = new DataSet1();
             foreach (var item in allCustomer)
@@ -1266,7 +1274,7 @@ namespace GtecIt.Controllers
             var query = _uoW.Orcamentos.ObterTodos().Where(x => x.Dt_orcamento >= model.inicio && x.Dt_orcamento <= model.fim && x.status.Equals("0")).AsQueryable();
             if (model.ConvenioId != 0)
                 query = query.Where(x => x.id_grlconvenio == model.ConvenioId);
-            var allCustomer = Mapper.Map<List<OrcamentoEditViewModel>>(query.ToList()).OrderBy(x => x.Dt_orcamento).ThenBy(x => x.id_Stqcporcamento);
+            var allCustomer = Mapper.Map<List<OrcamentoRelatorioViewModel>>(query.ToList()).OrderBy(x => x.Dt_orcamento).ThenBy(x => x.id_Stqcporcamento);
 
             /*var allCustomer =
                 Mapper.Map<List<OrcamentoEditViewModel>>(

@@ -1,0 +1,84 @@
+﻿@model GtecIt.ViewModels.RankingCreateViewModel
+
+@{
+    Layout = null;
+}
+<form id="formEdicao" class="form-horizontal" role="form">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Editar - Jogador</h4>
+    </div>
+    <div class="modal-body">
+
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(x => x.id_ranking)
+        <div id="divErros">
+        </div>
+        <div class="row">
+
+            <div class="col-sm-8">
+                <label>Jogador</label>
+
+                @Html.DropDownListFor(x => x.id_grlbasico, Model.DropdownProduto, "Selecione...", new { @class = "form-control", @name = "id_grlbasico", @id = "id_grlbasico" })
+                @Html.ValidationMessageFor(model => model.id_grlbasico, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="col-md-4">
+                <label>Pontos</label>
+                @Html.TextBoxFor(model => model.pontos, new { @class = "form-control text-right dinheiro", @name = "pontos", @id = "pontos", })
+            </div>
+
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" id="btnModalIncluirConfirmar" class="btn btn-primary">
+            <span class="glyphicon glyphicon-ok"></span> Confirmar
+        </button>
+        &nbsp;&nbsp;
+        <button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancelar</button>
+    </div>
+</form>
+
+
+<script type="text/javascript">
+
+    $('#formEdicao').on('submit', function (e) {
+        e.preventDefault();
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("Edit", "Ranking")',
+            data: $("#formEdicao").serialize(),
+            success: function (result) {
+                if (result.Sucesso == true) {
+                    location.reload();
+                    $("modalInclusao").modal('hide');
+                }
+                else {
+
+
+
+                    $("#divErros").empty();
+
+                    var i = 0;
+                    $(result.msg).each(function () {
+
+
+                        $("#divErros").append("<p style=color:red>" + "* " + result.msg[i] + "</p>");
+
+                        i = i + 1;
+
+                        //crie uma divErros em sua modal.
+                    });
+
+
+                }
+
+            },
+            error: function (xhr, status, error) {
+                alert(error);
+            }
+        });
+    });
+   
+</script>
+

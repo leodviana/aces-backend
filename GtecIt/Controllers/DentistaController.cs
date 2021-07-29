@@ -257,8 +257,10 @@ namespace GtecIt.Controllers
             x.HorarioProfessor.Any(d => d.Dia.ToLower() == "segunda")).FirstOrDefault();
             */
 
-            var model = Mapper.Map<DentistaEditViewModel>(_uoW.Dentistas.ObterPorId(codigo));
 
+            //var model2 = _uoW.Dentistas.ObterPorId(codigo);
+            var model = Mapper.Map<DentistaEditViewModel2>(_uoW.Dentistas.ObterPorId(codigo));
+            //model2.Orcamentos.Count();
 
             //model.HorarioProfessor = model.HorarioProfessor.Where(x => x.Dia.ToLower() == "segunda")
             //                                               .ToList();

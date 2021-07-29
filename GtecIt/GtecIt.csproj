@@ -253,6 +253,9 @@
     <Compile Include="Controllers\FornecedorController.cs" />
     <Compile Include="Controllers\CentrodeCustoController.cs" />
     <Compile Include="Controllers\AulaController.cs" />
+    <Compile Include="Controllers\RankingDuplaController.cs" />
+    <Compile Include="Controllers\RankingFemininoController.cs" />
+    <Compile Include="Controllers\RankingController.cs" />
     <Compile Include="Controllers\PessoaController.cs" />
     <Compile Include="Controllers\PlanoController.cs" />
     <Compile Include="Controllers\NotaEntradaController.cs" />
@@ -426,6 +429,7 @@
     <Compile Include="ViewModels\Dentistacerto\DentistaGridViewModelx.cs" />
     <Compile Include="ViewModels\Dentistacerto\DentistaIndexViewModelx.cs" />
     <Compile Include="ViewModels\Dentista\DentistaCreateViewModel.cs" />
+    <Compile Include="ViewModels\Dentista\DentistaEditViewModel2.cs" />
     <Compile Include="ViewModels\Dentista\DentistaEditViewModel.cs" />
     <Compile Include="ViewModels\Dentista\DentistaGridViewModel.cs" />
     <Compile Include="ViewModels\Dentista\DentistaIndexViewModel.cs" />
@@ -459,6 +463,7 @@
     <Compile Include="ViewModels\Grupo\GrupoGridViewModel.cs" />
     <Compile Include="ViewModels\Grupo\GrupoIndexViewModel.cs" />
     <Compile Include="ViewModels\HorarioProfessor\HorarioProfessorCreateViewModel.cs" />
+    <Compile Include="ViewModels\HorarioProfessor\HorarioProfessorEditViewModel2.cs" />
     <Compile Include="ViewModels\HorarioProfessor\HorarioProfessorEditViewModel.cs" />
     <Compile Include="ViewModels\HorarioProfessor\HorarioProfessorGridViewModel.cs" />
     <Compile Include="ViewModels\HorarioProfessor\HorarioProfessorIndexViewModel.cs" />
@@ -476,6 +481,9 @@
     <Compile Include="ViewModels\OrcamentoItem\OrcamentoItemGridViewModel.cs" />
     <Compile Include="ViewModels\OrcamentoItem\OrcamentoItemIndexViewModel.cs" />
     <Compile Include="ViewModels\Orcamento\OrcamentoCreateViewModel.cs" />
+    <Compile Include="ViewModels\Orcamento\OrcamentoRelatorioViewModel.cs" />
+    <Compile Include="ViewModels\Orcamento\OrcamentoEditViewModel2.cs" />
+    <Compile Include="ViewModels\Orcamento\OrcamentoRenovaViewModel.cs" />
     <Compile Include="ViewModels\Orcamento\OrcamentoEditViewModel.cs" />
     <Compile Include="ViewModels\Orcamento\OrcamentoGridViewModel.cs" />
     <Compile Include="ViewModels\Orcamento\OrcamentoIndexViewModel.cs" />
@@ -517,6 +525,10 @@
     <Compile Include="ViewModels\Profisao\ProfissaoEditViewModel.cs" />
     <Compile Include="ViewModels\Profisao\ProfissaoGridViewModel.cs" />
     <Compile Include="ViewModels\Profisao\ProfissaoIndexViewModel.cs" />
+    <Compile Include="ViewModels\Ranking\RankingCreateViewModel.cs" />
+    <Compile Include="ViewModels\Ranking\RankingEditViewModel.cs" />
+    <Compile Include="ViewModels\Ranking\RankingGridViewModel.cs" />
+    <Compile Include="ViewModels\Ranking\RankingIndexViewModel.cs" />
     <Compile Include="ViewModels\Relatorio\GerarelatorioViewModel.cs" />
     <Compile Include="ViewModels\Relatorio\RelGeralViewlModel.cs" />
     <Compile Include="ViewModels\Sexo\SexoCreateViewModel.cs" />
@@ -781,6 +793,16 @@
     <Content Include="Views\Orcamento\Ativacao.cshtml" />
     <Content Include="Views\Relatorio\RelAulasporprofessor.cshtml" />
     <Content Include="Views\Mensagem\Index.cshtml" />
+    <Content Include="Views\Orcamento\Edithorario.cshtml" />
+    <Content Include="Views\Ranking\Create.cshtml" />
+    <Content Include="Views\Ranking\Edit.cshtml" />
+    <Content Include="Views\Ranking\Index.cshtml" />
+    <Content Include="Views\RankingFeminino\Create.cshtml" />
+    <Content Include="Views\RankingFeminino\Edit.cshtml" />
+    <Content Include="Views\RankingFeminino\Index.cshtml" />
+    <Content Include="Views\RankingDupla\Index.cshtml" />
+    <Content Include="Views\RankingDupla\Edit.cshtml" />
+    <Content Include="Views\RankingDupla\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

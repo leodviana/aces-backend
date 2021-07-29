@@ -8,7 +8,7 @@ namespace GtecIt.ViewModels
     {
         public DentistaCreateViewModel()
         {
-            this.Orcamentos = new List<OrcamentoEditViewModel>();
+            //this.Orcamentos = new List<OrcamentoEditViewModel>();
             Dropdownnome = new List<SelectListItem>();
         }
 
@@ -41,7 +41,7 @@ namespace GtecIt.ViewModels
         }
         public virtual PessoaViewModel Idgrlbasic { get; set; }
         public string NomeDentista { get; set; }
-        public List<OrcamentoEditViewModel> Orcamentos { get; set; }
+      //  public List<OrcamentoEditViewModel> Orcamentos { get; set; }
         public List<SelectListItem> Dropdownnome { get; set; }
         public string origem { get; set; }
         //  public virtual ICollection<CefalometriaItemEditViewModel> cefalometriaItem { get; set; }

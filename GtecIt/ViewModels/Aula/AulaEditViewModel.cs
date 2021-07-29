@@ -35,7 +35,7 @@ namespace GtecIt.ViewModels
         public string IsFullDay { get; set; }
         public int id_grldentista { get; set; }
         public string nome_dentista { get; set; }
-        public virtual OrcamentoEditViewModel orcamentos { get; set; }
+      //  public virtual OrcamentoEditViewModel orcamentos { get; set; }
        // public List<HorarioProfessorEditViewModel> horarios { get; set; }
     }
 }

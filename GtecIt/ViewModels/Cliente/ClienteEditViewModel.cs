@@ -8,7 +8,7 @@ namespace GtecIt.ViewModels
     {
         public ClienteEditViewModel()
         {
-            this.Orcamentos = new List<OrcamentoEditViewModel>();
+            //this.Orcamentos = new List<OrcamentoEditViewModel>();
         }
 
         public int id_Grlcliente { get; set; }
@@ -28,7 +28,7 @@ namespace GtecIt.ViewModels
             }
         }
         public virtual PessoaEditViewModel grlbasic { get; set; }
-        public virtual ICollection<OrcamentoEditViewModel> Orcamentos { get; set; }
+      //  public virtual ICollection<OrcamentoEditViewModel> Orcamentos { get; set; }
         public string pagina_origem { get; set; }
         public long orcamentoid { get; set; }
     }

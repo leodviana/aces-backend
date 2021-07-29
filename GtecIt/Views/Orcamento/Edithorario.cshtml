@@ -1,5 +1,5 @@
 ﻿
-@model GtecIt.ViewModels.OrcamentoRenovaViewModel
+@model GtecIt.ViewModels.AulaCreateViewModel
 
 <script src="~/Scripts/defaults.js"></script>
 @{
@@ -15,24 +15,37 @@
         </div>
         @Html.AntiForgeryToken()
         @Html.HiddenFor(x => Model.id_Stqcporcamento)
-
+        @Html.HiddenFor(x => Model.idGercdaulas)
+        @Html.HiddenFor(x => Model.dia_semana)
         <div class="form-group">
 
 
-            <div class="col-sm-6">
-                <label>Aluno</label>
-                @Html.TextBoxFor(x => x.NomeCliente, new { @class = "form-control ", @autofocus = "autofocus", @name = "nome", @id = "nome", @readonly = "true" })
-            </div>
-            <div class="col-sm-4">
+
+            <div class="col-sm-12">
                 <label>Professor</label>
-                @Html.TextBoxFor(x => x.NomeDentista, new { @class = "form-control ", @autofocus = "autofocus", @name = "professor", @id = "professor", @readonly = "true" })
+
+
+                @Html.DropDownListFor(x => x.id_grldentista, Model.DropdownProduto, "Selecione...", new { @class = "form-control", @name = "NomeProduto", @id = "NomeProduto" })
+
+
             </div>
-            <div class="col-sm-2">
-                <label>Inicio</label>
-                @Html.TextBoxFor(x => x.dt_renovacao, "{0:dd/MM/yyyy}", new { @class = "form-control datesimple"})
-            </div>
+
+
         </div>
 
+        <hr />
+
+        <div class="form-group">
+
+            <div class="col-sm-12">
+
+                <label>Deseja repetir a modificação para todos(as) :  @Model.dia_semana</label>
+                @Html.CheckBoxFor(m => m.segunda)
+
+
+            </div>
+
+        </div>
         <div class="modal-footer">
             <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-ok"></span> Confirmar</button>
             &nbsp;&nbsp;
@@ -44,24 +57,26 @@
 
 <script type="text/javascript">
 
+    $(document).ready(function () {
+      
+    });
 
 
     $('#formEdicao').on('submit', function (e) {
 
         e.preventDefault();
 
-        //var codigo = @Model.id_Stqcporcamento;
 
 
         $.ajax({
             type: 'POST',
-            url: '@Url.Action("Renova", "Orcamento")',
+            url: '@Url.Action("Edithorario", "Orcamento")',
             data: $("#formEdicao").serialize(),
             success: function (result) {
 
                 if (result.Sucesso == true) {
 
-                    window.location.href = '@(Url.Action("Edit", "Orcamento"))?' + 'Codigo=' + result.msg;
+                   // window.location.href = '@(Url.Action("Edit", "Orcamento"))?' + 'Codigo=' + result.msg;
                     $("#modalEdicao").modal('hide');
                 }
                 else {

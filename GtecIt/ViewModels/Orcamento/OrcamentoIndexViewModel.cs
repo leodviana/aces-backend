@@ -32,6 +32,7 @@ namespace GtecIt.ViewModels
 
         public DateTime? Dt_inicio { get; set; }
         public DateTime? Dt_fim { get; set; }
+        public string consultanome { get; set; } = "";
        
     }
 }

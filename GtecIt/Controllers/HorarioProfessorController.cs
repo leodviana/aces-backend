@@ -481,7 +481,9 @@ namespace GtecIt.Controllers
             }
             try
             {
-
+                model.id_Stqcporcamento = null;
+                model.id_Stqcporcamento_dupla = null;
+                
                 //_orcamentoItemApp.Remove(model);
                 model.status = "2";
                 _uoW.horarioprofessor.Atualizar(model);
@@ -505,6 +507,16 @@ namespace GtecIt.Controllers
 
             return ehVazio;
         }
+
+        public ActionResult ObterHorarios()
+        {
+           var teste =  _uoW.horarioprofessor.ObterTodos().Where(x => x.id_grldentista == 3 && x.status.Equals("1")).ToList();
+
+
+            return Json("ok");
+        }
+
+       
     }
 
 }

@@ -356,6 +356,7 @@
                                     {
                                         if (Model.itemorcamentos != null && Model.itemorcamentos.Any())
                                         {
+
                                             //int codigo, string pagina_origem, long orcamentoid = 0
                                             <a href="@Url.Action("Edit","Dentista", new
                                             { codigo = Model.Id_grldentista,
@@ -414,7 +415,7 @@
                                                                 <td>@item.status</td>
 
                                                                 <td class="text-center col-sm-1">
-                                                                    <span class="glyphicon glyphicon-pencil" title="Edição de Procedimentos"></span>
+                                                                    <a href="#" span class="glyphicon glyphicon-pencil btnGridEditarhorarios" data-id="@item.idGercdaulas"  title="Edição de Horários"></a>
                                                                 </td>
                                                                 <td class="text-center col-sm-1">
                                                                     <span class="glyphicon glyphicon-trash" title="Exclusão de Procedimentos"></span>
@@ -455,6 +456,14 @@
                         <a id="btnVoltar" href="@Url.Action("Index")" class=" btn btn-primary">
                             <span class="glyphicon glyphicon-arrow-left"></span> Voltar
                         </a>
+                       
+                    </div>
+                    <div class="form-group col-sm-1">
+                        
+                        <a href="#" class="btn btn-primary btnLiberar" data-id="@Model.id_Stqcporcamento" data-toggle="modal" data-target="#modalInclusao">
+                            App <span class="glyphicon glyphicon-plus"></span>
+                        </a>
+
                     </div>
                 </div>
             </div>
@@ -629,6 +638,29 @@
     </div>
 </div>
 
+<div id="modalInclusao" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Inclusão de Contrato </h4>
+            </div>
+            <div class="modal-body">
+                <p class="text-center">Deseja realmente Incluir o Contrato?</p>
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="btn btn-primary" id="btnmodalInclusaoConfirmar">
+                    <span class="glyphicon glyphicon-ok"></span> Confirma
+                </a>
+                &nbsp;&nbsp;
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="btnmodalInclusaoCancelar">
+                    <span class="glyphicon glyphicon-remove"></span> Cancelar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <div id="myModal" class="modal fade" role="dialog">
     <div class="modal-dialog">
@@ -721,7 +753,7 @@
 
 
         $(document).ready(function () {
-          
+
             $('#tabelaGridaulas').DataTable();
             //var testa = testa_valor_pago();
             iniciarListaCliente(); //Iniciando a lista manualmente
@@ -819,7 +851,7 @@
 
                 e.preventDefault();
                var id = $(this).data('id');
-             
+
 
                 $("#btnModalExclusaoConfirmar2").off("click").click(function (e) {
                     $.ajax({
@@ -882,6 +914,39 @@
 
                 });
             }
+        });
+
+        $('.btnGridEditarhorarios').click(function (e) {
+            e.preventDefault();
+
+                var codigo = $(this).data('id');
+            var codigo2 = @Model.id_grlconvenio;
+
+            var url = '@Url.Action("Edithorario", "Orcamento")' + '?codigo=' + codigo ;
+
+               // var url = '@Url.Action("Edit", "OrcamentoItem")' + '?codigo=' + $(this).data('id');
+
+                var modal, modalDialog, modalContent;
+                modal = $('<div id="modalEdicao" class="modal fade" "/>');
+                modalDialog = $('<div class="modal-dialog modal-lg" />');
+                modalContent = $('<div class="modal-content" />');
+
+                modal.modal('hide')
+                               .append(modalDialog)
+                               .on('hidden.bs.modal', function () {
+
+                                   $(this).remove();
+                               })
+                               .appendTo('body');
+
+                modalDialog.append(modalContent);
+
+                $.get(url, function (data) {
+                    modalContent.html(data);
+                    modal.modal('show');
+
+                });
+
         });
 
         $('#btnNovo').click(function (e) {
@@ -973,6 +1038,36 @@
 
         });
 
+
+          $('#btnAlteraHorario').click(function (e) {
+
+
+            e.preventDefault();
+
+            var url = '@Url.Action("Gerencia", "HorarioProfessor")' + '?codigo=' + $(this).data('id') + '&data=' + $("#Dt_orcamento").val();
+
+            var modal, modalDialog, modalContent;
+            modal = $('<div id="modalInclusao" class="modal fade" "/>');
+            modalDialog = $('<div class="modal-dialog modal-lg" />');
+            modalContent = $('<div class="modal-content" />');
+
+            modal.modal('hide')
+                .append(modalDialog)
+                .on('hidden.bs.modal', function () { $(this).remove(); })
+                .appendTo('body');
+
+
+            modalDialog.append(modalContent);
+
+            $.get(url, function (data) {
+                modalContent.html(data);
+                modal.on('show.bs.modal', function () { $(this).find('input:first').focus(); });
+                modal.modal('show');
+            });
+
+        });
+
+
         $('.btnGridEditarTitulo').click(function (e) {
 
             e.preventDefault();
@@ -1054,7 +1149,38 @@
 
         });
 
+        $(".btnLiberar").click(function (e) {
 
+            e.preventDefault();
+            var id = $(this).data('id');
+
+            //var linha = $("." + id);
+            $("#btnmodalInclusaoConfirmar").off("click").click(function (e) {
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("incluirApp", "Orcamento")',
+                    data: {
+                        "codigo": id
+                    },
+                    success: function (data) {
+                        if (data == true) {
+
+                            $('#modalInclusao').modal('hide');
+                            alert("Contrato liberado para utilização no aplicativo!.");
+                            location.reload();
+                        } else {
+                            alert("Ocorreu um erro ao tentar excluir o registro.");
+                            $("#btnModalInclusaoCancelar").click();
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        alert(error);
+                    }
+
+                });
+            });
+
+        });
         $(".btnGridAbrirtitulo").click(function (e) {
             // e.preventDefault();
             // var url = '@Url.Action("Abrir", "Titulo")' + '?codigo=' + $(this).data('id');

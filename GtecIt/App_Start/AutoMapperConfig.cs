@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using GtecIt.Domain.Entities;
+using GtecIt.Infra.Data.Persistencia.Dto;
 using GtecIt.ViewModels;
 
 namespace GtecIt
@@ -102,8 +103,13 @@ namespace GtecIt
             Mapper.CreateMap<Orcamento, OrcamentoIndexViewModel>().ReverseMap();
             Mapper.CreateMap<Orcamento, OrcamentoGridViewModel>().ReverseMap();
             Mapper.CreateMap<Orcamento, OrcamentoEditViewModel>().ReverseMap();
+            Mapper.CreateMap<Orcamento, OrcamentoEditViewModel2>().ReverseMap();
             Mapper.CreateMap<Orcamento, OrcamentoCreateViewModel>().ReverseMap();
-
+            Mapper.CreateMap<Orcamento, OrcamentoRenovaViewModel>().ReverseMap();
+            Mapper.CreateMap<Orcamento, OrcamentoRelatorioViewModel>().ReverseMap();
+            
+            //dto 
+            Mapper.CreateMap<OrcamentoDto, OrcamentoGridViewModel>().ReverseMap();
 
             Mapper.CreateMap<OrcamentoItem, OrcamentoItemIndexViewModel>().ReverseMap();
             Mapper.CreateMap<OrcamentoItem, OrcamentoItemGridViewModel>().ReverseMap();
@@ -118,6 +124,7 @@ namespace GtecIt
             Mapper.CreateMap<Dentista, DentistaIndexViewModel>().ReverseMap();
             Mapper.CreateMap<Dentista, DentistaGridViewModel>().ReverseMap();
             Mapper.CreateMap<Dentista, DentistaEditViewModel>().ReverseMap();
+            Mapper.CreateMap<Dentista, DentistaEditViewModel2>().ReverseMap();
             Mapper.CreateMap<Dentista, DentistaCreateViewModel>().ReverseMap();
 
             Mapper.CreateMap<Titulo, TituloIndexViewModel>().ReverseMap();
@@ -187,6 +194,7 @@ namespace GtecIt
             Mapper.CreateMap<HorarioProfessor, HorarioProfessorIndexViewModel>().ReverseMap();
             Mapper.CreateMap<HorarioProfessor, HorarioProfessorGridViewModel>().ReverseMap();
             Mapper.CreateMap<HorarioProfessor, HorarioProfessorEditViewModel>().ReverseMap();
+            Mapper.CreateMap<HorarioProfessor, HorarioProfessorEditViewModel2>().ReverseMap();
             Mapper.CreateMap<HorarioProfessor, HorarioProfessorCreateViewModel>().ReverseMap();
 
             Mapper.CreateMap<Entrega, EntregaIndexViewModel>().ReverseMap();
@@ -199,6 +207,11 @@ namespace GtecIt
             Mapper.CreateMap<Events, EventGridViewModel>().ReverseMap();
             Mapper.CreateMap<Events, EventEditViewModel>().ReverseMap();
             Mapper.CreateMap<Events, EventCreateViewModel>().ReverseMap();
+
+            Mapper.CreateMap<Ranking, RankingIndexViewModel>().ReverseMap();
+            Mapper.CreateMap<Ranking, RankingGridViewModel>().ReverseMap();
+            Mapper.CreateMap<Ranking, RankingEditViewModel>().ReverseMap();
+            Mapper.CreateMap<Ranking, RankingCreateViewModel>().ReverseMap();
 
             /* Mapper.CreateMap<Relatorio, RelatorioIndexViewModel>().ReverseMap();
              Mapper.CreateMap<Relatorio, RelatorioGridViewModel>().ReverseMap();

@@ -31,7 +31,7 @@ namespace GtecIt.ViewModels
          public string status { get; set; }
          public int parcelas { get; set; }
          public List<TituloGridViewModel> Grid { get; set; }
-         public virtual OrcamentoEditViewModel orcamento { get; set; }
+       //  public virtual OrcamentoEditViewModel orcamento { get; set; }
          public virtual TipoPagamentoEditViewModel tp_pagamento { get; set; }
 
         public string Mensagem { get; set; }

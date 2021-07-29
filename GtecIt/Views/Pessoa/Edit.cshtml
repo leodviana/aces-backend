@@ -28,7 +28,7 @@
                     </div>
                     <div class="col-sm-8">
                         <label>Nome</label>
-                        @Html.EditorFor(model => model.nome, new { htmlAttributes = new { @class = "form-control", @Readonly = true } })
+                        @Html.EditorFor(model => model.nome, new { htmlAttributes = new { @class = "form-control"} })
                         @Html.ValidationMessageFor(model => model.nome, "", new { @class = "text-danger" })
 
 

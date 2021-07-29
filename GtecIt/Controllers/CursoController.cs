@@ -413,7 +413,7 @@ namespace GtecIt.Controllers
             byte[] _contentBytes;
 
             var allCustomer =
-                Mapper.Map<List<OrcamentoEditViewModel>>(
+                Mapper.Map<List<OrcamentoRelatorioViewModel>>(
                     _uoW.Orcamentos.ObterTodos()
                         .Where(x => x.id_Stqcporcamento == VendaId)
                         .ToList()
@@ -524,7 +524,7 @@ namespace GtecIt.Controllers
             byte[] _contentBytes = null;
 
             var allCustomer =
-                Mapper.Map<List<OrcamentoEditViewModel>>(
+                Mapper.Map<List<OrcamentoRelatorioViewModel>>(
                    _uoW.Orcamentos.ObterTodos()
                         .Where(x => x.id_Stqcporcamento == VendaId)
                         .ToList()

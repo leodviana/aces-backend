@@ -23,7 +23,7 @@ namespace GtecIt.ViewModels
         public string cd_usuario { get; set; }
         public string num_conta { get; set; }
         public string status { get; set; }
-        public virtual OrcamentoEditViewModel orcamento { get; set; }
+       // public virtual OrcamentoEditViewModel orcamento { get; set; }
         public virtual TipoPagamentoEditViewModel tp_pagamento { get; set; }
        }
 }

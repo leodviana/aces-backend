@@ -5,12 +5,12 @@ using System.Web.Mvc;
 
 namespace GtecIt.ViewModels
 {
-    public class OrcamentoEditViewModel 
+    public class OrcamentoEditViewModel2 
     {
-        public OrcamentoEditViewModel()
+        public OrcamentoEditViewModel2()
         {
-            itemorcamentos = new List<OrcamentoItemEditViewModel>();
-            titulos = new List<TituloEditViewModel>();
+           // itemorcamentos = new List<OrcamentoItemEditViewModel>();
+          //  titulos = new List<TituloEditViewModel>();
             Dropdownconvenio = new List<SelectListItem>();
         }
         public int id_Stqcporcamento { get; set; }
@@ -42,18 +42,18 @@ namespace GtecIt.ViewModels
         public DateTime? dt_renovacao { get; set; }
         public List<SelectListItem> Dropdownconvenio { get; set; }
 
-       // public virtual ClienteEditViewModel grlcliente { get; set; }
-       // public virtual DentistaEditViewModel grldentista { get; set; }
-
-        public virtual ConvenioEditViewModel Convenios { get; set; }
+        public virtual ClienteEditViewModel grlcliente { get; set; }
+        //public virtual DentistaEditViewModel grldentista { get; set; }
        
-        public virtual List<OrcamentoItemEditViewModel> itemorcamentos { get; set; }
-        public virtual List<TituloEditViewModel> titulos { get; set; }
-        public virtual CentrodeCustoIndexViewModel grlccust { get; set; }
+       // public virtual ConvenioEditViewModel Convenios { get; set; }
+       
+       // public virtual List<OrcamentoItemEditViewModel> itemorcamentos { get; set; }
+        //public virtual List<TituloEditViewModel> titulos { get; set; }
+        //public virtual CentrodeCustoIndexViewModel grlccust { get; set; }
 
-        public virtual List<HorarioProfessorCreateViewModel> aulas { get; set; }
+        ///public virtual List<HorarioProfessorEditViewModel> aulas { get; set; }
 
-        public virtual List<AulaEditViewModel> horarios { get; set; }
+       // public virtual List<AulaEditViewModel> horarios { get; set; }
         
         public bool guia { get; set; }
     }

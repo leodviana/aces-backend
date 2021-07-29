@@ -9,7 +9,7 @@ namespace GtecIt.ViewModels
     {
         public ClienteCreateViewModel()
         {
-           this.Orcamentos = new List<OrcamentoEditViewModel>();
+           //this.Orcamentos = new List<OrcamentoEditViewModel>();
             
         }
         
@@ -37,7 +37,7 @@ namespace GtecIt.ViewModels
             }
         }
         public virtual PessoaEditViewModel grlbasic { get; set; }
-        public virtual ICollection<OrcamentoEditViewModel> Orcamentos { get; set; }
+      //  public virtual ICollection<OrcamentoEditViewModel> Orcamentos { get; set; }
         public List<SelectListItem> Dropdownnome { get; set; }
         public string origem { get; set; }
 

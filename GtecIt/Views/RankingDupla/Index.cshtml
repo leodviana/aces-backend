@@ -1,81 +1,64 @@
-﻿@model GtecIt.ViewModels.OrcamentoIndexViewModel
-
-<h1></h1>
+﻿@model GtecIt.ViewModels.RankingIndexViewModel
+<br />
 @{
-    ViewBag.Title = "Contrato";
+    ViewBag.Title = "Ranking Dupla";
+  
 }
-<h1></h1>
 
-@using (Html.BeginForm("Index", "Orcamento", FormMethod.Get, new { @class = "form-inline", @role = "form" }))
+
+@using (Html.BeginForm("Index", "RankingDupla", FormMethod.Get, new { @class = "form-inline", @role = "form" }))
 {
 
     <fieldset>
-
         <legend>@ViewBag.Title</legend>
-        <div  class="form-group" >
-          
-            @Html.TextBoxFor(x => x.consultanome, new { @class = "form-control", @placeholder = "Aluno", @autofocus = "autofocus" })
+        <div class="form-group">
+
+            @Html.TextBoxFor(x => x.nome, new { @class = "form-control", @placeholder = "Jogador", @autofocus = "autofocus" })
         </div>
         <button name="tipoacao" type="submit" value="consultatodos" class="btn btn-primary">
             <i class="glyphicon glyphicon-search"></i> Consultar
         </button>
 
-        <a id="btnNovo" href="@Url.Action("Create")" class="btn btn-primary">
+        <a id="btnNovo" href="#" class="btn btn-primary">
             <span class="glyphicon glyphicon-plus"></span> Novo
         </a>
-
     </fieldset>
 }
 @if (Model != null && Model.Grid.Any())
 {
-    <div id="grid ">
+    <div id="grid">
         <hr />
         <table id="tabelaGrid" class="table table-bordered table-striped table-hover table-responsive dt-responsive">
             <thead>
                 <tr>
-                    <th class="col-sm-1 col-xs-1 text-right">Contr. No.</th>
-                    <th class="col-sm-2 col-xs-2 text-center">Emissão</th>
-                    <th class="col-sm-4 col-xs-4">Aluno</th>
-                    <th class="col-sm-4 col-xs-4">Professor</th>
+                    <th>Posição</th>
 
+                    <th>Jogador</th>
+                    <th>Jogador2</th>
+                    <th>Pontos</th>
                     <th class="text-center"></th>
                     <th class="text-center"></th>
-                    <th class="col-sm-1 col-xs-1"></th>
-                    
                 </tr>
-
             </thead>
             <tbody id="corpoTabelaGrid">
+
                 @foreach (var item in Model.Grid)
                 {
 
-                    var data = item.Dt_orcamento.HasValue ? item.Dt_orcamento.ToString().Substring(0, 10) : "-";
+                  
+                <tr class="@item.id_ranking">
+                    <td>@item.posicao</td>
 
-                    <tr class="@item.id_Stqcporcamento">
-
-                        <td class="text-right">@item.id_Stqcporcamento</td>
-                        <td class="text-center">@data</td>
-                        <td>@item.nome_aluno</td>
-                        <td>@item.nome_professor</td>
-
-
-                        <td class="text-center col-sm-1">
-                            <a href="@Url.Action("Edit", new RouteValueDictionary
-                                     {
-                                         {"codigo", item.id_Stqcporcamento}
-                                     })" />
-                            <span class="glyphicon glyphicon-pencil" />
-
-                        </td>
-                        <td class="text-center col-sm-1">
-                            <a href="#" class="glyphicon glyphicon-trash btnGridExcluir" data-toggle="modal" data-target="#modalExclusao" data-id="@item.id_Stqcporcamento"></a>
-                        </td>
-                        
-                        <td class="text-center col-sm-1">
-                            <a href="#" class="glyphicon glyphicon glyphicon-list-alt btnRelatorio" data-id="@item.id_Stqcporcamento"></a>
-                        </td>
-
-                    </tr>
+                    <td>@item.nome</td>
+                    <td>@item.nome_dupla</td>
+                    <td>@item.pontos</td>
+                    <td class="text-center col-sm-1">
+                        <a href="#" class="glyphicon glyphicon-pencil btnGridEditar" data-id="@item.id_ranking"></a>
+                    </td>
+                    <td class="text-center col-sm-1">
+                        <a href="#" class="glyphicon glyphicon-trash btnGridExcluir" data-toggle="modal" data-target="#modalExclusao" data-id="@item.id_ranking"></a>
+                    </td>
+                </tr>
                 }
             </tbody>
         </table>
@@ -105,15 +88,58 @@
     </div>
 </div>
 
-
-
-
-
 @section scripts{
     <script type="text/javascript">
 
         $(document).ready(function () {
             $('#tabelaGrid').DataTable();
+        });
+
+        $('#btnNovo').click(function (e) {
+            e.preventDefault();
+            var url = '@Url.Action("Create", "RankingDupla")';
+
+
+            var modal, modalDialog, modalContent;
+            modal = $('<div id="modalInclusao" class="modal fade" "/>');
+            modalDialog = $('<div class="modal-dialog-sm" />');
+            modalContent = $('<div class="modal-content" />');
+
+            modal.modal('hide')
+                .append(modalDialog)
+                .on('hidden.bs.modal', function () { $(this).remove(); })
+                .appendTo('body');
+
+
+            modalDialog.append(modalContent);
+
+            $.get(url, function (data) {
+                modalContent.html(data);
+                modal.on('show.bs.modal', function () { $(this).find('input:first').focus(); });
+                modal.modal('show');
+            });
+        });
+
+        $('.btnGridEditar').click(function (e) {
+            e.preventDefault();
+            var url = '@Url.Action("Edit", "RankingDupla")' + '?codigo=' + $(this).data('id');
+
+            var modal, modalDialog, modalContent;
+            modal = $('<div id="modalEdicao" class="modal fade" "/>');
+            modalDialog = $('<div class="modal-dialog-sm" />');
+            modalContent = $('<div class="modal-content" />');
+
+            modal.modal('hide')
+             .append(modalDialog)
+             .on('hidden.bs.modal', function () { $(this).remove(); })
+             .appendTo('body');
+
+            modalDialog.append(modalContent);
+
+            $.get(url, function (data) {
+                modalContent.html(data);
+                modal.modal('show');
+            });
         });
 
 
@@ -124,15 +150,16 @@
             $("#btnModalExclusaoConfirmar").off("click").click(function (e) {
                 $.ajax({
                     type: 'POST',
-                    url: '@Url.Action("Delete", "Orcamento")',
+                    url: '@Url.Action("Delete", "RankingDupla")',
                     data: {
                         "codigo": id
                     },
                     success: function (data) {
                         if (data == true) {
+
                             linha.remove();
-                            location.reload();
                             $('#modalExclusao').modal('hide');
+                            location.reload();
                             if ($("#corpoTabelaGrid").children("tr").length > 0) {
                                 return true;
                             }
@@ -140,7 +167,6 @@
                                 $("#grid").remove();
                                 return true;
                             }
-
                         } else {
                             alert("Ocorreu um erro ao tentar excluir o registro.");
                             $("#btnModalExclusaoCancelar").click();
@@ -152,33 +178,6 @@
                 });
             });
         });
-       
-        $('.btnRelatorio').click(function (e) {
-            console.Write("teste3");
-            
-            e.preventDefault();
-          
-            var url = '@Url.Action("gerarelatorio", "Orcamento")' + '?codigo=' + $(this).data('id');
 
-            var modal, modalDialog, modalContent;
-            modal = $('<div id="modalEdicao" class="modal fade" "/>');
-            modalDialog = $('<div class="modal-dialog modal-lg" />');
-            modalContent = $('<div class="modal-content" />');
-
-            modal.modal('hide')
-                .append(modalDialog)
-                .on('hidden.bs.modal', function () { $(this).remove(); })
-                .appendTo('body');
-
-            modalDialog.append(modalContent);
-
-            $.get(url, function (data) {
-                modalContent.html(data);
-                modal.modal('show');
-            });
-
-        });
-        
-         
     </script>
 }

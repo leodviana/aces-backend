@@ -5,9 +5,9 @@ using System.Web.Mvc;
 
 namespace GtecIt.ViewModels
 {
-    public class OrcamentoEditViewModel 
+    public class OrcamentoRelatorioViewModel
     {
-        public OrcamentoEditViewModel()
+        public OrcamentoRelatorioViewModel()
         {
             itemorcamentos = new List<OrcamentoItemEditViewModel>();
             titulos = new List<TituloEditViewModel>();
@@ -42,8 +42,8 @@ namespace GtecIt.ViewModels
         public DateTime? dt_renovacao { get; set; }
         public List<SelectListItem> Dropdownconvenio { get; set; }
 
-       // public virtual ClienteEditViewModel grlcliente { get; set; }
-       // public virtual DentistaEditViewModel grldentista { get; set; }
+        public virtual ClienteEditViewModel grlcliente { get; set; }
+        public virtual DentistaEditViewModel grldentista { get; set; }
 
         public virtual ConvenioEditViewModel Convenios { get; set; }
        
