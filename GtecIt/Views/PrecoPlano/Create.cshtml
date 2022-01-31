@@ -18,31 +18,35 @@
         @Html.AntiForgeryToken()
 
         @Html.HiddenFor(x => Model.id_stqcdprd)
-        <div class="form-group">
-            <div class="col-sm-4">
-                <label>Plano</label>
-                @Html.DropDownListFor(x => x.idGrlplanos, Model.DropdownConvenio, "Selecione...", new { @class = "form-control", @name = "id_grlconvenio", @id = "id_grlconvenio", @autofocus = "autofocus" })
-            </div>
-
-            <div class="col-md-2">
-                <label>Preço</label>
-                @Html.TextBoxFor(model => model.preco, new { @class = "form-control text-right dinheiro", @name = "preco", @id = "preco", required = "required" })
-            </div>
-
-            <div class="col-md-2">
-                <label for="Emissao" class="control-label text-left">Emissão</label>
-                @Html.TextBoxFor(model => model.vigencia, "{0:dd/MM/yyyy}", new { @class = "form-control text-left datesimple", @autofocus = "autofocus", @name = "vigencia", @id = "vigencia" })
-            </div>
-            <div class="col-md-2">
-                <label for="Qtd aulas" class="control-label text-left">No. de Aulas</label>
-                @Html.TextBoxFor(model => model.qtd_aulas, new { @class = "form-control text-left "})
-                
-            </div>
-            <div class="col-md-2">
-                <label for="Dias Plano" class="control-label text-left">No. de Dias</label>
-                @Html.TextBoxFor(model => model.qtd_dias_plano, new { @class = "form-control text-left", @autofocus = "autofocus"})
-            </div>
+    <div class="form-group">
+        <div class="col-sm-2">
+            <label>Plano</label>
+            @Html.DropDownListFor(x => x.idGrlplanos, Model.DropdownConvenio, "Selecione...", new { @class = "form-control", @name = "id_grlconvenio", @id = "id_grlconvenio", @autofocus = "autofocus" })
         </div>
+
+        <div class="col-md-2">
+            <label>Preço</label>
+            @Html.TextBoxFor(model => model.preco, new { @class = "form-control text-right dinheiro", @name = "preco", @id = "preco", required = "required" })
+        </div>
+
+        <div class="col-md-2">
+            <label for="Emissao" class="control-label text-left">Emissão</label>
+            @Html.TextBoxFor(model => model.vigencia, "{0:dd/MM/yyyy}", new { @class = "form-control text-left datesimple", @autofocus = "autofocus", @name = "vigencia", @id = "vigencia" })
+        </div>
+        <div class="col-md-2">
+            <label for="Qtd aulas" class="control-label text-left">No. de Aulas</label>
+            @Html.TextBoxFor(model => model.qtd_aulas, new { @class = "form-control text-left " })
+
+        </div>
+        <div class="col-md-2">
+            <label for="Dias Plano" class="control-label text-left">No. de Dias</label>
+            @Html.TextBoxFor(model => model.qtd_dias_plano, new { @class = "form-control text-left", @autofocus = "autofocus" })
+        </div>
+        <div class="col-md-2">
+            <label for="Dias Plano" class="control-label text-left">Jogo livre</label>
+            @Html.TextBoxFor(model => model.valor2, new { @class = "form-control text-left", @autofocus = "autofocus" })
+        </div>
+    </div>
 
 
     </div>

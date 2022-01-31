@@ -10,5 +10,7 @@ namespace GtecIt.ViewModels
         public DateTime? fim { get; set; }
         public string status { get; set; }
         public string dia_semana { get; set; }
+        public string nome_dentista_inicial { get; set; }
+        public string nome_dentista_final { get; set; }
     }
 }

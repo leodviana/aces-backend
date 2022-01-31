@@ -245,6 +245,7 @@
     <Compile Include="Binders\DecimalModelBinder.cs" />
     <Compile Include="Controllers\Api\BancoapiController.cs" />
     <Compile Include="Controllers\Api\testeController.cs" />
+    <Compile Include="Controllers\AulaLogController.cs" />
     <Compile Include="Controllers\MensagemController.cs" />
     <Compile Include="Controllers\EventsController.cs" />
     <Compile Include="Controllers\HorarioProfessorController.cs" />
@@ -325,14 +326,14 @@
     <Compile Include="Reports\Rel011 - Aulas por Professor.cs">
       <DependentUpon>Rel011 - Aulas por Professor.rpt</DependentUpon>
       <AutoGen>True</AutoGen>
-      <SubType>Component</SubType>
       <DesignTime>True</DesignTime>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Reports\Rel010 - Cursos por periodo.cs">
       <DependentUpon>Rel010 - Cursos por periodo.rpt</DependentUpon>
       <AutoGen>True</AutoGen>
-      <SubType>Component</SubType>
       <DesignTime>True</DesignTime>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Reports\Rel002 - Titulos a Receber por periodo1.cs">
       <AutoGen>True</AutoGen>
@@ -392,6 +393,10 @@
     <Compile Include="Util\FiltroDeCaracteres.cs" />
     <Compile Include="Util\GerenciaSession.cs" />
     <Compile Include="Util\GerenciaSessoinBase.cs" />
+    <Compile Include="ViewModels\AulaLog\AulaLogCreateViewModel.cs" />
+    <Compile Include="ViewModels\AulaLog\AulaLogEditViewModel.cs" />
+    <Compile Include="ViewModels\AulaLog\AulaLogGridViewModel.cs" />
+    <Compile Include="ViewModels\AulaLog\AulaLogIndexViewModel.cs" />
     <Compile Include="ViewModels\Aula\AulaCreateViewModel.cs" />
     <Compile Include="ViewModels\Aula\AulaEditViewModel.cs" />
     <Compile Include="ViewModels\Aula\AulaGridViewModel.cs" />
@@ -783,7 +788,6 @@
     <Content Include="Views\Dentista\Edit.cshtml" />
     <Content Include="Views\Dentista\Index.cshtml" />
     <Content Include="Views\Aula\Create.cshtml" />
-    <Content Include="Views\Aula\Edit.cshtml" />
     <Content Include="Views\HorarioProfessor\Create.cshtml" />
     <Content Include="Views\Orcamento\Renovacao.cshtml" />
     <Content Include="Views\Orcamento\Renova.cshtml" />
@@ -803,6 +807,9 @@
     <Content Include="Views\RankingDupla\Index.cshtml" />
     <Content Include="Views\RankingDupla\Edit.cshtml" />
     <Content Include="Views\RankingDupla\Create.cshtml" />
+    <Content Include="Views\Orcamento\Liberacao.cshtml" />
+    <Content Include="Views\Aula\visualizar.cshtml" />
+    <Content Include="Views\AulaLog\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

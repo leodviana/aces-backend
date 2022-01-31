@@ -45,14 +45,14 @@ namespace GtecIt.Controllers
                 if (!model.ConsultaTodos)
                     return View(model);
 
-                model.Grid = Mapper.Map<List<PessoaGridViewModel>>(_uoW.Pessoas.ObterTodos().ToList().OrderBy(x => x.nome));
+                model.Grid = Mapper.Map<List<PessoaGridViewModel>>(_uoW.Pessoas.ObterTodos().Where(x=>x.status.Equals("0")).ToList().OrderBy(x => x.nome));
                 model.ConsultaTodos = true;
                 return View(model);
             }
 
             model.ConsultaTodos = false;
 
-            model.Grid = Mapper.Map<List<PessoaGridViewModel>>(_uoW.Pessoas.ObterTodos().Where(x => x.nome.Contains(model.nome)).ToList().OrderBy(x => x.nome));
+            model.Grid = Mapper.Map<List<PessoaGridViewModel>>(_uoW.Pessoas.ObterTodos().Where(x => x.nome.Contains(model.nome) && x.status.Equals("0")).ToList().OrderBy(x => x.nome));
 
 
             return View(model);
@@ -462,8 +462,14 @@ namespace GtecIt.Controllers
 
                 return View(model);
             }
-
+            model.status = "0";
             _uoW.Pessoas.Atualizar(Mapper.Map<Pessoa>(model));
+            var usuario = _uoW.Usuarios.ObterTodos().Where(x=>x.Id_grlbasico==model.Id_grlbasico).FirstOrDefault();
+            if (usuario != null)
+            {
+                usuario.Login = model.email;
+                _uoW.Usuarios.Atualizar(Mapper.Map<Usuario>(usuario));
+            }
             _uoW.Complete();
 
 
@@ -476,15 +482,41 @@ namespace GtecIt.Controllers
         public JsonResult Delete(int codigo)
         {
             var model = _uoW.Pessoas.ObterPorId(codigo);
-
             if (model == null)
             {
                 return Json(false);
             }
+            var contratos = _uoW.Orcamentos.obterporpf(codigo).ToList() ;
+            if (contratos.Count>0)
+            {
+                
+                    var mensagem = new List<String>();
 
-            _uoW.Pessoas.RemoverPorId(codigo);
+                    mensagem.Add( model.nome +" tem  contrato ativo No. " + contratos[0].id_Stqcporcamento  );
+                var resposta = new
+                {
+
+                    Sucesso = false,
+                    msg = mensagem
+                };
+
+                    return Json(resposta);
+                
+            }
+            model.status = "2";
+            //itens
+            _uoW.Pessoas.Atualizar(model);
+           
             _uoW.Complete();
-            return Json(true);
+            var response = new
+            {
+
+                Sucesso = true,
+                msg = ""
+            };
+
+            return Json(response);
+            
         }
 
         public bool VerificarFiltroVazio(PessoaIndexViewModel model)

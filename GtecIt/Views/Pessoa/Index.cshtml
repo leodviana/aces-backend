@@ -7,23 +7,24 @@
 
 @using (Html.BeginForm("Index", "Pessoa", FormMethod.Get, new { @class = "form-inline", @role = "form" }))
 {
-
-<fieldset>
-    <legend>@ViewBag.Title</legend>
-    <div class="form-group">
-
-        @Html.TextBoxFor(x => x.nome, new { @class = "form-control", @placeholder = "Nome", @autofocus = "autofocus" })
+    <div id="divErros">
     </div>
-    <button name="tipoacao" type="submit" value="consultatodos" class="btn btn-primary">
-        <i class="glyphicon glyphicon-search"></i> Consultar
-    </button>
+    <fieldset>
+        <legend>@ViewBag.Title</legend>
+        <div class="form-group">
 
-    
-    <a id="btnNovo" href="@Url.Action("Create","Pessoa")" class="btn btn-primary">
-        <span class="glyphicon glyphicon-plus"></span> Novo
-    </a>
+            @Html.TextBoxFor(x => x.nome, new { @class = "form-control", @placeholder = "Nome", @autofocus = "autofocus" })
+        </div>
+        <button name="tipoacao" type="submit" value="consultatodos" class="btn btn-primary">
+            <i class="glyphicon glyphicon-search"></i> Consultar
+        </button>
 
-</fieldset>
+
+        <a id="btnNovo" href="@Url.Action("Create","Pessoa")" class="btn btn-primary">
+            <span class="glyphicon glyphicon-plus"></span> Novo
+        </a>
+
+    </fieldset>
 }
 @if (Model != null && Model.Grid.Any())
 {
@@ -33,15 +34,15 @@
             <thead>
                 <tr>
                     <th class="col-sm-1">Tipo</th>
-                    <th class ="col-sm-4">Nome</th>
+                    <th class="col-sm-4">Nome</th>
                     <th class="col-sm-4">Razão Social</th>
                     <th class="col-sm-1">Contato</th>
                     <th class="col-sm-2">Telefone 01</th>
-                    
+                    <th class="col-sm-2">Status</th>
                     <th class="text-center"></th>
                     <th class="text-center"></th>
                 </tr>
-                
+
             </thead>
             <tbody id="corpoTabelaGrid">
                 @foreach (var item in Model.Grid)
@@ -49,24 +50,25 @@
                     //var tp_pessoa = item.Id_grltopessoa.ToUpper() == "F" ? "Física" : "Juridica";
                     //var nome = item.nome.Length >0 ? item.nome : item.razao_social;
 
-                    <tr class="@item.Id_grlbasico">
-                        <td>@item.Id_grltopessoa</td>
-                        <td>@item.nome</td>
-                        <td>@item.razao_social</td>
-                        <td>@item.contato</td>
-                        <td>@item.ddd_telefone</td>
-                        
-                        <td class="text-center col-sm-1">
-                            <a href="@Url.Action("Edit", new RouteValueDictionary
+                <tr class="@item.Id_grlbasico">
+                    <td>@item.Id_grltopessoa</td>
+                    <td>@item.nome</td>
+                    <td>@item.razao_social</td>
+                    <td>@item.contato</td>
+                    <td>@item.ddd_telefone</td>
+                    <td>@item.status</td>
+
+                    <td class="text-center col-sm-1">
+                        <a href="@Url.Action("Edit", new RouteValueDictionary
                                      {
                                          {"codigo", item.Id_grlbasico}
                                      })" />
-                            <span class="glyphicon glyphicon-pencil" />
-                        </td>
-                        <td class="text-center col-sm-1">
-                            <a href="#" class="glyphicon glyphicon-trash btnGridExcluir" data-toggle="modal" data-target="#modalExclusao" data-id="@item.Id_grlbasico"></a>
-                        </td>
-                    </tr>
+                        <span class="glyphicon glyphicon-pencil" />
+                    </td>
+                    <td class="text-center col-sm-1">
+                        <a href="#" class="glyphicon glyphicon-trash btnGridExcluir" data-toggle="modal" data-target="#modalExclusao" data-id="@item.Id_grlbasico"></a>
+                    </td>
+                </tr>
                 }
             </tbody>
         </table>
@@ -103,7 +105,7 @@
             $('#tabelaGrid').DataTable();
         });
 
-            
+
         $(".btnGridExcluir").click(function (e) {
             e.preventDefault();
             var id = $(this).data('id');
@@ -116,19 +118,38 @@
                         "codigo": id
                     },
                     success: function (data) {
-                        if (data == true) {
-                            linha.remove();
+                       
+                        if (data.Sucesso == true)
+                        {
+                            //linha.remove();
                             $('#modalExclusao').modal('hide');
-                            if ($("#corpoTabelaGrid").children("tr").length > 0) {
+                            location.reload();
+                           /* if ($("#corpoTabelaGrid").children("tr").length > 0) {
                                 return true;
                             }
                             else {
                                 $("#grid").remove();
                                 return true;
-                            }
-                        } else {
-                            alert("Ocorreu um erro ao tentar excluir o registro.");
-                            $("#btnModalExclusaoCancelar").click();
+                            }*/
+                        }
+                        else {
+
+                            $('#modalExclusao').modal('hide');
+
+                            $("#divErros").empty();
+
+                            var i = 0;
+                            $(data.msg).each(function () {
+
+
+                                $("#divErros").append("<p style=color:red>" + "* " + data.msg[i] + "</p>");
+
+                                i = i + 1;
+
+                                //crie uma divErros em sua modal.
+                            });
+
+
                         }
                     },
                     error: function (xhr, status, error) {

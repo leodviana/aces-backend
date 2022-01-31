@@ -1,0 +1,273 @@
+﻿@model GtecIt.ViewModels.OrcamentoIndexViewModel
+@using GtecIt.ViewModels
+<h1></h1>
+@{
+    /**/
+
+    ViewBag.Title = "Liberação de horários";
+}
+<h1></h1>
+
+@using (Html.BeginForm("Liberacao", "Orcamento", FormMethod.Post, new { @class = "form-inline", @role = "form" }))
+{
+
+    <fieldset>
+
+        <legend>@ViewBag.Title</legend>
+        @if (TempData["Mensagens"] != null)
+        {
+            var messagemViewModel = (MensagemAuxiliarViewModel)TempData["Mensagens"];
+
+            <div class="alert alert-dismissible alert-@messagemViewModel.Tipo">
+                <button type="button" class="close" data-dismiss="alert">×</button>
+                <strong>@Html.Raw(string.Join("<br/>", messagemViewModel.Mensagens))</strong>
+            </div>
+        }
+    <div class="row">
+
+
+        <div class="col-sm-2">
+            <label>Início</label>
+            @Html.TextBoxFor(x => x.Dt_inicio, "{0:dd/MM/yyyy}", new { @class = "form-control datesimple", @required = "required" })
+        </div>
+        <div class="col-sm-2">
+            <label>Fim</label>
+
+            @Html.TextBoxFor(x => x.Dt_fim, "{0:dd/MM/yyyy}", new { @class = "form-control datesimple", @required = "required" })
+        </div>
+
+
+        <div class="form-inline">
+            <button type="submit" class="btn btn-primary" name="tipoacao" value="semfiltro" style="margin-top: 24px;">
+                <span class="glyphicon glyphicon-search"></span> Pesquisar
+            </button>
+            
+        </div>
+    </div>
+
+    </fieldset>
+}
+@if (Model != null && Model.Grid.Any())
+{
+    <div id="grid ">
+        <hr />
+        <table id="tabelaGrid" class="table table-bordered table-striped table-hover table-responsive dt-responsive">
+            <thead>
+                <tr>
+                    <th class="col-sm-1 col-xs-1 text-right">Contr. No.</th>
+                    <th class="col-sm-2 col-xs-2 text-center">Emissão</th>
+                    <th class="col-sm-4 col-xs-4">Aluno</th>
+                    <th class="col-sm-4 col-xs-4">Professor</th>
+                    <th class="col-sm-4 col-xs-4">Renovação</th>
+                    <th class="text-center"></th>
+
+                    <th class="text-center"></th>
+
+                </tr>
+
+            </thead>
+            <tbody id="corpoTabelaGrid">
+                @foreach (var item in Model.Grid)
+                {
+
+                    var data = item.Dt_orcamento.HasValue ? item.Dt_orcamento.ToString().Substring(0, 10) : "-";
+                    var data_renova = item.dt_renovacao.HasValue ? item.dt_renovacao.ToString().Substring(0, 10) : "-";
+
+                <tr class="@item.id_Stqcporcamento">
+
+                    <td class="text-right">@item.id_Stqcporcamento</td>
+                    <td class="text-center">@data</td>
+                    <td>@item.nome_aluno</td>
+                    <td>@item.nome_professor</td>
+
+                    <td>@data_renova</td>
+                    <td class="text-center col-sm-1">
+                        <a href="#" class="glyphicon glyphicon-list-alt btnGridExcluir" data-toggle="modal" data-target="#modalExclusao" data-id="@item.id_Stqcporcamento" data-dentista="@item.Id_grldentista"></a>
+                    </td>
+                    
+                    <td class="text-center col-sm-1">
+                       
+                        <a href="#" span class="glyphicon glyphicon glyphicon-calendar btnNovohorario" data-id="@item.id_Stqcporcamento" data-convenio="@item.id_grlconvenio" ></a>
+                    </td>
+                    
+
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+<div id="modalExclusao" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Exclusão de registro</h4>
+            </div>
+            <div class="modal-body">
+                <p class="text-center">Deseja Liberar o(s) horarios selecionado(s)? </p>
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="btn btn-primary " id="btnModalExclusaoConfirmar">
+                    <span class="glyphicon glyphicon-ok"></span> Confirma
+                </a>
+                &nbsp;&nbsp;
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="btnModalExclusaoCancelar">
+                    <span class="glyphicon glyphicon-remove"></span> Cancelar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+@section scripts{
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $('#tabelaGrid').DataTable();
+        });
+
+        $('.btnNovohorario').click(function (e) {
+
+            e.preventDefault();
+
+            var codigo = $(this).data('id');
+            var codigo2 = $(this).data('convenio');
+
+            var url = '@Url.Action("visualizar", "Aula")' + '?codigo=' + codigo + '&codigo2=' + codigo2;
+
+            var modal, modalDialog, modalContent;
+            modal = $('<div id="modalInclusao" class="modal fade" "/>');
+            modalDialog = $('<div class="modal-dialog modal-lg" />');
+            modalContent = $('<div class="modal-content" />');
+
+            modal.modal('hide')
+                .append(modalDialog)
+                .on('hidden.bs.modal', function () {
+                    $(this).remove();
+                })
+                .appendTo('body');
+
+
+            modalDialog.append(modalContent);
+
+            $.get(url, function (data) {
+                modalContent.html(data);
+                modal.on('show.bs.modal', function () { $(this).find('input:first').focus(); });
+                modal.modal('show');
+            });
+
+        });
+        $(".btnRenovacao").click(function (e) {
+
+            e.preventDefault();
+
+            var url = '@Url.Action("Libera", "Orcamento")' + '?codigo=' + $(this).data('id');
+
+            var modal, modalDialog, modalContent;
+            modal = $('<div id="modalEdicao" class="modal fade" "/>');
+            modalDialog = $('<div class="modal-dialog modal-lg" />');
+            modalContent = $('<div class="modal-content" />');
+
+            modal.modal('hide')
+                .append(modalDialog)
+                .on('hidden.bs.modal', function () { $(this).remove(); })
+                .appendTo('body');
+
+            modalDialog.append(modalContent);
+
+             $.get(url, function (data) {
+
+                modalContent.html(data);
+                modal.modal('show');
+            });
+
+        });
+
+
+        $(".btnGridExcluir").click(function (e) {
+            e.preventDefault();
+            var id = $(this).data('id');
+            var linha = $("." + id);
+            var id2 = $(this).data('dentista');
+
+            $("#btnModalExclusaoConfirmar").off("click").click(function (e) {
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("Libera", "Orcamento")',
+                    data: {
+                        "codigo": id,
+                        "codigo2": id2
+                    },
+                    success: function (data) {
+                        if (data == true) {
+                            alert("Horario do contrato" + id + " foi liberado!");
+                            linha.remove();
+                            location.reload();
+                            $('#modalExclusao').modal('hide');
+                            if ($("#corpoTabelaGrid").children("tr").length > 0) {
+                                return true;
+                            }
+                            else {
+                                $("#grid").remove();
+                                return true;
+                            }
+
+                        } else {
+                            alert("Ocorreu um erro ao tentar excluir o registro.");
+                            $("#btnModalExclusaoCancelar").click();
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        alert(error);
+                    }
+                });
+            });
+        });
+   
+         $(".btnLiberaTodos").click(function (e) {
+            e.preventDefault();
+            var id = $(this).data('id');
+            var linha = $("." + id);
+            var id2 = $(this).data('dentista');
+
+            $("#btnModalExclusaoConfirmar").off("click").click(function (e) {
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("Libera", "Orcamento")',
+                    data: {
+                        "codigo": id,
+                        "codigo2": id2
+                    },
+                    success: function (data) {
+                        if (data == true) {
+                            alert("Horario do contrato" + id + " foi liberado!");
+                            linha.remove();
+                            location.reload();
+                            $('#modalExclusao').modal('hide');
+                            if ($("#corpoTabelaGrid").children("tr").length > 0) {
+                                return true;
+                            }
+                            else {
+                                $("#grid").remove();
+                                return true;
+                            }
+
+                        } else {
+                            alert("Ocorreu um erro ao tentar excluir o registro.");
+                            $("#btnModalExclusaoCancelar").click();
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        alert(error);
+                    }
+                });
+            });
+        });
+    </script>
+}

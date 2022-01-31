@@ -96,7 +96,7 @@ namespace GtecIt.Controllers
 
             var qdt_produtos = _uoW.OrcamentoItens.ObterTodos().Where(x=>x.id_stqporcamento== model.id_stqporcamento).ToList();
 
-            if (qdt_produtos.Count>0)
+            /*if (qdt_produtos.Count>0)
             {
                 var mensagem = new List<String>();
 
@@ -109,7 +109,7 @@ namespace GtecIt.Controllers
                 };
 
                 return Json(resposta);
-            }
+            }*/
             model.status = "0";
             _uoW.OrcamentoItens.Salvar(Mapper.Map<OrcamentoItem>(model));
             //atualizar a renovacao 

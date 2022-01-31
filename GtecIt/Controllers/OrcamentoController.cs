@@ -29,28 +29,29 @@ namespace GtecIt.Controllers
         public OrcamentoController(IUnitOfWork uoW)
         {
             _uoW = uoW;
-           /* var orcamentos = _uoW.Orcamentos.ObterTodos().Where(x => x.status.Equals("0")).ToList();
-            foreach (var item in orcamentos)
-            {
-                if(string.IsNullOrEmpty(item.grlcliente.grlbasic.email))
-                {
 
-                }
-                else
-                {
-                    Usuario novo = new Usuario();
-                    novo.Administrador = "N";
-                    novo.Ativo = "S";
-                    novo.Id_grlbasico = item.grlcliente.grlbasic.Id_grlbasico;
-                    novo.Login = item.grlcliente.grlbasic.email;
-                    novo.senha_sem = "123";
-                    var hash = GetMd5Hash(MD5.Create(), "123");
-                    novo.Senha = hash;
-                    novo.Tipo_usuario = 1;
-                    uoW.Usuarios.Salvar(novo);
-                    _uoW.Complete();
-                }
-            }*/
+            /* var orcamentos = _uoW.Orcamentos.ObterTodos().Where(x => x.status.Equals("0")).ToList();
+             foreach (var item in orcamentos)
+             {
+                 if(string.IsNullOrEmpty(item.grlcliente.grlbasic.email))
+                 {
+
+                 }
+                 else
+                 {
+                     Usuario novo = new Usuario();
+                     novo.Administrador = "N";
+                     novo.Ativo = "S";
+                     novo.Id_grlbasico = item.grlcliente.grlbasic.Id_grlbasico;
+                     novo.Login = item.grlcliente.grlbasic.email;
+                     novo.senha_sem = "123";
+                     var hash = GetMd5Hash(MD5.Create(), "123");
+                     novo.Senha = hash;
+                     novo.Tipo_usuario = 1;
+                     uoW.Usuarios.Salvar(novo);
+                     _uoW.Complete();
+                 }
+             }*/
         }
        /* static string GetMd5Hash(MD5 md5Hash, string input)
         {
@@ -125,10 +126,66 @@ namespace GtecIt.Controllers
             return View(model);
         }
 
+        public ActionResult Liberacao(OrcamentoIndexViewModel model, string tipoacao)
+        {
+            if (tipoacao != null)
+                model.ConsultaTodos = true;
+            else
+            {
+                model.Dt_inicio = DateTime.Now;
+                model.Dt_fim = DateTime.Now;
+            }
+            if (VerificarFiltroVazio2(model))
+            {
+                if (!model.ConsultaTodos)
+                    return View(model);
+                try
+                {
+                    //var teste  = _uoW.Orcamentos.ObterTodosPorId();
+                    /*  model.Grid =
+                          Mapper.Map<List<OrcamentoGridViewModel>>(
+                              _uoW.Orcamentos.ObterTodos()
+                                  .Where(x => x.status.Equals("0") && x.id_Grltpatendimento == 3 && x.dt_renovacao >= model.Dt_inicio && x.dt_renovacao <= model.Dt_fim)
+                                  .ToList()
+                                  .OrderBy(x => x.id_Stqcporcamento));*/
+                    //var teste  = _uoW.Orcamentos.ObterTodosPorId(model.Dt_inicio, model.Dt_fim).ToList();
+
+                    model.Grid = Mapper.Map<List<OrcamentoGridViewModel>>(_uoW.Orcamentos.Obterrenovacao(model.Dt_inicio, model.Dt_fim).ToList());
+                    model.ConsultaTodos = true;
+                }
+                catch (Exception e)
+                {
+
+                }
+
+
+                return View(model);
+            }
+
+            /* model.ConsultaTodos = false;
+             try
+             {
+                 model.Grid =
+                     Mapper.Map<List<OrcamentoGridViewModel>>(
+                        _uoW.Orcamentos.ObterTodos()
+                             .Where(x => x.id_Stqcporcamento.Equals(model.id_Stqcporcamento) && (x.status.Equals("0") && (x.id_Grltpatendimento == 3)))
+                             .ToList()
+                             .OrderBy(x => x.id_Stqcporcamento));
+             }
+             catch (Exception e)
+             {
+
+             }*/
+
+            return View(model);
+        }
+
         public ActionResult Index(OrcamentoIndexViewModel model, string tipoacao)
         {
             if (tipoacao != null)
                 model.ConsultaTodos = true;
+            
+            
 
             if (VerificarFiltroVazio(model))
             {
@@ -506,6 +563,7 @@ namespace GtecIt.Controllers
             var horario = _uoW.horarioprofessor.ObterTodos().Where(x => x.id_Stqcporcamento == codigo).ToList();
             foreach (var item in horario)
             {
+                item.status = "1";
                 item.id_Stqcporcamento = null;
                 _uoW.horarioprofessor.Atualizar(item);
              
@@ -514,6 +572,7 @@ namespace GtecIt.Controllers
             horario = _uoW.horarioprofessor.ObterTodos().Where(x => x.id_Stqcporcamento_dupla == codigo).ToList();
             foreach (var item in horario)
             {
+                item.status = "1";
                 item.id_Stqcporcamento_dupla = null;
                 _uoW.horarioprofessor.Atualizar(item);
 
@@ -522,7 +581,8 @@ namespace GtecIt.Controllers
            var aulas = _uoW.Aulas.ObterTodos().Where(x => x.id_Stqcporcamento == codigo).ToList();
             foreach (var item in aulas)
             {
-                _uoW.Aulas.RemoverPorId(item.idGercdaulas);
+                if(item.inicio>DateTime.Now)
+                  _uoW.Aulas.RemoverPorId(item.idGercdaulas);
             }
            
             _uoW.Complete();
@@ -578,6 +638,109 @@ namespace GtecIt.Controllers
 
             return Json(true);
         }
+
+
+
+        public ActionResult Liberatodos(string inicio , string fim )
+        {
+
+            try
+            {
+                var liberacao = _uoW.Orcamentos.Obterrenovacao(Convert.ToDateTime(inicio), Convert.ToDateTime(fim)).ToList();
+
+                //var model = _uoW.Orcamentos.ObterPorId(codigo);
+                /*  ModelState.Clear();
+                  if (!TryValidateModel(model))
+                  {
+                      var validationErrors = string.Join(",",
+                          ModelState.Values.Where(E => E.Errors.Count > 0)
+                          .SelectMany(E => E.Errors)
+                          .Select(E => E.ErrorMessage)
+                          .ToArray());
+
+                      return View(model);
+                  }
+                */
+                foreach (var libera in liberacao)
+                {
+
+
+                    //apaga os horarios
+                    var horario = _uoW.horarioprofessor.ObterTodos().Where(x => x.id_Stqcporcamento == libera.id_Stqcporcamento).ToList();
+                    foreach (var item in horario)
+                    {
+                        item.id_Stqcporcamento = null;
+                        item.id_Stqcporcamento_dupla = null;
+                        _uoW.horarioprofessor.Atualizar(item);
+
+                    }
+                    // apaga horario da dupla 
+                    horario = _uoW.horarioprofessor.ObterTodos().Where(x => x.id_Stqcporcamento_dupla == libera.id_Stqcporcamento).ToList();
+                    foreach (var item in horario)
+                    {
+                        item.id_Stqcporcamento_dupla = null;
+                        _uoW.horarioprofessor.Atualizar(item);
+
+                    }
+                    _uoW.Complete();
+                }
+                  return Json(true);
+            }
+            catch (Exception ex)
+            {
+                  return Json(false);
+            }
+             
+  
+        }
+        public ActionResult Libera(int codigo, int codigo2)
+        {
+            try
+            {
+
+
+               /* var model = _uoW.Orcamentos.ObterPorId(codigo);
+                ModelState.Clear();
+                if (!TryValidateModel(model))
+                {
+                    var validationErrors = string.Join(",",
+                        ModelState.Values.Where(E => E.Errors.Count > 0)
+                        .SelectMany(E => E.Errors)
+                        .Select(E => E.ErrorMessage)
+                        .ToArray());
+
+                    return View(model);
+                }*/
+
+                //apaga os horarios
+                var horario = _uoW.horarioprofessor.ObterTodos().Where(x => x.id_Stqcporcamento == codigo ).ToList();
+                foreach (var item in horario)
+                {
+                    item.id_Stqcporcamento = null;
+                    item.id_Stqcporcamento_dupla = null;
+                    item.status = "1";
+                    _uoW.horarioprofessor.Atualizar(item);
+
+                }
+                // apaga horario da dupla 
+                horario = _uoW.horarioprofessor.ObterTodos().Where(x => x.id_Stqcporcamento_dupla == codigo ).ToList();
+                foreach (var item in horario)
+                {
+                    item.id_Stqcporcamento_dupla = null;
+                    item.status = "1";
+                    _uoW.horarioprofessor.Atualizar(item);
+
+                }
+                _uoW.Complete();
+                return Json(true);
+            }
+            catch(Exception ex)
+            {
+                return Json(false);
+            }
+
+            
+        }
         public bool VerificarFiltroVazio2(OrcamentoIndexViewModel model)
         {
             model = model ?? new OrcamentoIndexViewModel();
@@ -602,7 +765,7 @@ namespace GtecIt.Controllers
             //var model = Mapper.Map<OrcamentoEditViewModel>(_uoW.Orcamentos.ObterPorId(codigo));//.ObterTodos().FirstOrDefault(x => x.id_Stqcporcamento == codigo && x.status.Equals("0")));
             var model = Mapper.Map<AulaCreateViewModel>(_uoW.Aulas.ObterPorId(codigo));
             model.DropdownProduto =
-              _uoW.Dentistas.ObterTodos()
+              _uoW.Dentistas.ObterTodos().Where(x => x.Ativo.Equals("S"))
                   .OrderBy(x => x.Idgrlbasic.nome)
                   .Select(x => new SelectListItem { Text = x.Idgrlbasic.nome, Value = x.id_grldentista.ToString() })
                   .ToList();
@@ -645,7 +808,7 @@ namespace GtecIt.Controllers
             }
             if (model.segunda)
             {
-                var atualizacao_horario = _uoW.Aulas.ObterTodos().Where(x => x.id_Stqcporcamento == model.id_Stqcporcamento && x.dia_semana.Equals(model.dia_semana)).ToList();
+                var atualizacao_horario = _uoW.Aulas.ObterTodos().Where(x=>x.inicio>= horario.inicio &&  x.id_Stqcporcamento == model.id_Stqcporcamento && x.dia_semana.Equals(model.dia_semana)).ToList();
                 foreach (var item in atualizacao_horario)
                 {
                     item.id_grldentista = model.id_grldentista;
@@ -659,98 +822,7 @@ namespace GtecIt.Controllers
                 _uoW.Aulas.Atualizar(horario);
                 _uoW.Complete();
             }
-            // critica para quitar os titulos em aberto
-            /* var em_aberto = false;
-             foreach (var item_titulo in model.Titulos)
-             {
-                 if (item_titulo.status.Equals("0"))
-                 {
-                     if (item_titulo.Valor_pago == 0)
-                     {
-                         em_aberto = true;
-                     }
-                     else if (!item_titulo.Valor_pago.HasValue)
-                     {
-                         em_aberto = true;
-
-                     }
-                 }
-             }
-             if (em_aberto)
-             {
-                 var mensagem = new List<String>();
-
-                 mensagem.Add("Não e possivel realizar a renovação.Contrato com parcelas em aberto!");
-                 var resposta = new
-                 {
-
-                     Sucesso = false,
-                     msg = mensagem
-                 };
-
-                 return Json(resposta);
-             }
-
-             TimeSpan dias = model.dt_renovacao.Value - model.Dt_orcamento.Value;
-             var novo = new Orcamento
-             {
-                 // id_Stqcporcamento = model.id_Stqcporcamento,
-                 id_grlcliente = model.id_grlcliente,
-                 Id_grldentista = model.Id_grldentista,
-                 id_grlconvenio = model.id_grlconvenio,
-                 id_Grltpatendimento = model.id_Grltpatendimento,
-                 Obs = model.Obs,
-                 status = "0",
-                 Dt_orcamento = model2.dt_renovacao,
-                 dt_renovacao = model2.dt_renovacao.Value.AddDays(dias.TotalDays),
-
-             };
-             _uoW.Orcamentos.Salvar(novo);
-
-             model.status = "1";
-             var novo_item = new OrcamentoItem();
-             foreach (var item in model.itemorcamentos)
-             {
-                 if (item.status.Equals("0"))
-                 {
-
-                     novo_item.id_stqporcamento = novo.id_Stqcporcamento;
-                     novo_item.id_stqcdprd = item.id_stqcdprd;
-                     novo_item.qtd = item.qtd;
-                     novo_item.Vl_unitario = item.Vl_unitario;
-                     novo_item.status = "0";
-                     novo_item.desconto = item.desconto;
-                     novo_item.descontoperc = item.descontoperc;
-
-                     item.status = "1";
-
-
-                 }
-             }
-             _uoW.OrcamentoItens.Salvar(novo_item);
-
-             _uoW.Complete();
-             //procura o contrato anterior para modificar o dia agendado com o professor 
-             var horario = _uoW.horarioprofessor.ObterTodos().Where(x => x.id_Stqcporcamento == model2.id_Stqcporcamento).ToList();
-             foreach (var item in horario)
-             {
-                 item.id_Stqcporcamento = novo.id_Stqcporcamento;
-                 _uoW.horarioprofessor.Atualizar(item);
-
-             }
-
-
-
-             var horario_dupa = _uoW.horarioprofessor.ObterTodos().Where(x => x.id_Stqcporcamento_dupla == model2.id_Stqcporcamento).ToList();
-             foreach (var item in horario_dupa)
-             {
-                 item.id_Stqcporcamento_dupla = novo.id_Stqcporcamento;
-                 _uoW.horarioprofessor.Atualizar(item);
-
-             }
-            ;*/
-
-            //
+            
             var response = new
             {
 
@@ -762,6 +834,8 @@ namespace GtecIt.Controllers
             // return RedirectToAction("Index");
             //  return RedirectToAction("Edit", new { codigo = _uoW.Orcamentos.ObterTodos().FirstOrDefault(x => x.id_Stqcporcamento == novo.id_Stqcporcamento && x.status.Equals("0")).id_Stqcporcamento });
         }
+
+
         public ActionResult Renova(int codigo)
         {
 
@@ -1104,6 +1178,20 @@ namespace GtecIt.Controllers
             }
             try
             {
+                if (string.IsNullOrEmpty(model.grlcliente.grlbasic.email) )
+                {
+                    var mensagem = new List<String>();
+
+                    mensagem.Add("Contrato sem email cadastrado");
+                    var resposta = new
+                    {
+
+                        Sucesso = false,
+                        msg = mensagem
+                    };
+
+                    return Json(resposta);
+                }
 
                 var user = _uoW.Usuarios.ObterTodos().Where(x => x.Id_grlbasico == model.grlcliente.grlbasic.Id_grlbasico).FirstOrDefault();
                 if(user==null)
@@ -1119,31 +1207,40 @@ namespace GtecIt.Controllers
                     novo.Tipo_usuario = 1;
                     _uoW.Usuarios.Salvar(novo);
                     _uoW.Complete();
-
-                }
-                else
-                {
-                   /* var mensagem = new List<String>();
-
-                    mensagem.Add("Contrato já incluido no App");
-                    var resposta = new
+                    var response = new
                     {
 
                         Sucesso = true,
-                        msg = mensagem
+                        msg = ""
                     };
-                   */
-                    return Json(true);
+                    return Json(response);
                 }
+                else
+                {
+                    var response = new
+                    {
+
+                        Sucesso = true,
+                        msg = ""
+                    };
+                    return Json(response);
+                }
+                
             }
             catch (Exception ex)
             {
 
-                throw;
+                var response = new
+                {
+
+                    Sucesso = false,
+                    msg = ex.Message.ToString()
+                };
+                return Json(response);
             }
 
 
-            return Json(true);
+            
         }
 
         public ActionResult incluirtodos()

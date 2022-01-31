@@ -335,12 +335,13 @@
                                 <div class=" panel-heading">
                                     @if (Model.aulas != null && Model.aulas.Any())
                                     {
+                                        
                                         if (Model.itemorcamentos != null && Model.itemorcamentos.Any())
                                         {
                                             <a href="#" id="btnNovohorario" class="btn btn-primary" data-id="@Model.id_Stqcporcamento" data-convenio="@Model.id_grlconvenio">
                                                 Aulas <span class="glyphicon glyphicon-plus" disabled='disabled'></span>
                                             </a>
-                                           
+
                                             <a href="#" class="glyphicon glyphicon-trash btnGridExcluiraulas" data-toggle="modal" data-target="#modalExclusao2" data-id="@Model.id_Stqcporcamento" data-convenio="@Model.id_grlconvenio"></a>
                                         }
                                         else
@@ -383,10 +384,11 @@
                                 <div class="panel-body ">
 
                                     <div class="row">
-
+                                        
                                         @if (Model != null && Model.horarios != null && Model.horarios.Any())
                                         {
-
+                                            int aula_dada = 0;
+                                            int aula_nao_dada = 0;
 
                                             <div id="grid ">
 
@@ -404,9 +406,19 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody id="corpoTabelaGridOrcamentos">
+                                                       
                                                         @foreach (var item in Model.horarios)
                                                         {
+                                                            
 
+                                                            if (DateTime.Now >= Convert.ToDateTime(item.inicio))
+                                                            {
+                                                                aula_dada = aula_dada + 1;
+                                                            }
+                                                            else
+                                                            {
+                                                                aula_nao_dada = aula_nao_dada + 1;
+                                                            }
                                                             <tr class="@item.idGercdaulas">
 
                                                                 <td>@item.inicio.Substring(0, 10)</td>
@@ -415,7 +427,7 @@
                                                                 <td>@item.status</td>
 
                                                                 <td class="text-center col-sm-1">
-                                                                    <a href="#" span class="glyphicon glyphicon-pencil btnGridEditarhorarios" data-id="@item.idGercdaulas"  title="Edição de Horários"></a>
+                                                                    <a href="#" span class="glyphicon glyphicon-pencil btnGridEditarhorarios" data-id="@item.idGercdaulas" title="Edição de Horários"></a>
                                                                 </td>
                                                                 <td class="text-center col-sm-1">
                                                                     <span class="glyphicon glyphicon-trash" title="Exclusão de Procedimentos"></span>
@@ -429,6 +441,9 @@
                                             </div>
                                             <div class="panel-footer clearfix">
                                                 <div class="pull-right">
+
+
+                                                    <a href="#" class="btn btn-default" name="aulas" id="aulas">Qtde de Aulas: @aula_dada de @Model.horarios.Count</a>
 
 
                                                 </div>
@@ -456,14 +471,20 @@
                         <a id="btnVoltar" href="@Url.Action("Index")" class=" btn btn-primary">
                             <span class="glyphicon glyphicon-arrow-left"></span> Voltar
                         </a>
-                       
+
                     </div>
                     <div class="form-group col-sm-1">
-                        
+
                         <a href="#" class="btn btn-primary btnLiberar" data-id="@Model.id_Stqcporcamento" data-toggle="modal" data-target="#modalInclusao">
                             App <span class="glyphicon glyphicon-plus"></span>
                         </a>
 
+                    </div>
+                    <div class="form-group col-sm-1">
+
+                        <a href="#" class=" btn btn-primary btnGridExcluirhorario" data-toggle="modal" data-target="#modalExclusao3" data-id="@Model.id_Stqcporcamento" data-dentista="@Model.Id_grldentista">
+                            Liberar horário <span class="glyphicon glyphicon-calendar">  </span>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -604,6 +625,29 @@
             </div>
             <div class="modal-footer">
                 <a href="#" class="btn btn-primary " id="btnModalExclusaoConfirmar2">
+                    <span class="glyphicon glyphicon-ok"></span> Confirma
+                </a>
+                &nbsp;&nbsp;
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="btnModalExclusaoCancelar">
+                    <span class="glyphicon glyphicon-remove"></span> Cancelar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="modalExclusao3" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Exclusão de registro</h4>
+            </div>
+            <div class="modal-body">
+                <p class="text-center">Deseja Liberar esse(s) horario(s)? </p>
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="btn btn-primary " id="btnModalExclusaoConfirmar3">
                     <span class="glyphicon glyphicon-ok"></span> Confirma
                 </a>
                 &nbsp;&nbsp;
@@ -847,7 +891,7 @@
             }
         });
 
-           $(".btnGridExcluiraulas").click(function (e) {
+        $(".btnGridExcluiraulas").click(function (e) {
 
                 e.preventDefault();
                var id = $(this).data('id');
@@ -1039,7 +1083,7 @@
         });
 
 
-          $('#btnAlteraHorario').click(function (e) {
+        $('#btnAlteraHorario').click(function (e) {
 
 
             e.preventDefault();
@@ -1163,13 +1207,18 @@
                         "codigo": id
                     },
                     success: function (data) {
-                        if (data == true) {
+                        if (data.Sucesso == true)
+                        {
+
 
                             $('#modalInclusao').modal('hide');
                             alert("Contrato liberado para utilização no aplicativo!.");
                             location.reload();
-                        } else {
-                            alert("Ocorreu um erro ao tentar excluir o registro.");
+                        }
+                        else {
+
+                            $('#modalInclusao').modal('hide');
+                            alert(data.msg);
                             $("#btnModalInclusaoCancelar").click();
                         }
                     },
@@ -1294,7 +1343,46 @@
                 return false;
             }
         }
+        $(".btnGridExcluirhorario").click(function (e) {
+            e.preventDefault();
+            var id = $(this).data('id');
+            var linha = $("." + id);
+            var id2 = $(this).data('dentista');
 
+            $("#btnModalExclusaoConfirmar3").off("click").click(function (e) {
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("Libera", "Orcamento")',
+                    data: {
+                        "codigo": id,
+                        "codigo2": id2
+                    },
+                    success: function (data) {
+
+                        if (data == true) {
+                            alert("Horario do contrato" + id + " foi liberado!");
+                            linha.remove();
+                            location.reload();
+                            $('#modalExclusao').modal('hide');
+                            if ($("#corpoTabelaGrid").children("tr").length > 0) {
+                                return true;
+                            }
+                            else {
+                                $("#grid").remove();
+                                return true;
+                            }
+
+                        } else {
+                            alert("Ocorreu um erro ao tentar excluir o registro.");
+                            $("#btnModalExclusaoCancelar").click();
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        alert(error);
+                    }
+                });
+            });
+        });
 
     </script>
     @Scripts.Render("~/Scripts/gtec/modal.Cliente.js")

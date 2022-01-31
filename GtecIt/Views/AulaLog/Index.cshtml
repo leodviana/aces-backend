@@ -1,0 +1,137 @@
+﻿@model GtecIt.ViewModels.AulaLogIndexViewModel
+<style>
+    .vcenter {
+        display: inline-block;
+        vertical-align: middle;
+        float: none;
+    }
+</style>
+<h1></h1>
+@{
+    ViewBag.Title = "Modificações";
+}
+
+
+@using (Html.BeginForm("Index", "AulaLog", FormMethod.Get, new { @class = "form-inline", @role = "form" }))
+{
+
+    <legend>@ViewBag.Title</legend>
+    <div class="form-group">
+        
+        <div class="col-sm-4">
+            <label for="cidade" class="control-label">Contrato</label>
+            @Html.TextBoxFor(x => x.id_Stqcporcamento_inicio, new { @class = "form-control", @placeholder = "Contrato", @autofocus = "autofocus" })
+        </div>
+
+        <div class="col-sm-3" style="margin-left:-40px">
+            <label for="Inicio" class="control-label">Início</label>
+            @Html.TextBoxFor(x => x.inicio, "{0:dd/MM/yyyy}", new { @class = "form-control datesimple", @required = "required" })
+        </div>
+        <div class="col-sm-3" style="margin-left:-20px">
+            <label for="Fim" class="control-label">Fim</label>
+            @Html.TextBoxFor(x => x.Fim, "{0:dd/MM/yyyy}", new { @class = "form-control datesimple", @required = "required" })
+        </div>
+
+        <div class="form-inline">
+            <button name="tipoacao" type="submit" value="consultatodos" class="btn btn-primary" style="margin-top: 20px;">
+                <i class="glyphicon glyphicon-search"></i> Filtro
+            </button>
+
+        </div>
+
+    </div>
+
+
+
+
+}
+@if (Model != null && Model.Grid.Any())
+{
+    <div id="grid ">
+        <hr />
+        <table id="tabelaGrid" class="table table-bordered table-striped table-hover table-responsive dt-responsive">
+            <thead>
+                <tr>
+                    <th class="col-sm-1 col-xs-1 text-right">Modif. No.</th>
+                    <th class="col-sm-3 col-xs-4 text-left">Contrato Inicial</th>
+                    <th class="col-sm-3 col-xs-4 text-left">Prof. Inicial</th>
+                    <th class="col-sm-3 col-xs-3 text-center">Horario Inicial</th>
+                    <th class="col-sm-3 col-xs-4 text-left">Contrato Final</th>
+                    <th class="col-sm-3 col-xs-4 text-left">Prof. Final</th>
+                    <th class="col-sm-3 col-xs-3">Horario Final</th>
+
+                </tr>
+
+            </thead>
+            <tbody id="corpoTabelaGrid">
+                @foreach (var item in Model.Grid)
+                {
+
+
+                    var horario_inicio = item.inicio.ToString().Substring(0, 10) + "-" + item.inicio.ToString().Substring(11, 5) + " - " + item.Fim.ToString().Substring(11,5) ;
+                    var horario_final = item.horario_inicio_final.ToString().Substring(0, 10) + "-" + item.horario_inicio_final.ToString().Substring(11, 5) + " - " + item.hora_final_final.ToString().Substring(11, 5);
+
+                <tr class="@item.idGercdAulasLog">
+
+                    <td class="text-right">@item.idGercdAulasLog</td>
+                    <td class="text-center">@item.Subject_inicial</td>
+                    <td class="text-center">@item.nome_dentista_inicial</td>
+                    <td>@horario_inicio</td>
+                    <td>@item.Subject_final</td>
+                    <td class="text-center">@item.nome_dentista_final</td>
+                    <td>@horario_final</td>
+
+
+
+
+
+
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+<div id="modalExclusao" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Exclusão de registro</h4>
+            </div>
+            <div class="modal-body">
+                <p class="text-center">Deseja realmente excluir este registro? </p>
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="btn btn-primary " id="btnModalExclusaoConfirmar">
+                    <span class="glyphicon glyphicon-ok"></span> Confirma
+                </a>
+                &nbsp;&nbsp;
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="btnModalExclusaoCancelar">
+                    <span class="glyphicon glyphicon-remove"></span> Cancelar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+@section scripts{
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $('#tabelaGrid').DataTable();
+        });
+
+
+
+
+
+
+
+    </script>
+}

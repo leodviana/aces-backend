@@ -53,7 +53,7 @@ namespace GtecIt.Controllers
             model.Grid = Mapper.Map<List<AulaGridViewModel>>(_uoW.Aulas.ObterTodos().Where(x => x.idGercdaulas.Equals(model.idGercdaulas)).ToList().OrderBy(x => x.idGercdaulas));
 
             //migrar aulas 
-           
+
             return View(model);
 
         }
@@ -72,7 +72,7 @@ namespace GtecIt.Controllers
             {
                 codigo_prd = item.id_stqcdprd;
             }
-            var plano = _uoW.PrecosPlano.ObterTodos().Where(x => x.id_stqcdprd == codigo_prd && x.idGrlplanos==_plano).FirstOrDefault();
+            var plano = _uoW.PrecosPlano.ObterTodos().Where(x => x.id_stqcdprd == codigo_prd && x.idGrlplanos == _plano).FirstOrDefault();
             if (plano != null)
             {
                 model.qtd_aulas = plano.qtd_aulas;
@@ -103,22 +103,89 @@ namespace GtecIt.Controllers
                 novo.id_Stqcporcamento_dupla = item.id_Stqcporcamento_dupla;
                 novo.idgercdhorarioProf = item.idgercdhorarioProf;
                 novo.id_grldentista = Convert.ToInt16(item.id_grldentista);
+                novo.nome_dentista = item.dentistas.Idgrlbasic.nome;
                 novo.Dia = item.Dia;
                 novo.horario = item.horario;
                 model.horarios.Add(novo);
             }
-           /* var aulas = _uoW.Aulas.ObterTodos().Where(x=>x.id_Stqcporcamento== model.id_Stqcporcamento).ToList();
-            foreach (var item in aulas)
+            /* var aulas = _uoW.Aulas.ObterTodos().Where(x=>x.id_Stqcporcamento== model.id_Stqcporcamento).ToList();
+             foreach (var item in aulas)
+             {
+                 var aula_nova = new Events();
+                 aula_nova.EventID = item.idGercdaulas;
+                 aula_nova.Subject = "Contrato" + item.id_Stqcporcamento;
+
+                 aula_nova.Start = item.inicio.Value;
+                 aula_nova.End = item.final.Value;
+                 _uoW.Events.Salvar(aula_nova);
+             }
+             _uoW.Complete();*/
+            return View(model);
+        }
+
+
+        public ActionResult visualizar(string codigo, string codigo2)
+        {
+            var model = new AulaCreateViewModel();
+            var orcamento = _uoW.Orcamentos.ObterPorId(Convert.ToInt32(codigo));
+
+            model.Inicio_contrato = Convert.ToDateTime(orcamento.Dt_orcamento);
+            model.id_Stqcporcamento = orcamento.id_Stqcporcamento;
+            model.nome_cliente = orcamento.grlcliente.grlbasic.nome;
+            int? codigo_prd = 0;
+            int _plano = Convert.ToInt32(codigo2);
+            foreach (var item in orcamento.itemorcamentos)
             {
-                var aula_nova = new Events();
-                aula_nova.EventID = item.idGercdaulas;
-                aula_nova.Subject = "Contrato" + item.id_Stqcporcamento;
-                
-                aula_nova.Start = item.inicio.Value;
-                aula_nova.End = item.final.Value;
-                _uoW.Events.Salvar(aula_nova);
+                codigo_prd = item.id_stqcdprd;
             }
-            _uoW.Complete();*/
+            var plano = _uoW.PrecosPlano.ObterTodos().Where(x => x.id_stqcdprd == codigo_prd && x.idGrlplanos == _plano).FirstOrDefault();
+            if (plano != null)
+            {
+                model.qtd_aulas = plano.qtd_aulas;
+
+                model.Vencimento_contrato = model.Inicio_contrato.AddDays(plano.qtd_dias_plano);
+            }
+
+            model.inicio = DateTime.Now.ToShortTimeString();
+            model.fim = DateTime.Now.ToShortTimeString();
+
+            model.DropdownProduto = _uoW.Dentistas.ObterTodos()
+               .Where(x => x.id_grldentista == orcamento.Id_grldentista)
+               .OrderBy(x => x.Idgrlbasic.nome)
+               .Select(x => new SelectListItem { Text = x.Idgrlbasic.nome, Value = x.id_grldentista.ToString() })
+               .ToList();
+
+
+            model.nome_dentista = _uoW.Dentistas.ObterTodos()
+               .Where(x => x.id_grldentista == orcamento.Id_grldentista)
+               .OrderBy(x => x.Idgrlbasic.nome).FirstOrDefault().Idgrlbasic.nome;
+
+            model.id_grldentista = Convert.ToInt16(orcamento.Id_grldentista);
+            var lista_horarios = _uoW.horarioprofessor.ObterTodos().Where(x => x.id_Stqcporcamento == model.id_Stqcporcamento).ToList();
+            foreach (var item in lista_horarios)
+            {
+                var novo = new HorarioProfessorEditViewModel();
+                novo.id_Stqcporcamento = item.id_Stqcporcamento;
+                novo.id_Stqcporcamento_dupla = item.id_Stqcporcamento_dupla;
+                novo.idgercdhorarioProf = item.idgercdhorarioProf;
+                novo.id_grldentista = Convert.ToInt16(item.id_grldentista);
+                novo.nome_dentista = item.dentistas.Idgrlbasic.nome;
+                novo.Dia = item.Dia;
+                novo.horario = item.horario;
+                model.horarios.Add(novo);
+            }
+            /* var aulas = _uoW.Aulas.ObterTodos().Where(x=>x.id_Stqcporcamento== model.id_Stqcporcamento).ToList();
+             foreach (var item in aulas)
+             {
+                 var aula_nova = new Events();
+                 aula_nova.EventID = item.idGercdaulas;
+                 aula_nova.Subject = "Contrato" + item.id_Stqcporcamento;
+
+                 aula_nova.Start = item.inicio.Value;
+                 aula_nova.End = item.final.Value;
+                 _uoW.Events.Salvar(aula_nova);
+             }
+             _uoW.Complete();*/
             return View(model);
         }
 
@@ -146,6 +213,15 @@ namespace GtecIt.Controllers
                 return Json(resposta);
 
             }
+            //fazer a rotina para apgar as aulas que serao dadas 
+            var aulas_naorealizadas = _uoW.Aulas.ObterTodos().Where(x => x.id_Stqcporcamento == model.id_Stqcporcamento).ToList();
+
+            foreach (var item in aulas_naorealizadas)
+            {
+                if (item.inicio >= DateTime.Now)
+                    _uoW.Aulas.RemoverPorId(item.idGercdaulas);
+            }
+
 
             var qtd_aulascontrato = _uoW.Aulas.ObterTodos().Where(x => x.id_Stqcporcamento == model.id_Stqcporcamento && x.status != "2").ToList();
             if (qtd_aulascontrato.Count() >= model.qtd_aulas)
@@ -171,16 +247,28 @@ namespace GtecIt.Controllers
             List<string> nome_dias = new List<string>();
 
 
-            DateTime inicio_contrato = model.Inicio_contrato;
+            DateTime inicio_contrato; 
+                
+                
             DateTime fim_contrato = model.Vencimento_contrato;
-            int i = 1;
+            int i = 0;
             DateTime data_corrente;
-
-            data_corrente = inicio_contrato.AddDays(i);
+            if (qtd_aulascontrato.Count() > 0)
+            {
+                inicio_contrato = DateTime.Now;
+                data_corrente = DateTime.Now.AddDays(i);
+            }
+               
+            else
+            {
+                inicio_contrato= model.Inicio_contrato;
+                data_corrente = inicio_contrato.AddDays(i);
+            }
+             
             int cont_aulas = 1;
             while (data_corrente <= fim_contrato)
             {
-                if (cont_aulas <= model.qtd_aulas)
+                if (cont_aulas <= (model.qtd_aulas-qtd_aulascontrato.Count))
                 {
                     //converter o dia da semana para portugeus 
                     var dia = convertePortugues(data_corrente.DayOfWeek.ToString());
@@ -221,7 +309,7 @@ namespace GtecIt.Controllers
                 // string aula_corrente_fim = dia.Remove(10, 9) + " " + model.fim.Remove(5, 3);
                 var aula_nova = new Aulas();
 
-                aula_nova.Subject = model.nome_cliente + " Contrato "+ model.id_Stqcporcamento;
+                aula_nova.Subject = model.nome_cliente + " Contrato " + model.id_Stqcporcamento;
                 aula_nova.inicio = Convert.ToDateTime(aula_corrente_inicio);
                 aula_nova.final = aula_nova.inicio.Value.AddMinutes(30);
                 aula_nova.id_Stqcporcamento = model.id_Stqcporcamento;
@@ -354,7 +442,7 @@ namespace GtecIt.Controllers
         [HttpPost]
         public JsonResult Delete(int codigo)
         {
-            var model = _uoW.Aulas.ObterTodos().Where(x=>x.id_Stqcporcamento == codigo).ToList();
+            var model = _uoW.Aulas.ObterTodos().Where(x => x.id_Stqcporcamento == codigo).ToList();
 
             if (model == null)
             {
@@ -366,10 +454,11 @@ namespace GtecIt.Controllers
 
                 foreach (var item in model)
                 {
-                    _uoW.Aulas.RemoverPorId(item.idGercdaulas);
+                    if (item.inicio >= DateTime.Now)
+                        _uoW.Aulas.RemoverPorId(item.idGercdaulas);
                 }
-                
-               // _uoW.Complete();
+
+                // _uoW.Complete();
             }
             catch (Exception)
             {
@@ -391,7 +480,7 @@ namespace GtecIt.Controllers
         }
 
 
-        
+
     }
 
 }

@@ -20,6 +20,7 @@ namespace GtecIt.ViewModels
         public int? cd_usuario { get; set; }
         public int qtd_aulas { get; set; }
         public int qtd_dias_plano { get; set; }
+        public decimal? valor2 { get; set; }
         public virtual PlanoEditViewModel planos { get; set; }
         public virtual ProdutoEditViewModel produtos { get; set; }
         public bool ConsultaTodos { get; set; }

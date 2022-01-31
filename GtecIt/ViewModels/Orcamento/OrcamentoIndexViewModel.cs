@@ -16,6 +16,7 @@ namespace GtecIt.ViewModels
 
         public int? id_grlcliente { get; set; }
         public int? Id_grldentista { get; set; }
+        public int? id_grlconvenio { get; set; }
         public string Obs { get; set; }
         public int? cd_usuario { get; set; }
         public string status { get; set; }

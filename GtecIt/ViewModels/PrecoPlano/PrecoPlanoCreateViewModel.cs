@@ -32,6 +32,7 @@ namespace GtecIt.ViewModels
 
         [Required(ErrorMessage = "Informe a quantidade de dias do plano!")]
         public int qtd_dias_plano { get; set; }
+        public decimal? valor2 { get; set; }
         public List<SelectListItem> DropdownConvenio { get; set; }
     }
 }

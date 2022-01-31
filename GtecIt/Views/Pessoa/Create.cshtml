@@ -16,177 +16,180 @@
 
     @Html.HiddenFor(x => x.origem)
     @Html.HiddenFor(x => x.orcamentoid)
-    <fieldset>
-        <legend>@ViewBag.Title</legend>
-        @if (!string.IsNullOrEmpty(ViewBag.Error))
-        {
-            <div class="danger">
-                @ViewBag.Error.ToString()
-            </div>
-        }
-        <div id="panelgerais" class="panel panel-default ">
-            <div class="panel-heading">
-                Dados Gerais
-            </div>
-            <div class="panel-body">
-                <div class="row">
-                    <div class="col-sm-2">
-                        <label>Tp. pessoa*</label>
-                        <select id="Id_grltopessoa" name="Id_grltopessoa" class="form-control">
-                            <option selected value="F">Física</option>
-                            <option value="J">Jurídica</option>
-                        </select>
-                    </div>
+<fieldset>
+    <legend>@ViewBag.Title</legend>
+    <div id="divErros">
+    </div>
+    @if (!string.IsNullOrEmpty(ViewBag.Error))
+    {
+        <div class="danger">
+            @ViewBag.Error.ToString()
+        </div>
+    }
+    <div id="panelgerais" class="panel panel-default ">
+        <div class="panel-heading">
+            Dados Gerais
+        </div>
+        <div class="panel-body">
 
-                    <div class="col-sm-8">
-                        <label>Nome</label>
-                        @Html.EditorFor(model => model.nome, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.nome, "", new { @class = "text-danger" })
+            <div class="row">
+                <div class="col-sm-2">
+                    <label>Tp. pessoa*</label>
+                    <select id="Id_grltopessoa" name="Id_grltopessoa" class="form-control">
+                        <option selected value="F">Física</option>
+                        <option value="J">Jurídica</option>
+                    </select>
+                </div>
 
-                    </div>
-                    <div class="col-sm-2">
-                        <label>Nasc/Fund.</label>
-                        @Html.TextBoxFor(x => x.dt_nascimento, new { @class = "form-control datesimple", @autofocus = "autofocus", @name = "dt_nascimento", @id = "dt_nascimento" })
-
-                        @Html.ValidationMessageFor(model => model.dt_nascimento, "", new { @class = "text-danger" })
-                    </div>
+                <div class="col-sm-8">
+                    <label>Nome</label>
+                    @Html.EditorFor(model => model.nome, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.nome, "", new { @class = "text-danger" })
 
                 </div>
-                <div class="row">
+                <div class="col-sm-2">
+                    <label>Nasc/Fund.</label>
+                    @Html.TextBoxFor(x => x.dt_nascimento, new { @class = "form-control datesimple", @autofocus = "autofocus", @name = "dt_nascimento", @id = "dt_nascimento" })
 
-                    <div class="col-sm-3">
-                        <label>Telefone 01</label>
-                        <input class="form-control fone" name="ddd_telefone" type="text" />
-                    </div>
+                    @Html.ValidationMessageFor(model => model.dt_nascimento, "", new { @class = "text-danger" })
+                </div>
 
-                    <div class="col-sm-3">
-                        <label>Ident. Fone 01</label>
-                        @Html.DropDownListFor(x => x.Id_grlidtel, Model.DropdownIdentifica, "Selecione...", new { @class = "form-control" })
+            </div>
+            <div class="row">
 
-                    </div>
-                    <div class="col-sm-3">
-                        <label>Telefone02</label>
-                        <input class="form-control fone" name="ddd_telefone2" type="text" />
-                    </div>
-                    <div class="col-sm-3">
-                        <label>Ident. Fone 02</label>
-                        @Html.DropDownListFor(x => x.Id_grlidtel02, Model.DropdownIdentifica, "Selecione...", new { @class = "form-control" })
+                <div class="col-sm-3">
+                    <label>Telefone 01</label>
+                    <input class="form-control fone" name="ddd_telefone" type="text" />
+                </div>
 
-                    </div>
-
+                <div class="col-sm-3">
+                    <label>Ident. Fone 01</label>
+                    @Html.DropDownListFor(x => x.Id_grlidtel, Model.DropdownIdentifica, "Selecione...", new { @class = "form-control" })
 
                 </div>
-                <div class="row">
-                    <div class="col-sm-4">
-                        <label>Email01</label>
-                        <input class="form-control" name="email" type="email" />
-                    </div>
+                <div class="col-sm-3">
+                    <label>Telefone02</label>
+                    <input class="form-control fone" name="ddd_telefone2" type="text" />
+                </div>
+                <div class="col-sm-3">
+                    <label>Ident. Fone 02</label>
+                    @Html.DropDownListFor(x => x.Id_grlidtel02, Model.DropdownIdentifica, "Selecione...", new { @class = "form-control" })
 
-                    <div class="col-sm-4">
-                        <label>Email02</label>
-                        <input class="form-control" name="email2" type="email" />
-                    </div>
-                    <div class="col-sm-4">
-
-                        <label>Nome/Contato</label>
-                        <input class="form-control" name="contato" type="text" />
+                </div>
 
 
-                    </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-4">
+                    <label>Email01</label>
+                    <input class="form-control" name="email" type="email" />
+                </div>
+
+                <div class="col-sm-4">
+                    <label>Email02</label>
+                    <input class="form-control" name="email2" type="email" />
+                </div>
+                <div class="col-sm-4">
+
+                    <label>Nome/Contato</label>
+                    <input class="form-control" name="contato" type="text" />
+
+
                 </div>
             </div>
         </div>
-        <h1></h1>
+    </div>
+    <h1></h1>
 
-        <div id="panelDadosPessoaJuridica" class="panel panel-default" style="display: none">
-            <div class="panel-heading">Dados Pessoa Jurídica</div>
-            <div class="panel-body">
-                <div class="row">
+    <div id="panelDadosPessoaJuridica" class="panel panel-default" style="display: none">
+        <div class="panel-heading">Dados Pessoa Jurídica</div>
+        <div class="panel-body">
+            <div class="row">
 
-                    <div class="col-sm-6">
-                        <label>Razão Social</label>
-                        <input class="form-control" name="razao_social" type="text" />
-                    </div>
-                    <div class="col-sm-6">
-                        <label>Nome Fantasia</label>
-                        @Html.EditorFor(model => model.Nome_fantasia, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.Nome_fantasia, "", new { @class = "text-danger" })
-                    </div>
-
+                <div class="col-sm-6">
+                    <label>Razão Social</label>
+                    <input class="form-control" name="razao_social" type="text" />
                 </div>
-                <div class="row">
-
-                    <div class="col-sm-4">
-                        <label>CNPJ</label>
-                        <input class="form-control" name="cgc" type="text" />
-                    </div>
-                    <div class="col-sm-4">
-                        <label>Insc. Mun.</label>
-                        <input class="form-control" name="insc_municipal" type=" text" />
-                    </div>
-                    <div class="col-sm-4">
-                        <label>Insc. Est.</label>
-                        <input class="form-control" name="insc_estadual" type="text" />
-                    </div>
-
+                <div class="col-sm-6">
+                    <label>Nome Fantasia</label>
+                    @Html.EditorFor(model => model.Nome_fantasia, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Nome_fantasia, "", new { @class = "text-danger" })
                 </div>
+
             </div>
+            <div class="row">
 
+                <div class="col-sm-4">
+                    <label>CNPJ</label>
+                    <input class="form-control" name="cgc" type="text" />
+                </div>
+                <div class="col-sm-4">
+                    <label>Insc. Mun.</label>
+                    <input class="form-control" name="insc_municipal" type=" text" />
+                </div>
+                <div class="col-sm-4">
+                    <label>Insc. Est.</label>
+                    <input class="form-control" name="insc_estadual" type="text" />
+                </div>
+
+            </div>
         </div>
-        <div id="panelDadosPessoaFisica" class="panel panel-default ">
-            <div class="panel-heading">
-                Dados Pessoa Física
-            </div>
-            <div class="panel-body">
 
-                <div class="row">
+    </div>
+    <div id="panelDadosPessoaFisica" class="panel panel-default ">
+        <div class="panel-heading">
+            Dados Pessoa Física
+        </div>
+        <div class="panel-body">
 
-                    <div class="col-sm-3">
-                        <label>Sexo</label>
-                        @Html.DropDownListFor(x => x.sexo, Model.DropdownSexo, "Selecione...", new { @class = "form-control" })
-                        @Html.ValidationMessageFor(model => model.sexo, "", new { @class = "text-danger" })
+            <div class="row">
+
+                <div class="col-sm-3">
+                    <label>Sexo</label>
+                    @Html.DropDownListFor(x => x.sexo, Model.DropdownSexo, "Selecione...", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.sexo, "", new { @class = "text-danger" })
+                </div>
+
+
+                <div class="col-sm-3">
+                    <label>Estado Civil</label>
+                    @Html.DropDownListFor(x => x.Id_grlcivil, Model.DropdownEstado, "Selecione...", new { @class = "form-control" })
+                </div>
+                <div class="col-sm-1">
+                    <div class="form-group">
+                        <label>Cod.</label>
+                        <input type="text" class="form-control" id="CodigoProfissao" name="Id_grlprofi" data-url="@Url.Action("ObterDescricaoProfissao", "Profissao")" onkeypress=" return SomenteNumero() ">
+
                     </div>
-
-
-                    <div class="col-sm-3">
-                        <label>Estado Civil</label>
-                        @Html.DropDownListFor(x => x.Id_grlcivil, Model.DropdownEstado, "Selecione...", new { @class = "form-control" })
-                    </div>
-                    <div class="col-sm-1">
-                        <div class="form-group">
-                            <label>Cod.</label>
-                            <input type="text" class="form-control" id="CodigoProfissao" name="Id_grlprofi" data-url="@Url.Action("ObterDescricaoProfissao", "Profissao")" onkeypress=" return SomenteNumero() ">
-
+                </div>
+                <div class="col-sm-5">
+                    <label>Descrição</label>
+                    <div class="input-group">
+                        <input type="text" readonly id="NomeProfissao" name="NomeProfissao" class="form-control">
+                        <div class="input-group-btn">
+                            <button type="button" id="open-Profissao" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span></button>
+                            <button type="button" style="margin-left: 5px" class="btn btn-primary" data-toggle="modal" data-target="#modalIncluirProfissao"><span class="glyphicon glyphicon-plus"></span></button>
                         </div>
                     </div>
-                    <div class="col-sm-5">
-                        <label>Descrição</label>
-                        <div class="input-group">
-                            <input type="text" readonly id="NomeProfissao" name="NomeProfissao" class="form-control">
-                            <div class="input-group-btn">
-                                <button type="button" id="open-Profissao" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span></button>
-                                <button type="button" style="margin-left: 5px" class="btn btn-primary" data-toggle="modal" data-target="#modalIncluirProfissao"><span class="glyphicon glyphicon-plus"></span></button>
-                            </div>
-                        </div>
-                    </div>
                 </div>
-                <div class="row">
-                    <div class="col-sm-6">
-                        <label>CPF</label>
-                        <input class="form-control" name="cpf" type="text" />
-                    </div>
-
-                    <div class="col-sm-6">
-                        <label>RG</label>
-                        <input class="form-control" name="rg" type="text" />
-                    </div>
-                </div>
-
-
             </div>
-        </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <label>CPF</label>
+                    <input class="form-control" name="cpf" type="text" />
+                </div>
 
-    </fieldset>
+                <div class="col-sm-6">
+                    <label>RG</label>
+                    <input class="form-control" name="rg" type="text" />
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+</fieldset>
     <div class="row">
         <div class="form-group col-sm-1">
             <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-floppy-saved"></span> Salvar</button>

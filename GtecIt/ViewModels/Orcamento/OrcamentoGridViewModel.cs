@@ -18,7 +18,7 @@ namespace GtecIt.ViewModels
         public int? id_Grltpatendimento { get; set; }
         public int? id_entrega { get; set; }
         public DateTime? dt_entrega { get; set; }
-
+        public int? id_grlconvenio { get; set; }
         public string nome_aluno { get; set; }
         public string nome_professor { get; set; }
         public DateTime? dt_renovacao { get; set; }

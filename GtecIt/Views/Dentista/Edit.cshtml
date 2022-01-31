@@ -326,7 +326,7 @@
                                                 <td>@item.status</td>
 
                                                 <td class="text-center col-sm-1">
-                                                    <a href="#" class="glyphicon glyphicon-pencil btnGridEditarEndereco" data-id="@item.idgercdhorarioProf"></a>
+                                                    <a href="#" class="glyphicon glyphicon-pencil btnGridEditarEndereco" data-id="@item.idgercdhorarioProf" data-contrato="@Model.orcamentoid"></a>
                                                 </td>
                                                 <td class="text-center col-sm-1">
                                                     <a href="#" class="glyphicon glyphicon-trash btnGridExcluirEndereco" data-toggle="modal" data-target="#modalExclusao" data-id="@item.idgercdhorarioProf"></a>
@@ -383,7 +383,7 @@
                                                 <td>@item.status</td>
 
                                                 <td class="text-center col-sm-1">
-                                                    <a href="#" class="glyphicon glyphicon-pencil btnGridEditarEndereco" data-id="@item.idgercdhorarioProf"></a>
+                                                    <a href="#" class="glyphicon glyphicon-pencil btnGridEditarEndereco" data-id="@item.idgercdhorarioProf" data-contrato="@Model.orcamentoid"></a>
                                                 </td>
                                                 <td class="text-center col-sm-1">
                                                     <a href="#" class="glyphicon glyphicon-trash btnGridExcluirEndereco" data-toggle="modal" data-target="#modalExclusao" data-id="@item.idgercdhorarioProf"></a>
@@ -440,7 +440,7 @@
                                                 <td>@item.status</td>
 
                                                 <td class="text-center col-sm-1">
-                                                    <a href="#" class="glyphicon glyphicon-pencil btnGridEditarEndereco" data-id="@item.idgercdhorarioProf"></a>
+                                                    <a href="#" class="glyphicon glyphicon-pencil btnGridEditarEndereco" data-id="@item.idgercdhorarioProf" data-contrato="@Model.orcamentoid"></a>
                                                 </td>
                                                 <td class="text-center col-sm-1">
                                                     <a href="#" class="glyphicon glyphicon-trash btnGridExcluirEndereco" data-toggle="modal" data-target="#modalExclusao" data-id="@item.idgercdhorarioProf"></a>
@@ -497,10 +497,10 @@
                                                 <td>@item.status</td>
 
                                                 <td class="text-center col-sm-1">
-                                                    <a href="#" class="glyphicon glyphicon-pencil btnGridEditarEndereco" data-id="@item.idgercdhorarioProf"></a>
+                                                    <a href="#" class="glyphicon glyphicon-pencil btnGridEditarEndereco" data-id="@item.idgercdhorarioProf" data-contrato="@Model.orcamentoid"></a>
                                                 </td>
                                                 <td class="text-center col-sm-1">
-                                                    <a href="#" class="glyphicon glyphicon-trash btnGridExcluirEndereco" data-toggle="modal" data-target="#modalExclusao" data-id="@item.idgercdhorarioProf"></a>
+                                                    <a href="#" class="glyphicon glyphicon-trash btnGridExcluirEndereco" data-toggle="modal" data-target="#modalExclusao" data-id="@item.idgercdhorarioProf" ></a>
                                                 </td>
                                             </tr>
                                             }
@@ -554,10 +554,10 @@
                                                 <td>@item.status</td>
 
                                                 <td class="text-center col-sm-1">
-                                                    <a href="#" class="glyphicon glyphicon-pencil btnGridEditarEndereco" data-id="@item.idgercdhorarioProf"></a>
+                                                    <a href="#" class="glyphicon glyphicon-pencil btnGridEditarEndereco" data-id="@item.idgercdhorarioProf" data-contrato="@Model.orcamentoid"></a>
                                                 </td>
                                                 <td class="text-center col-sm-1">
-                                                    <a href="#" class="glyphicon glyphicon-trash btnGridExcluirEndereco" data-toggle="modal" data-target="#modalExclusao" data-id="@item.idgercdhorarioProf"></a>
+                                                    <a href="#" class="glyphicon glyphicon-trash btnGridExcluirEndereco" data-toggle="modal" data-target="#modalExclusao" data-id="@item.idgercdhorarioProf" ></a>
                                                 </td>
                                             </tr>
                                             }
@@ -611,10 +611,10 @@
                                                 <td>@item.status</td>
 
                                                 <td class="text-center col-sm-1">
-                                                    <a href="#" class="glyphicon glyphicon-pencil btnGridEditarEndereco" data-id="@item.idgercdhorarioProf"></a>
+                                                    <a href="#" class="glyphicon glyphicon-pencil btnGridEditarEndereco" data-id="@item.idgercdhorarioProf" data-contrato="@Model.orcamentoid"></a>
                                                 </td>
                                                 <td class="text-center col-sm-1">
-                                                    <a href="#" class="glyphicon glyphicon-trash btnGridExcluirEndereco" data-toggle="modal" data-target="#modalExclusao" data-id="@item.idgercdhorarioProf"></a>
+                                                    <a href="#" class="glyphicon glyphicon-trash btnGridExcluirEndereco" data-toggle="modal" data-target="#modalExclusao" data-id="@item.idgercdhorarioProf" data-contrato="@Model.orcamentoid"></a>
                                                 </td>
                                             </tr>
                                             }
@@ -820,7 +820,7 @@
         $('.btnGridEditarEndereco').click(function (e) {
 
             e.preventDefault();
-            var url = '@Url.Action("Edit", "HorarioProfessor")' + '?codigo=' + $(this).data('id');
+            var url = '@Url.Action("Edit", "HorarioProfessor")' + '?codigo=' + $(this).data('id') + '&contrato=' + $(this).data('contrato');
 
             var modal, modalDialog, modalContent;
             modal = $('<div id="modalEdicao" class="modal fade" "/>');

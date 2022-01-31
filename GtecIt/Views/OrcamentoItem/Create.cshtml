@@ -184,12 +184,12 @@
             vl_perc = parseFloat(vl_perc);
         }
 
-
-        vl_total = (qtd * vl_unit) - vl_desconto;
+        console.log(parseFloat(qtd * vl_unit));
+        vl_total = parseFloat(qtd * vl_unit) - (parseFloat(vl_desconto));
         vl_total = vl_total - (vl_total * (vl_perc / 100));
+        
         vl_total = parseFloat(vl_total);
-
-        //console.log(vl_total);
+        console.log(vl_total);
 
         $("#Valor_total").maskMoney('mask',vl_total);
     }

@@ -81,6 +81,10 @@
               <xs:element name="data_aula" msprop:Generator_ColumnVarNameInTable="columndata_aula" msprop:Generator_ColumnPropNameInRow="data_aula" msprop:Generator_ColumnPropNameInTable="data_aulaColumn" msprop:Generator_UserColumnName="data_aula" type="xs:string" minOccurs="0" />
               <xs:element name="servico" msprop:Generator_ColumnVarNameInTable="columnservico" msprop:Generator_ColumnPropNameInRow="servico" msprop:Generator_ColumnPropNameInTable="servicoColumn" msprop:Generator_UserColumnName="servico" type="xs:string" minOccurs="0" />
               <xs:element name="plano" msprop:Generator_ColumnVarNameInTable="columnplano" msprop:Generator_ColumnPropNameInRow="plano" msprop:Generator_ColumnPropNameInTable="planoColumn" msprop:Generator_UserColumnName="plano" type="xs:string" minOccurs="0" />
+              <xs:element name="Valor" msprop:Generator_ColumnVarNameInTable="columnValor" msprop:Generator_ColumnPropNameInRow="Valor" msprop:Generator_ColumnPropNameInTable="ValorColumn" msprop:Generator_UserColumnName="Valor" type="xs:decimal" minOccurs="0" />
+              <xs:element name="valor_base" msprop:Generator_ColumnVarNameInTable="columnvalor_base" msprop:Generator_ColumnPropNameInRow="valor_base" msprop:Generator_ColumnPropNameInTable="valor_baseColumn" msprop:Generator_UserColumnName="valor_base" type="xs:decimal" minOccurs="0" />
+              <xs:element name="Status" msprop:Generator_ColumnVarNameInTable="columnStatus" msprop:Generator_ColumnPropNameInRow="Status" msprop:Generator_ColumnPropNameInTable="StatusColumn" msprop:Generator_UserColumnName="Status" type="xs:string" minOccurs="0" />
+              <xs:element name="Aula_grupo" msprop:Generator_ColumnVarNameInTable="columnAula_grupo" msprop:Generator_ColumnPropNameInRow="Aula_grupo" msprop:Generator_ColumnPropNameInTable="Aula_grupoColumn" msprop:Generator_UserColumnName="Aula_grupo" type="xs:dateTime" minOccurs="0" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>

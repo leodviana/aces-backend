@@ -117,7 +117,16 @@ namespace GtecIt.Controllers
                 var item = _uoW.Orcamentos.ObterPorId(Convert.ToInt32(titulos.id_stqcporcamento));
                 if (item != null)
                 {
-                    row["cliente"] = item.grlcliente.grlbasic.nome.ToUpper();
+
+                    if (string.IsNullOrEmpty(item.grlcliente.grlbasic.nome))
+                    {
+                        row["cliente"] = " Sem aluno informado";
+                    }
+                    else
+                    {
+                        row["cliente"] = item.grlcliente.grlbasic.nome.ToUpper();
+                    }
+                    
 
                 }
                 ds.Tables[2].Rows.Add(row);
@@ -775,7 +784,7 @@ namespace GtecIt.Controllers
             if (!cidade.IsNullOrWhiteSpace())
                 query = query.Where(a => a.Cliente.Pessoa.Cidade == cidade);
              */
-            var query = _uoW.Aulas.ObterTodos().Where(x => x.inicio >= model.inicio && x.inicio <= model.fim && x.status.Equals("1")).AsQueryable();
+            var query = _uoW.Aulas.ObterTodos().Where(x => x.inicio >= model.inicio && x.inicio <= model.fim && x.status.Equals("1")).OrderBy(x=>x.inicio).AsQueryable();
             if (model.ConvenioId != 0)
                 query = query.Where(x => x.id_grldentista == model.ConvenioId);
 
@@ -783,54 +792,141 @@ namespace GtecIt.Controllers
             var ds = new Models.DataSet1();
             foreach (var item in query.ToList())
             {
-                
-                var contrato = _uoW.Orcamentos.ObterPorId(Convert.ToInt32(item.id_Stqcporcamento));
-                string dentista_nome = "";
-
-                DataRow row2 = ds.Tables[0].NewRow();
-                row2["Id_orcamento"] = contrato.id_Stqcporcamento;
-                row2["dt_orcamento"] = contrato.Dt_orcamento;
-                row2["Paciente"] = contrato.grlcliente.grlbasic.nome.ToUpper();
-                //row2["dentista"] = contrato.grldentista.Idgrlbasic.nome.ToUpper();
-                //var dentista = item.id_grldentista;
-                var dentista = _uoW.Dentistas.ObterPorId(Convert.ToInt16(item.id_grldentista));
-                if (dentista!=null)
+                if (item.id_Stqcporcamento==2173)
                 {
-                    var pessoa = _uoW.Pessoas.ObterPorId(Convert.ToInt16(dentista.Id_grlbasico));
-                    row2["dentista"] = pessoa.nome;
-                    dentista_nome  = pessoa.nome;
+                    var teste = "";
                 }
-                var plano = _uoW.Planos.ObterPorId(Convert.ToInt32(contrato.id_grlconvenio));
-
-                row2["endereco_pac"] = plano.desc_plano;
-                row2["endereco_sol"] = contrato.Obs;
-
-                string aula = item.inicio.ToString();
-                aula = aula.Substring(0, 10) + " " + aula.Substring(11, 5) + "-" + item.final.ToString().Substring(11, 5);
-
-                var itens = _uoW.OrcamentoItens.ObterTodos().Where(x => x.id_stqporcamento == item.id_Stqcporcamento && x.status == "0").ToList();
-                var descricao = "";
-                ; foreach (var itemorcamento in itens)
+                if (item.id_Stqcporcamento != null)
                 {
-                    descricao = itemorcamento.produtos.desc_produto;
+
+                    var contrato = _uoW.Orcamentos.ObterPorId(Convert.ToInt32(item.id_Stqcporcamento));
+                    string dentista_nome = "";
+
+                    /*DataRow row2 = ds.Tables[0].NewRow();
+                    row2["Id_orcamento"] = contrato.id_Stqcporcamento;
+                    row2["dt_orcamento"] = contrato.Dt_orcamento;
+                    row2["Paciente"] = contrato.grlcliente.grlbasic.nome.ToUpper();
+                    row2["Status"] = contrato.status;*/
+                    //row2["dentista"] = contrato.grldentista.Idgrlbasic.nome.ToUpper();
+                    //var dentista = item.id_grldentista;
+                    var dentista = _uoW.Dentistas.ObterPorId(Convert.ToInt16(item.id_grldentista));
+                    if (dentista!=null)
+                    {
+                        var pessoa = _uoW.Pessoas.ObterPorId(Convert.ToInt16(dentista.Id_grlbasico));
+                       // row2["dentista"] = pessoa.nome;*/
+                        dentista_nome  = pessoa.nome;
+                    }
+
+
+
+                   // row2["endereco_pac"] = plano.desc_plano;
+                    //row2["endereco_sol"] = contrato.Obs;
+                    //ds.Tables[0].Rows.Add(row2);*/
+                    var plano = _uoW.Planos.ObterPorId(Convert.ToInt32(contrato.id_grlconvenio));
+                    string aula = item.inicio.ToString();
+                    aula = aula.Substring(0, 10) + " " + aula.Substring(11, 5) + "-" + item.final.ToString().Substring(11, 5);
+
+                    var itens = _uoW.OrcamentoItens.ObterTodos().Where(x => x.id_stqporcamento == item.id_Stqcporcamento && x.status != "2").ToList();
+                    var descricao = "";
+                    decimal? valor_total = 0;
+                    var qtd_aulas = 0;
+                    decimal? valor2 = 0;
+                    decimal? vl_jogo = 0;
+                    var dupla = false;
+                    decimal? valoraula = 0;
+
+                    
+                    foreach (var itemorcamento in itens)
+                    {
+                        var precoplano = _uoW.PrecosPlano.ObterTodos().Where(x => x.id_stqcdprd == itemorcamento.id_stqcdprd && x.idGrlplanos == contrato.id_grlconvenio).OrderBy(x=>x.vigencia).ToList();
+                        if (precoplano.Count>1)
+                        {
+                            foreach (var item_plano in precoplano)
+                            {
+                                if (item_plano.vigencia<=contrato.Dt_orcamento)
+                                {
+                                    qtd_aulas = item_plano.qtd_aulas;
+                                    valor2 = item_plano.valor2;
+                                }
+                            }
+                            
+                        }
+                        else
+                        {
+                            qtd_aulas = precoplano[0].qtd_aulas;
+                            valor2 = precoplano[0].valor2;
+                        }
+                        
+                        descricao = itemorcamento.produtos.desc_produto;
+                        if (descricao.Contains("dupla"))
+                        {
+                            dupla = true;
+                            vl_jogo = Convert.ToDecimal(valor2) / 2;
+                        }
+                        else if (descricao.Contains("DUPLA"))
+                        {
+                            dupla = true;
+                            vl_jogo = Convert.ToDecimal(valor2) / 2;
+                        }
+                        else
+                        {
+                            vl_jogo = Convert.ToDecimal(valor2);
+                        }
+
+                        valor_total = (Convert.ToDecimal((itemorcamento.qtd) * Convert.ToDecimal(itemorcamento.Vl_unitario)) - Convert.ToDecimal(itemorcamento.
+                            desconto));
+                        //  valoraula = (valor_total - vl_jogo);
+
+
+                        if (itemorcamento.descontoperc != 0)
+                        {
+
+                            // valor_total = (Convert.ToDecimal((itemorcamento.qtd) * Convert.ToDecimal(itemorcamento.Vl_unitario)));
+                            valoraula = (valor_total - vl_jogo);
+                            valoraula = valoraula - (valoraula * (itemorcamento.descontoperc / 100));
+                            valor_total = valor_total - (valor_total * (itemorcamento.descontoperc / 100));
+
+                        }
+                        else
+                        {
+                            valoraula = (valor_total - vl_jogo);
+                        }
+
+
+                        //valor do plano *40%/numero de aulas 
+                        valoraula = valoraula * Convert.ToDecimal(0.4) / qtd_aulas;
+                        if (dupla)
+                            valoraula = valoraula * 2;
+
+                    }
+
+                    string aluno_filtro = contrato.grlcliente.grlbasic.nome.ToUpper();
+                    string filtro = "aluno ='" + aluno_filtro + "'"  + " and aula='" +aula + "'"; 
+                    DataRow[] pesquisa = ds.Tables["DataTable5"].Select(filtro);
+
+                    if (pesquisa.Count()==0)
+                    {
+                        DataRow row = ds.Tables["DataTable5"].NewRow();
+                        row["Id_orcamento"] = item.id_Stqcporcamento;
+                        row["id_professor"] = item.id_grldentista;
+                        row["inicio"] = item.inicio;
+                        row["Fim"] = item.final;
+                        row["plano"] = plano.desc_plano;
+                        row["aula"] = aula;
+                        row["aluno"] = contrato.grlcliente.grlbasic.nome.ToUpper();
+                        row["professor"] = dentista_nome; //contrato.grldentista.Idgrlbasic.nome.ToUpper();
+                        row["data_aula"] = item.inicio.ToString().Substring(0, 10);
+                        row["servico"] = descricao;
+                        row["Valor"] = valor_total;
+                        row["valor_base"] = valoraula;
+                        row["Status"] = contrato.status;
+                        row["Aula_grupo"] = Convert.ToDateTime(item.inicio.ToString().Substring(0, 10));
+                        ds.Tables["DataTable5"].Rows.Add(row);
+                    }
+                                       
+
 
                 }
-
-
-                DataRow row = ds.Tables["DataTable5"].NewRow();
-                row["Id_orcamento"] = item.id_Stqcporcamento;
-                row["id_professor"] = item.id_grldentista;
-                row["inicio"] = item.inicio;
-                row["Fim"] = item.final;
-                row["plano"] = plano.desc_plano;
-                row["aula"] = aula;
-                row["aluno"] = contrato.grlcliente.grlbasic.nome.ToUpper();
-                row["professor"] = dentista_nome; //contrato.grldentista.Idgrlbasic.nome.ToUpper();
-                row["data_aula"] = item.inicio.ToString().Substring(0, 10);
-                row["servico"] = descricao;
-                ds.Tables["DataTable5"].Rows.Add(row);
-
-                ds.Tables[0].Rows.Add(row2);
 
             }
             //pega o nome do relatorio
@@ -856,6 +952,8 @@ namespace GtecIt.Controllers
 
                 rd.DataDefinition.FormulaFields["Ordem"].Text = "'" + convenio.Idgrlbasic.nome + "'";
             }
+           // rd.DataDefinition.SortFields[7].SortDirection = CrystalDecisions.Shared.SortDirection.AscendingOrder;
+            //rd.DataDefinition.SortFields["data_aula"]
             rd.SetDataSource(ds);
             //rd.SetDataSource(ds.Tables[1]);
 

@@ -11,6 +11,7 @@ namespace GtecIt.ViewModels
         public decimal? preco { get; set; }
         public int qtd_aulas { get; set; }
         public int qtd_dias_plano { get; set; }
+        public decimal? valor2 { get; set; }
         public int? cd_usuario { get; set; }
     }
 }

@@ -81,8 +81,9 @@ namespace GtecIt.Controllers
                    evento.professor = item.id_grldentista;
                    events.Add(evento);
                }
-               
-            return new JsonResult { Data = events, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+
+            return new JsonResult { Data = events, JsonRequestBehavior = JsonRequestBehavior.AllowGet , MaxJsonLength = Int32.MaxValue };//Json(events, JsonRequestBehavior.AllowGet);
+            //return new JsonResult { Data = events, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
            
             
            
@@ -113,6 +114,20 @@ namespace GtecIt.Controllers
 
             var status = false;
 
+            /*if (e.Start <= DateTime.Now)
+            {
+                var mensagem = new List<String>();
+
+                mensagem.Add("Horario não esta mais diponível!.  ");
+                var resposta = new
+                {
+
+                    Sucesso = false,
+                    msg = mensagem
+                };
+
+                return Json(resposta);
+            }*/
             if (e.Start == null)
             {
                 var mensagem = new List<String>();
@@ -184,6 +199,62 @@ namespace GtecIt.Controllers
 
                 return Json(resposta);
             }
+            //pegar numero de aulas lancadas no contrato
+            var orcamento = _uoW.Orcamentos.ObterPorId(Convert.ToInt32(e.contrato));
+
+            int? codigo_prd = 0;
+            foreach (var item in orcamento.itemorcamentos)
+            {
+                codigo_prd = item.id_stqcdprd;
+            }
+            var qtd_aulas = 0;
+            var plano = _uoW.PrecosPlano.ObterTodos().Where(x => x.id_stqcdprd == codigo_prd && x.idGrlplanos == orcamento.id_grlconvenio).FirstOrDefault();
+            if (plano != null)
+            {
+                qtd_aulas = plano.qtd_aulas;
+
+                
+            }
+
+
+            //
+            var qtd_aulascontrato = _uoW.Aulas.ObterTodos().Where(x => x.id_Stqcporcamento == e.contrato && x.status != "2").ToList();
+            //
+            //pegar qdt de aulas do contrato
+           
+            
+            if (orcamento.dt_renovacao<DateTime.Now)
+            {
+                var mensagem = new List<String>();
+
+                mensagem.Add("Contrato Expirado!");
+                var resposta = new
+                {
+
+                    Sucesso = false,
+                    msg = mensagem
+                };
+                
+
+                return Json(resposta);
+            }
+            if (e.EventID <= 0)
+            {
+                if (qtd_aulascontrato.Count() >= qtd_aulas)
+                {
+                    var mensagem = new List<String>();
+
+                    mensagem.Add("Quantidade excedida de aulas!");
+                    var resposta = new
+                    {
+
+                        Sucesso = false,
+                        msg = mensagem
+                    };
+
+                    return Json(resposta);
+                }
+            }
             if (e.EventID > 0)
             {
                 //Update the event
@@ -205,6 +276,7 @@ namespace GtecIt.Controllers
             }
             else
             {
+                
                 var teste_horario  = _uoW.Aulas.ObterTodos().Where(a => a.id_grldentista==e.professor && a.id_Stqcporcamento==e.contrato && a.inicio==e.Start && a.final==e.End).FirstOrDefault();
                 if (teste_horario!=null)
                 {
@@ -253,14 +325,38 @@ namespace GtecIt.Controllers
             var status = false;
 
             var v = _uoW.Aulas.ObterTodos().Where(a => a.idGercdaulas == eventID).FirstOrDefault();
+            if (v.inicio<DateTime.Now)
+            {
+                var mensagem = new List<String>();
+
+                mensagem.Add("Nâo é Possivel Excluir Esse horario!");
+                var resposta = new
+                {
+
+                    status = false,
+                    msg = mensagem
+                };
+
+                return Json(resposta);
+            }
             if (v != null)
             {
                 _uoW.Aulas.Remover(v);
                 _uoW.Complete();
                 status = true;
+
+                var mensagem = new List<String>();
+
+                mensagem.Add("");
+                var resposta = new
+                {
+
+                    status = true,
+                    msg = mensagem
+                };
             }
 
-            return new JsonResult { Data = new { status = status } };
+            return new JsonResult { Data = new { messagem = "Ok", status = status } };
         }
         private string convertePortugues(string dia)
         {

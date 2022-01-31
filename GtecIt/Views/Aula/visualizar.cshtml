@@ -11,7 +11,7 @@
 <form id="formInclusao" class="form-horizontal" role="form">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">Incluir - Aulas</h4>
+        <h4 class="modal-title">Visualização - Aulas</h4>
     </div>
     <div class="modal-body">
 
@@ -58,29 +58,28 @@
                                 <tr>
                                     <th>Dia</th>
                                     <th>Horário</th>
-                                    <th>Professor</th>
                                     <th class="text-center"></th>
                                     <th class="text-center"></th>
-
+                                    <th class="text-center"></th>
                                 </tr>
                             </thead>
                             <tbody id="corpoTabelaGrid">
                                 @foreach (var item in Model.horarios)
                                 {
 
-                                    <tr class="@item.idgercdhorarioProf">
+                                <tr class="@item.idgercdhorarioProf">
 
-                                        <td>@item.Dia</td>
-                                        <td>@item.horario</td>
-                                        <td>@item.nome_dentista</td>
-                                        <td class="text-center col-sm-1">
-                                            <span class="glyphicon glyphicon-pencil" title="Edição de Procedimentos"></span>
-                                        </td>
-                                        <td class="text-center col-sm-1">
-                                            <span class="glyphicon glyphicon-trash" title="Exclusão de Procedimentos"></span>
-                                        </td>
+                                    <td>@item.Dia</td>
+                                    <td>@item.horario</td>
+                                    <td>@item.nome_dentista</td>
+                                    <td class="text-center col-sm-1">
+                                        <span class="glyphicon glyphicon-pencil" title="Edição de Procedimentos"></span>
+                                    </td>
+                                    <td class="text-center col-sm-1">
+                                        <span class="glyphicon glyphicon-trash" title="Exclusão de Procedimentos"></span>
+                                    </td>
 
-                                    </tr>
+                                </tr>
                                 }
                             </tbody>
                         </table>
@@ -92,9 +91,9 @@
         </div>
     </div>
     <div class="modal-footer">
-        <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-ok"></span> Confirmar</button>
-        &nbsp;&nbsp;
-        <button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancelar</button>
+        
+        
+        <button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Fechar</button>
     </div>
 
 </form>
@@ -103,8 +102,6 @@
 @Scripts.Render("~/Scripts/gtec/modal.Produto.js")
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
 <script type="text/javascript">
-
-
     $('#dtp1,#dtp2').datetimepicker({
         format: 'HH:mm A'
     });
@@ -117,23 +114,24 @@
     });
 
 
-    $('#formInclusao').on('submit', function (e) {
-       
+        $('#formInclusao').on('submit', function (e) {
+
         e.preventDefault();
         $.ajax({
             type: 'POST',
             url: '@Url.Action("Create", "Aula")',
             data: $("#formInclusao").serialize(),
             success: function (result) {
-
-                if (result.Sucesso == true) {
+                if (result.Sucesso == true)
+                {
                     location.reload();
                     $("modalInclusao").modal('hide');
                 }
-                else {
+                else
+                {
 
-                    location.reload();
-                    $("modalInclusao").modal('hide');
+
+
                     $("#divErros").empty();
 
                     var i = 0;
@@ -154,9 +152,7 @@
                 alert(error);
             }
         });
-
     });
-
 
 
 

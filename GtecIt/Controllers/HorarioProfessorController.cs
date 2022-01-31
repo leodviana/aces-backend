@@ -404,13 +404,16 @@ namespace GtecIt.Controllers
         }
 
 
-        public ActionResult Edit(int codigo)
+        public ActionResult Edit(int codigo , int contrato)
         {
 
 
             var model = Mapper.Map<HorarioProfessorCreateViewModel>(_uoW.horarioprofessor.ObterPorId(codigo));
 
-
+            if (model.id_Stqcporcamento==null)
+              model.id_Stqcporcamento = contrato;
+            if (model.id_Stqcporcamento_dupla == null)
+                model.id_Stqcporcamento_dupla = 0;
             var dentista = _uoW.Dentistas.ObterPorId(model.id_grldentista);
             model.professor = dentista.Idgrlbasic.nome;
 

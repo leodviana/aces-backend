@@ -11,7 +11,7 @@
 
 <fieldset>
     <legend></legend>
-
+    
     <div class="col-sm-5">
 
         <label for="Professor" class="control-label">Professor</label>
@@ -23,7 +23,7 @@
         @Html.DropDownListFor(x => x.id_contrato, Model.DropdownAluno, "TODOS", new { @class = "form-control", @autofocus = "autofocus", @name = "contrato", @id = "contrato" })
 
     </div>
-    <a id="btnpesquisa" class=" btn btn-primary" style="margin-top: 25px; " >
+    <a id="btnpesquisa" class=" btn btn-primary" style="margin-top: 25px; ">
         <span class="glyphicon glyphicon-search"></span>
     </a>
     <button type="button" class="btn btn-primary" id="btnlimpar" style="margin-top: 25px; ">
@@ -143,27 +143,29 @@
     </div>
 </div>
 
-
-
-
 @section Scripts{
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.js"></script>
     <script src="~/Scripts/pt-br.js"></script>
-
-
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
     <script>
         $(document).ready(function () {
+            $("#divErros").empty();
             var events = [];
-
+            var codigo = 0;
+            var codigo2 = 0;
             console.log(events);
             var selectedEvent = null;
             console.log(selectedEvent);
             FetchEventAndRenderCalendar();
             function FetchEventAndRenderCalendar() {
-                var codigo = $('#professor option:selected').val();
-                var codigo2 = $('#contrato option:selected').val();
+                 codigo = $('#professor option:selected').val();
+                codigo2 = $('#contrato option:selected').val();
+                if (codigo.length == 0)
+                    codigo = 0;
+                if (codigo2.length == 0)
+                    codigo2 = 0;
+
                 events = [];
                 $.ajax({
                     type: "GET",
@@ -173,15 +175,15 @@
                         id_contrato: codigo2
                     },
                     success: function (data) {
-
+                        
                         $.each(data, function (i, v) {
                             events.push({
                                 eventID: v.EventID,
                                 title: v.Subject,
                                 description: v.Description,
-                                start: moment(v.Start),
+                                start: v.Start != null ? moment(v.Start) : null,
                                 end: v.End != null ? moment(v.End) : null,
-                                color: v.ThemeColor,
+                                color: v.ThemeColor != null ? moment(v.ThemeColor) : null ,
                                 allDay: v.IsFullDay,
                                 contrato: v.contrato,
                                 professor: v.professor
@@ -191,7 +193,8 @@
                         GenerateCalender(events);
                     },
                     error: function (error) {
-                        alert("failed");
+                        alert(error.$description);
+                       
 
                     }
                 })
@@ -269,6 +272,7 @@
 
             $('#btnEdit').click(function () {
                 //Open modal dialog for edit event
+                $("#divErros").empty();
                 openAddEditForm();
             })
             $('#btnDelete').click(function () {
@@ -284,6 +288,24 @@
                                 FetchEventAndRenderCalendar();
                                 $('#myModal').modal('hide');
                             }
+                            else
+                            {
+                                alert("Nâo é Possivel Excluir Esse horario. Aula ja concluida!");
+                                $("#divErros").empty();
+
+                                var i = 0;
+                                $(data.msg).each(function () {
+
+
+                                    $("#divErros").append("<p style=color:red>" + "* " + data.msg[i] + "</p>");
+
+                                    i = i + 1;
+
+                                    //crie uma divErros em sua modal.
+                                });
+                            }
+                        
+
                         },
                         error: function () {
                             alert('Failed');
@@ -320,6 +342,7 @@
             });
 
             function openAddEditForm() {
+                $("#divErros").empty();
                 if (selectedEvent != null) {
 
                     $('#hdEventID').val(selectedEvent.eventID);
