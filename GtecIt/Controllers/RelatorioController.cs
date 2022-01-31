@@ -792,10 +792,7 @@ namespace GtecIt.Controllers
             var ds = new Models.DataSet1();
             foreach (var item in query.ToList())
             {
-                if (item.id_Stqcporcamento==2173)
-                {
-                    var teste = "";
-                }
+               
                 if (item.id_Stqcporcamento != null)
                 {
 

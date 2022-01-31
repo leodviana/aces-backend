@@ -518,6 +518,113 @@ namespace GtecIt.Controllers
             }
 
         }
-      
+
+        [HttpPost]
+        public ActionResult incluirApp(int codigo)
+        {
+
+            var model = _uoW.Pessoas.ObterPorId(codigo);
+            ModelState.Clear();
+
+
+            if (!TryValidateModel(model))
+            {
+                var validationErrors = string.Join(",",
+                    ModelState.Values.Where(E => E.Errors.Count > 0)
+                    .SelectMany(E => E.Errors)
+                    .Select(E => E.ErrorMessage)
+                    .ToArray());
+
+                return Json(validationErrors);
+            }
+            try
+            {
+                if (string.IsNullOrEmpty(model.email))
+                {
+                    var mensagem = new List<String>();
+
+                    mensagem.Add("Professor sem email cadastrado");
+                    var resposta = new
+                    {
+
+                        Sucesso = false,
+                        msg = mensagem
+                    };
+
+                    return Json(resposta);
+                }
+
+                var user = _uoW.Usuarios.ObterTodos().Where(x => x.Id_grlbasico == model.Id_grlbasico).FirstOrDefault();
+                if (user == null)
+                {
+                    var novo = new Usuario(); ;
+                    novo.Id_grlbasico = model.Id_grlbasico;
+                    novo.Login = model.email;
+                    var hash = GetMd5Hash(MD5.Create(), "123");
+                    novo.Senha = hash;
+                    novo.senha_sem = "123";
+                    novo.Administrador = "N";
+                    novo.Ativo = "S";
+                    novo.Tipo_usuario = 3;
+                    _uoW.Usuarios.Salvar(novo);
+                    _uoW.Complete();
+                    var response = new
+                    {
+
+                        Sucesso = true,
+                        msg = ""
+                    };
+                    return Json(response);
+                }
+                else
+                {
+                    user.Login = model.email;
+                    _uoW.Usuarios.Atualizar(user);
+                    _uoW.Complete();
+                    var response = new
+                    {
+
+                        Sucesso = true,
+                        msg = ""
+                    };
+                    return Json(response);
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                var response = new
+                {
+
+                    Sucesso = false,
+                    msg = ex.Message.ToString()
+                };
+                return Json(response);
+            }
+
+
+
+        }
+        static string GetMd5Hash(MD5 md5Hash, string input)
+        {
+            // Convert the input string to a byte array and compute the hash.
+            var data = md5Hash.ComputeHash(Encoding.UTF8.GetBytes(input));
+
+            // Create a new Stringbuilder to collect the bytes
+            // and create a string.
+            var sBuilder = new StringBuilder();
+
+            // Loop through each byte of the hashed data 
+            // and format each one as a hexadecimal string.
+            foreach (var t in data)
+            {
+                sBuilder.Append(t.ToString("x2"));
+            }
+
+            // Return the hexadecimal string.
+            return sBuilder.ToString();
+        }
+
     }
 }
